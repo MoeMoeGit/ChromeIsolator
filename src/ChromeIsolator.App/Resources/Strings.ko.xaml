@@ -54,6 +54,7 @@
     <sys:String x:Key="DownloadPreparingStatus">준비 중...</sys:String>
     <sys:String x:Key="BtnCancel">취소</sys:String>
     <sys:String x:Key="BtnClose">닫기</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">설치된 Chrome 사용</sys:String>
 
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">관리 패널 열기</sys:String>

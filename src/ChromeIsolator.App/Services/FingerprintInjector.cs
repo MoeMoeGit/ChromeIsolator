@@ -37,19 +37,7 @@ public sealed class FingerprintInjector : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         await _cts.CancelAsync();
-        if (_webSocket is not null)
-        {
-            try
-            {
-                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "profile stopped", CancellationToken.None);
-            }
-            catch
-            {
-                // Best-effort shutdown; Chrome may already be gone.
-            }
-
-            _webSocket.Dispose();
-        }
+        await CleanupWebSocketAsync();
 
         foreach (var pending in _pendingResponses.Values)
         {
@@ -63,36 +51,86 @@ public sealed class FingerprintInjector : IAsyncDisposable
 
     private async Task RunAsync()
     {
-        try
+        const int maxRetries = 5;
+        var retryCount = 0;
+
+        while (!_cts.IsCancellationRequested)
         {
-            var browserWebSocketUrl = await PollBrowserWebSocketUrlAsync(_cts.Token);
-            _webSocket = new ClientWebSocket();
-            await _webSocket.ConnectAsync(browserWebSocketUrl, _cts.Token);
-
-            var receiveTask = Task.Run(ReceiveLoopAsync);
-
-            await SendCommandAsync("Target.setDiscoverTargets", new { discover = true });
-            await SendCommandAsync("Target.setAutoAttach", new
+            try
             {
-                autoAttach = true,
-                waitForDebuggerOnStart = false,
-                flatten = true
-            });
+                var browserWebSocketUrl = await PollBrowserWebSocketUrlAsync(_cts.Token);
+                _webSocket = new ClientWebSocket();
+                await _webSocket.ConnectAsync(browserWebSocketUrl, _cts.Token);
 
-            foreach (var targetId in await PollPageTargetsAsync(_cts.Token))
+                retryCount = 0;
+
+                var receiveTask = Task.Run(ReceiveLoopAsync);
+
+                await SendCommandAsync("Target.setDiscoverTargets", new { discover = true });
+                await SendCommandAsync("Target.setAutoAttach", new
+                {
+                    autoAttach = true,
+                    waitForDebuggerOnStart = false,
+                    flatten = true
+                });
+
+                foreach (var targetId in await PollPageTargetsAsync(_cts.Token))
+                {
+                    await AttachToTargetIfNeededAsync(targetId);
+                }
+
+                await receiveTask;
+
+                if (_cts.IsCancellationRequested) break;
+
+                _injectedTargets.Clear();
+                _attachingTargets.Clear();
+            }
+            catch (OperationCanceledException)
             {
-                await AttachToTargetIfNeededAsync(targetId);
+                break;
+            }
+            catch
+            {
+                if (retryCount >= maxRetries) break;
+
+                retryCount++;
+                var delay = TimeSpan.FromSeconds(Math.Pow(2, retryCount - 1));
+                try
+                {
+                    await Task.Delay(delay, _cts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+
+                await CleanupWebSocketAsync();
+                _injectedTargets.Clear();
+                _attachingTargets.Clear();
+            }
+        }
+    }
+
+    private async Task CleanupWebSocketAsync()
+    {
+        if (_webSocket is not null)
+        {
+            try
+            {
+                if (_webSocket.State is WebSocketState.Open or WebSocketState.CloseReceived)
+                {
+                    await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "reconnect", CancellationToken.None)
+                        .ConfigureAwait(false);
+                }
+            }
+            catch
+            {
+                // Best-effort cleanup.
             }
 
-            await receiveTask;
-        }
-        catch (OperationCanceledException)
-        {
-            // Normal during profile shutdown.
-        }
-        catch
-        {
-            // Injection is best-effort. Startup should not fail because CDP injection failed.
+            _webSocket.Dispose();
+            _webSocket = null;
         }
     }
 

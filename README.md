@@ -13,8 +13,8 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 - **专业管理界面**：左侧环境列表用于快速扫描，右侧详情栏展示路径、调试端口、磁盘占用、错误和高级信息
 - **自定义命名**：新增环境后可以直接命名，也可以之后重命名，方便对应不同账号或用途
 - **安全删除**：删除环境需要输入环境名称确认，数据会先移到 Windows 回收站
-- **轻量环境差异**：为不同环境注入稳定的 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory` 值，并持续处理新打开的标签页
-- **自动浏览器准备**：首次运行时自动下载并安装官方 Stable Google Chrome Enterprise，带进度显示
+- **轻量环境差异**：为不同环境注入稳定的 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory` 值，自动处理新打开的标签页，断线后自动重连（最多 5 次指数退避）
+- **自动浏览器准备**：首次运行时自动下载并安装官方 Stable Google Chrome Enterprise，带进度显示；也支持跳过下载直接使用系统已安装的 Chrome
 - **设置面板**：查看 Chrome 状态和版本、打开数据目录、复制路径、高级详情显示、语言切换，以及帮助与更新信息
 - **多语言支持**：内置中文、English、日本語、한국어、Deutsch、Français、Русский 七种语言，自动检测系统语言，可在设置中切换
 - **系统托盘**：关闭窗口后驻留在系统托盘，右键菜单可快速启动/关闭环境、检查更新；退出时自动确认运行中的环境

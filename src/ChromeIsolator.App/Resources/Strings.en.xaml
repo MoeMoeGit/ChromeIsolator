@@ -54,6 +54,7 @@
     <sys:String x:Key="DownloadPreparingStatus">Preparing...</sys:String>
     <sys:String x:Key="BtnCancel">Cancel</sys:String>
     <sys:String x:Key="BtnClose">Close</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">Use Installed Chrome</sys:String>
 
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">Open Manager</sys:String>

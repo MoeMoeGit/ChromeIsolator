@@ -54,6 +54,7 @@
     <sys:String x:Key="DownloadPreparingStatus">Préparation...</sys:String>
     <sys:String x:Key="BtnCancel">Annuler</sys:String>
     <sys:String x:Key="BtnClose">Fermer</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">Utiliser Chrome installé</sys:String>
 
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">Ouvrir le panneau de gestion</sys:String>

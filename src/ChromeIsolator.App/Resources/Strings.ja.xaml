@@ -54,6 +54,7 @@
     <sys:String x:Key="DownloadPreparingStatus">準備中...</sys:String>
     <sys:String x:Key="BtnCancel">キャンセル</sys:String>
     <sys:String x:Key="BtnClose">閉じる</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">インストール済みの Chrome を使用</sys:String>
 
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">管理パネルを開く</sys:String>

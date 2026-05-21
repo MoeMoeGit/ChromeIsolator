@@ -10,6 +10,7 @@ public partial class DownloadWindow : Window
     private CancellationTokenSource? _cts;
 
     public bool DownloadSucceeded { get; private set; }
+    public bool UseInstalled { get; private set; }
 
     public DownloadWindow(ChromeManager chromeManager)
     {
@@ -43,6 +44,13 @@ public partial class DownloadWindow : Window
             StatusText.Text = $"{L10n.GetString("ChromeInstallFailed")}: {ex.Message}";
             CancelButton.Content = L10n.GetString("BtnClose");
         }
+    }
+
+    private void UseInstalledButton_Click(object sender, RoutedEventArgs e)
+    {
+        _cts?.Cancel();
+        UseInstalled = true;
+        DialogResult = false;
     }
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)

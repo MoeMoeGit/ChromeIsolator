@@ -163,6 +163,20 @@ public sealed class MainViewModel : ObservableObject
             Owner = WpfApplication.Current.MainWindow
         };
         downloadWindow.ShowDialog();
+
+        if (downloadWindow.UseInstalled)
+        {
+            RefreshChromeStatus();
+            if (_chromeManager.CurrentChrome is null)
+            {
+                WpfMessageBox.Show(
+                    L10n.GetString("ChromeNotFound"),
+                    L10n.GetString("AppTitle"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+        }
+
         RefreshChromeStatus();
     }
 

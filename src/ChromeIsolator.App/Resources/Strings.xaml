@@ -54,6 +54,7 @@
     <sys:String x:Key="DownloadPreparingStatus">准备中...</sys:String>
     <sys:String x:Key="BtnCancel">取消</sys:String>
     <sys:String x:Key="BtnClose">关闭</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">使用已安装的 Chrome</sys:String>
 
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">打开管理面板</sys:String>
