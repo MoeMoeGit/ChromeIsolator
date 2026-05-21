@@ -1,4 +1,5 @@
 using System.Windows;
+using ChromeIsolator.Services;
 using WpfButton = System.Windows.Controls.Button;
 using WpfHorizontalAlignment = System.Windows.HorizontalAlignment;
 using WpfOrientation = System.Windows.Controls.Orientation;
@@ -21,14 +22,14 @@ public static class SimpleInputDialog
 
         var okButton = new WpfButton
         {
-            Content = "确定",
+            Content = L10n.GetString("BtnOk"),
             IsDefault = true,
             MinWidth = 76,
             Margin = new Thickness(8, 0, 0, 0)
         };
         var cancelButton = new WpfButton
         {
-            Content = "取消",
+            Content = L10n.GetString("BtnCancel"),
             IsCancel = true,
             MinWidth = 76
         };

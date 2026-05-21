@@ -4,6 +4,7 @@ using ChromeIsolator.Models;
 using ChromeIsolator.Services;
 using WpfApplication = System.Windows.Application;
 using WpfMessageBox = System.Windows.MessageBox;
+using DownloadWindow = ChromeIsolator.DownloadWindow;
 
 namespace ChromeIsolator.ViewModels;
 
@@ -14,7 +15,7 @@ public sealed class MainViewModel : ObservableObject
     private readonly UpdateService _updateService;
     private ProfileViewModel? _selectedProfile;
     private string _chromeStatusText = "";
-    private bool _isPreparingChrome;
+    private bool _showAdvancedDetails;
 
     public MainViewModel(ProfileManager profileManager, ChromeManager chromeManager, UpdateService updateService)
     {
@@ -26,17 +27,21 @@ public sealed class MainViewModel : ObservableObject
             _profileManager.Config.Profiles.Select(profile => new ProfileViewModel(profile)));
         SelectedProfile = Profiles.FirstOrDefault();
 
+        _showAdvancedDetails = _profileManager.Config.ShowAdvancedDetails;
+
         AddProfileCommand = new RelayCommand(AddProfile);
         StartSelectedCommand = new RelayCommand(StartSelected, () => SelectedProfile is not null);
         StopSelectedCommand = new RelayCommand(StopSelected, () => SelectedProfile is not null);
         StopAllCommand = new RelayCommand(StopAll);
-        PrepareChromeCommand = new RelayCommand(PrepareChrome, () => !IsPreparingChrome);
+        PrepareChromeCommand = new RelayCommand(PrepareChrome);
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         RenameSelectedCommand = new RelayCommand(RenameSelected, () => SelectedProfile is not null);
         DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null);
 
         _chromeManager.ProfileExited += OnProfileExited;
+        L10n.LanguageChanged += OnLanguageChanged;
         RefreshChromeStatus();
+        RefreshDiskSizes();
     }
 
     public ObservableCollection<ProfileViewModel> Profiles { get; }
@@ -68,15 +73,45 @@ public sealed class MainViewModel : ObservableObject
         private set => SetProperty(ref _chromeStatusText, value);
     }
 
-    public bool IsPreparingChrome
+    public bool ShowAdvancedDetails
     {
-        get => _isPreparingChrome;
-        private set
+        get => _showAdvancedDetails;
+        set
         {
-            if (SetProperty(ref _isPreparingChrome, value))
+            if (SetProperty(ref _showAdvancedDetails, value))
             {
-                PrepareChromeCommand.RaiseCanExecuteChanged();
+                _profileManager.Config.ShowAdvancedDetails = value;
+                _profileManager.Save();
             }
+        }
+    }
+
+    public string ChromeVersionText
+    {
+        get
+        {
+            var chrome = _chromeManager.CurrentChrome;
+            return chrome?.Version ?? "-";
+        }
+    }
+
+    public string ChromePathText
+    {
+        get
+        {
+            var chrome = _chromeManager.CurrentChrome;
+            return chrome?.ExecutablePath ?? "-";
+        }
+    }
+
+    public string CpuCoresText => Environment.ProcessorCount.ToString();
+    public string MemoryText
+    {
+        get
+        {
+            var gc = GC.GetGCMemoryInfo();
+            var totalMb = gc.TotalAvailableMemoryBytes / (1024.0 * 1024.0);
+            return $"{totalMb:F0} MB";
         }
     }
 
@@ -94,7 +129,7 @@ public sealed class MainViewModel : ObservableObject
 
     public void StartSelected()
     {
-        if (SelectedProfile is not null)
+        if (SelectedProfile is not null && !SelectedProfile.IsRunning)
         {
             StartProfile(SelectedProfile);
         }
@@ -108,7 +143,9 @@ public sealed class MainViewModel : ObservableObject
             profile.IsRunning = false;
             profile.DebugPort = null;
             profile.LastUsed = DateTime.Now;
+            profile.RefreshDiskSize();
         }
+        SortProfiles();
     }
 
     private void AddProfile()
@@ -119,32 +156,82 @@ public sealed class MainViewModel : ObservableObject
         SelectedProfile = viewModel;
     }
 
-    private async void PrepareChrome()
+    private void PrepareChrome()
+    {
+        var downloadWindow = new DownloadWindow(_chromeManager)
+        {
+            Owner = WpfApplication.Current.MainWindow
+        };
+        downloadWindow.ShowDialog();
+        RefreshChromeStatus();
+    }
+
+    public void ShowDownloadIfNeeded()
+    {
+        if (_chromeManager.CurrentChrome is not null)
+        {
+            return;
+        }
+
+        var result = WpfMessageBox.Show(
+            L10n.GetString("MsgChromeNotFound"),
+            L10n.GetString("AppTitle"),
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            PrepareChrome();
+        }
+    }
+
+    public async Task CheckForUpdatesFromTrayAsync()
     {
         try
         {
-            IsPreparingChrome = true;
-            ChromeStatusText = "Chrome 准备中...";
-            await _chromeManager.PrepareChromeAsync();
-            RefreshChromeStatus();
+            var result = await _updateService.CheckForUpdatesAsync();
+            var message = result.Status switch
+            {
+                UpdateCheckStatus.UpToDate => L10n.Format("MsgUpToDate", result.LatestVersion ?? _updateService.CurrentVersion),
+                UpdateCheckStatus.UpdateAvailable => L10n.Format("MsgUpdateAvailable", result.LatestVersion ?? "-"),
+                _ => L10n.Format("MsgUpdateFailed", result.ErrorMessage ?? "-")
+            };
+
+            var icon = result.Status switch
+            {
+                UpdateCheckStatus.UpToDate => MessageBoxImage.Information,
+                UpdateCheckStatus.UpdateAvailable => MessageBoxImage.Question,
+                _ => MessageBoxImage.Error
+            };
+
+            if (result.Status == UpdateCheckStatus.UpdateAvailable)
+            {
+                var choice = WpfMessageBox.Show(message, L10n.GetString("AppTitle"), MessageBoxButton.YesNo, icon);
+                if (choice == MessageBoxResult.Yes)
+                {
+                    ShellService.OpenUrl(UpdateService.ReleasesUrl);
+                }
+            }
+            else
+            {
+                WpfMessageBox.Show(message, L10n.GetString("AppTitle"), MessageBoxButton.OK, icon);
+            }
         }
-        catch (Exception ex)
+        catch
         {
-            ChromeStatusText = $"Chrome 准备失败：{ex.Message}";
-        }
-        finally
-        {
-            IsPreparingChrome = false;
+            WpfMessageBox.Show(L10n.GetString("MsgUpdateError"), L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
     private void OpenSettings()
     {
-        var window = new SettingsWindow(new SettingsViewModel(_chromeManager, _updateService))
+        var window = new SettingsWindow(new SettingsViewModel(_chromeManager, _updateService, _profileManager))
         {
             Owner = WpfApplication.Current.MainWindow
         };
         window.ShowDialog();
+        _showAdvancedDetails = _profileManager.Config.ShowAdvancedDetails;
+        OnPropertyChanged(nameof(ShowAdvancedDetails));
         RefreshChromeStatus();
     }
 
@@ -164,7 +251,7 @@ public sealed class MainViewModel : ObservableObject
         }
 
         var currentName = SelectedProfile.Model.DisplayName;
-        var input = SimpleInputDialog.Show("重命名", "自定义名称，方便识别", currentName);
+        var input = SimpleInputDialog.Show(L10n.GetString("MsgRenameTitle"), L10n.GetString("MsgRenameMessage"), currentName);
         if (input is null)
         {
             return;
@@ -183,11 +270,11 @@ public sealed class MainViewModel : ObservableObject
 
         if (SelectedProfile.IsRunning)
         {
-            WpfMessageBox.Show("运行中的环境不能删除，请先关闭。", "浏览器多开", MessageBoxButton.OK, MessageBoxImage.Information);
+            WpfMessageBox.Show(L10n.GetString("MsgRunningEnvNoDelete"), L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
-        var confirm = SimpleInputDialog.Show("确认删除", $"将把“{SelectedProfile.Title}”的数据移到回收站。\n请输入环境名称确认。", "");
+        var confirm = SimpleInputDialog.Show(L10n.GetString("MsgDeleteTitle"), L10n.Format("MsgDeleteConfirm", SelectedProfile.Title), "");
         if (confirm != SelectedProfile.Title)
         {
             return;
@@ -208,6 +295,7 @@ public sealed class MainViewModel : ObservableObject
             profile.IsRunning = true;
             profile.DebugPort = _chromeManager.DebugPort(profile.Model);
             profile.LastUsed = DateTime.Now;
+            SortProfiles();
         }
         catch (Exception ex)
         {
@@ -222,6 +310,8 @@ public sealed class MainViewModel : ObservableObject
         profile.IsRunning = false;
         profile.DebugPort = null;
         profile.LastUsed = DateTime.Now;
+        profile.RefreshDiskSize();
+        SortProfiles();
     }
 
     private void OnProfileExited(string folder)
@@ -237,7 +327,20 @@ public sealed class MainViewModel : ObservableObject
             profile.IsRunning = false;
             profile.DebugPort = null;
             profile.LastUsed = DateTime.Now;
+            profile.RefreshDiskSize();
+            SortProfiles();
         });
+    }
+
+    private void OnLanguageChanged()
+    {
+        RefreshChromeStatus();
+        foreach (var profile in Profiles)
+        {
+            profile.RefreshLocalizedProperties();
+        }
+        OnPropertyChanged(nameof(ChromeVersionText));
+        OnPropertyChanged(nameof(ChromePathText));
     }
 
     private void RaiseCommandState()
@@ -252,7 +355,44 @@ public sealed class MainViewModel : ObservableObject
     {
         var chrome = _chromeManager.CurrentChrome;
         ChromeStatusText = chrome is null
-            ? "Chrome 未找到"
-            : $"Chrome 可用：{chrome.Version ?? "未知版本"}（{chrome.Source}）";
+            ? L10n.GetString("ChromeNotFoundShort")
+            : L10n.Format("ChromeAvailable", chrome.Version ?? "-", chrome.Source);
+    }
+
+    private void RefreshDiskSizes()
+    {
+        foreach (var profile in Profiles)
+        {
+            profile.RefreshDiskSize();
+        }
+    }
+
+    private void SortProfiles()
+    {
+        var selected = SelectedProfile;
+        var sorted = Profiles
+            .OrderByDescending(p => p.IsRunning)
+            .ThenByDescending(p => p.LastUsed ?? DateTime.MinValue)
+            .ToList();
+
+        var changed = false;
+        for (var i = 0; i < sorted.Count; i++)
+        {
+            if (Profiles[i] != sorted[i])
+            {
+                changed = true;
+                break;
+            }
+        }
+
+        if (!changed) return;
+
+        Profiles.Clear();
+        foreach (var item in sorted)
+        {
+            Profiles.Add(item);
+        }
+
+        SelectedProfile = selected is not null && Profiles.Contains(selected) ? selected : Profiles.FirstOrDefault();
     }
 }

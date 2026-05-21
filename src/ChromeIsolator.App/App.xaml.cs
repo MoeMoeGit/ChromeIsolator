@@ -18,6 +18,7 @@ public partial class App : WpfApplication
 
         var configStore = new ConfigStore();
         var profileManager = new ProfileManager(configStore);
+        L10n.Initialize(profileManager.Config.Language);
         var chromeManager = new ChromeManager();
         var updateService = new UpdateService();
         var mainViewModel = new MainViewModel(profileManager, chromeManager, updateService);
@@ -29,6 +30,7 @@ public partial class App : WpfApplication
         _trayService.Initialize();
 
         _mainWindow.Show();
+        mainViewModel.ShowDownloadIfNeeded();
     }
 
     protected override void OnExit(ExitEventArgs e)

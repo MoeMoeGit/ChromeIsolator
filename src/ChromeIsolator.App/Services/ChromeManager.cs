@@ -33,7 +33,7 @@ public sealed class ChromeManager
         }
 
         var chromePath = ResolveChrome()?.ExecutablePath
-            ?? throw new InvalidOperationException("找不到官方 Chrome 可执行文件。后续版本会提供自动下载和准备。");
+            ?? throw new InvalidOperationException(L10n.GetString("ChromeNotFound"));
 
         var profileDir = AppPaths.ProfileDir(profile.Folder);
         Directory.CreateDirectory(profileDir);
@@ -114,11 +114,11 @@ public sealed class ChromeManager
         }
     }
 
-    public async Task PrepareChromeAsync(IProgress<double>? progress = null, CancellationToken cancellationToken = default)
+    public async Task PrepareChromeAsync(IProgress<(double Percent, string Status)>? progress = null, CancellationToken cancellationToken = default)
     {
         if (ResolveChrome() is not null)
         {
-            progress?.Report(1);
+            progress?.Report((100, L10n.GetString("ChromeReady")));
             return;
         }
 
@@ -126,11 +126,16 @@ public sealed class ChromeManager
         var installerPath = Path.Combine(AppPaths.ChromeDir, "GoogleChromeStandaloneEnterprise64.msi");
         var downloadUrl = new Uri("https://dl.google.com/chrome/install/GoogleChromeStandaloneEnterprise64.msi");
 
+        progress?.Report((0, L10n.GetString("ChromeConnecting")));
+
         using (var httpClient = new HttpClient())
         using (var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
         {
             response.EnsureSuccessStatusCode();
             var totalBytes = response.Content.Headers.ContentLength;
+
+            progress?.Report((0, L10n.GetString("ChromeDownloading")));
+
             await using var source = await response.Content.ReadAsStreamAsync(cancellationToken);
             await using var destination = File.Create(installerPath);
             var buffer = new byte[128 * 1024];
@@ -147,10 +152,15 @@ public sealed class ChromeManager
                 readBytes += read;
                 if (totalBytes is > 0)
                 {
-                    progress?.Report((double)readBytes / totalBytes.Value);
+                    var percent = (double)readBytes / totalBytes.Value * 80;
+                    var downloadedMB = readBytes / (1024.0 * 1024.0);
+                    var totalMB = totalBytes.Value / (1024.0 * 1024.0);
+                    progress?.Report((percent, L10n.Format("ChromeDownloadingProgress", $"{downloadedMB:F1}", $"{totalMB:F1}")));
                 }
             }
         }
+
+        progress?.Report((80, L10n.GetString("ChromeInstalling")));
 
         var process = Process.Start(new ProcessStartInfo
         {
@@ -159,14 +169,19 @@ public sealed class ChromeManager
             Verb = "runas",
             Arguments = $"/i \"{installerPath}\" /passive /norestart"
         });
-        process?.WaitForExit();
+        if (process is not null)
+        {
+            await process.WaitForExitAsync(cancellationToken);
+        }
+
+        progress?.Report((90, L10n.GetString("ChromeVerifying")));
 
         if (ResolveChrome() is null)
         {
-            throw new InvalidOperationException("Chrome 安装后仍未找到可执行文件");
+            throw new InvalidOperationException(L10n.GetString("ChromeInstallFailed"));
         }
 
-        progress?.Report(1);
+        progress?.Report((100, L10n.GetString("ChromeDone")));
     }
 
     private static ChromeInfo? ResolveChrome()

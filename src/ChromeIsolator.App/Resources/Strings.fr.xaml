@@ -1,0 +1,103 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xml:lang="fr">
+
+    <!-- MainWindow -->
+    <sys:String x:Key="AppTitle">Multi-Ouverture Navigateur</sys:String>
+    <sys:String x:Key="BtnAddProfile">Ajouter un profil</sys:String>
+    <sys:String x:Key="BtnStart">Démarrer</sys:String>
+    <sys:String x:Key="BtnStop">Arrêter</sys:String>
+    <sys:String x:Key="BtnStopAll">Tout arrêter</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Préparer Chrome</sys:String>
+    <sys:String x:Key="BtnSettings">Paramètres</sys:String>
+    <sys:String x:Key="BtnRename">Renommer</sys:String>
+    <sys:String x:Key="BtnDelete">Supprimer</sys:String>
+    <sys:String x:Key="SectionProfiles">Profils</sys:String>
+    <sys:String x:Key="SelectProfile">Sélectionnez un profil</sys:String>
+    <sys:String x:Key="SectionBasicInfo">Informations de base</sys:String>
+    <sys:String x:Key="LabelFolder">Dossier</sys:String>
+    <sys:String x:Key="LabelProfilePath">Chemin des données</sys:String>
+    <sys:String x:Key="LabelDebugPort">Port de débogage</sys:String>
+    <sys:String x:Key="LabelLastUsed">Dernière utilisation</sys:String>
+    <sys:String x:Key="LabelDiskSize">Espace disque</sys:String>
+    <sys:String x:Key="LabelError">Erreur</sys:String>
+    <sys:String x:Key="SectionAdvancedInfo">Informations avancées</sys:String>
+    <sys:String x:Key="LabelChromeVersion">Version de Chrome</sys:String>
+    <sys:String x:Key="LabelChromePath">Chemin de Chrome</sys:String>
+    <sys:String x:Key="LabelCpuCores">Cœurs CPU</sys:String>
+    <sys:String x:Key="LabelMemory">Mémoire</sys:String>
+    <sys:String x:Key="EmptyProfiles">Aucun profil. Cliquez sur « Ajouter un profil » ci-dessus pour en créer un.</sys:String>
+
+    <!-- SettingsWindow -->
+    <sys:String x:Key="SettingsTitle">Paramètres</sys:String>
+    <sys:String x:Key="SectionBrowser">Navigateur</sys:String>
+    <sys:String x:Key="SectionData">Données</sys:String>
+    <sys:String x:Key="LabelDataPath">Répertoire de données</sys:String>
+    <sys:String x:Key="LabelProfilesPath">Répertoire des profils</sys:String>
+    <sys:String x:Key="BtnOpenDataFolder">Ouvrir le dossier de données</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">Ouvrir le dossier des profils</sys:String>
+    <sys:String x:Key="BtnCopyPath">Copier le chemin</sys:String>
+    <sys:String x:Key="SectionHelpUpdate">Aide et mises à jour</sys:String>
+    <sys:String x:Key="BtnCheckUpdates">Vérifier les mises à jour</sys:String>
+    <sys:String x:Key="BtnViewReleases">Voir les releases</sys:String>
+    <sys:String x:Key="BtnOpenIssues">Ouvrir les issues</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Copier l'e-mail</sys:String>
+    <sys:String x:Key="SectionUi">Interface</sys:String>
+    <sys:String x:Key="ShowAdvancedDetails">Afficher les détails avancés (version Chrome, chemin, infos système)</sys:String>
+    <sys:String x:Key="SectionLanguage">Langue</sys:String>
+    <sys:String x:Key="BtnOpenChromeFolder">Ouvrir le dossier Chrome</sys:String>
+
+    <!-- DownloadWindow -->
+    <sys:String x:Key="DownloadTitle">Préparer Chrome</sys:String>
+    <sys:String x:Key="DownloadPreparing">Préparation du navigateur Chrome</sys:String>
+    <sys:String x:Key="DownloadPreparingStatus">Préparation...</sys:String>
+    <sys:String x:Key="BtnCancel">Annuler</sys:String>
+    <sys:String x:Key="BtnClose">Fermer</sys:String>
+
+    <!-- Tray Menu -->
+    <sys:String x:Key="TrayOpenPanel">Ouvrir le panneau de gestion</sys:String>
+    <sys:String x:Key="TrayStopAll">Tout arrêter</sys:String>
+    <sys:String x:Key="TrayCheckUpdates">Vérifier les mises à jour</sys:String>
+    <sys:String x:Key="TrayExit">Quitter</sys:String>
+    <sys:String x:Key="TrayStartProfile">Démarrer {0}</sys:String>
+    <sys:String x:Key="TrayStopProfile">Arrêter {0}</sys:String>
+
+    <!-- Dialogs -->
+    <sys:String x:Key="BtnOk">OK</sys:String>
+    <sys:String x:Key="MsgChromeNotFound">Navigateur Chrome non détecté. Il doit être téléchargé et installé.\n\nTélécharger maintenant ?</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} environnement(s) en cours d'exécution. La fermeture les arrêtera tous.\n\nConfirmer la fermeture ?</sys:String>
+    <sys:String x:Key="MsgRunningEnvNoDelete">Impossible de supprimer un environnement en cours d'exécution. Veuillez l'arrêter d'abord.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">Les données de « {0} » seront déplacées vers la corbeille.\nTapez le nom de l'environnement pour confirmer.</sys:String>
+    <sys:String x:Key="MsgDeleteTitle">Confirmer la suppression</sys:String>
+    <sys:String x:Key="MsgRenameTitle">Renommer</sys:String>
+    <sys:String x:Key="MsgRenameMessage">Entrez un nom personnalisé pour faciliter l'identification</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">Nouvelle version disponible : {0}\n\nAller à la page de téléchargement ?</sys:String>
+    <sys:String x:Key="MsgUpToDate">Déjà à jour ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateFailed">Échec de la vérification : {0}</sys:String>
+    <sys:String x:Key="MsgUpdateError">Une erreur s'est produite lors de la vérification des mises à jour.</sys:String>
+    <sys:String x:Key="MsgCurrentVersion">Version actuelle : {0}</sys:String>
+    <sys:String x:Key="MsgCheckingUpdate">Vérification des mises à jour...</sys:String>
+    <sys:String x:Key="MsgUpToDateShort">Déjà à jour ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateFailedShort">Échec de la vérification : {0}</sys:String>
+
+    <!-- ChromeManager -->
+    <sys:String x:Key="ChromeNotFound">Exécutable Chrome officiel introuvable. Les futures versions fourniront un téléchargement et une configuration automatiques.</sys:String>
+    <sys:String x:Key="ChromeReady">Chrome est prêt</sys:String>
+    <sys:String x:Key="ChromeConnecting">Connexion au serveur de téléchargement...</sys:String>
+    <sys:String x:Key="ChromeDownloading">Téléchargement de Chrome...</sys:String>
+    <sys:String x:Key="ChromeDownloadingProgress">Téléchargement de Chrome... {0} Mo / {1} Mo</sys:String>
+    <sys:String x:Key="ChromeInstalling">Installation de Chrome...</sys:String>
+    <sys:String x:Key="ChromeVerifying">Vérification de Chrome...</sys:String>
+    <sys:String x:Key="ChromeInstallFailed">Exécutable Chrome introuvable après l'installation</sys:String>
+    <sys:String x:Key="ChromeDone">Préparation de Chrome terminée</sys:String>
+
+    <!-- Status -->
+    <sys:String x:Key="StatusRunning">En cours</sys:String>
+    <sys:String x:Key="StatusStopped">Arrêté</sys:String>
+    <sys:String x:Key="StatusNotUsed">Non utilisé</sys:String>
+    <sys:String x:Key="StatusRecentUsed">Dernière utilisation {0}</sys:String>
+    <sys:String x:Key="ChromeNotFoundShort">Chrome introuvable</sys:String>
+    <sys:String x:Key="ChromeAvailable">Chrome disponible : {0} ({1})</sys:String>
+
+</ResourceDictionary>

@@ -1,0 +1,103 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xml:lang="en">
+
+    <!-- MainWindow -->
+    <sys:String x:Key="AppTitle">Browser Multi-Open</sys:String>
+    <sys:String x:Key="BtnAddProfile">Add Profile</sys:String>
+    <sys:String x:Key="BtnStart">Start</sys:String>
+    <sys:String x:Key="BtnStop">Stop</sys:String>
+    <sys:String x:Key="BtnStopAll">Stop All</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Prepare Chrome</sys:String>
+    <sys:String x:Key="BtnSettings">Settings</sys:String>
+    <sys:String x:Key="BtnRename">Rename</sys:String>
+    <sys:String x:Key="BtnDelete">Delete</sys:String>
+    <sys:String x:Key="SectionProfiles">Profiles</sys:String>
+    <sys:String x:Key="SelectProfile">Select a profile</sys:String>
+    <sys:String x:Key="SectionBasicInfo">Basic Info</sys:String>
+    <sys:String x:Key="LabelFolder">Folder</sys:String>
+    <sys:String x:Key="LabelProfilePath">Data Path</sys:String>
+    <sys:String x:Key="LabelDebugPort">Debug Port</sys:String>
+    <sys:String x:Key="LabelLastUsed">Last Used</sys:String>
+    <sys:String x:Key="LabelDiskSize">Disk Size</sys:String>
+    <sys:String x:Key="LabelError">Error</sys:String>
+    <sys:String x:Key="SectionAdvancedInfo">Advanced Info</sys:String>
+    <sys:String x:Key="LabelChromeVersion">Chrome Version</sys:String>
+    <sys:String x:Key="LabelChromePath">Chrome Path</sys:String>
+    <sys:String x:Key="LabelCpuCores">CPU Cores</sys:String>
+    <sys:String x:Key="LabelMemory">Memory</sys:String>
+    <sys:String x:Key="EmptyProfiles">No profiles yet. Click "Add Profile" above to create one.</sys:String>
+
+    <!-- SettingsWindow -->
+    <sys:String x:Key="SettingsTitle">Settings</sys:String>
+    <sys:String x:Key="SectionBrowser">Browser</sys:String>
+    <sys:String x:Key="SectionData">Data</sys:String>
+    <sys:String x:Key="LabelDataPath">Data Directory</sys:String>
+    <sys:String x:Key="LabelProfilesPath">Profiles Directory</sys:String>
+    <sys:String x:Key="BtnOpenDataFolder">Open Data Folder</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">Open Profiles Folder</sys:String>
+    <sys:String x:Key="BtnCopyPath">Copy Path</sys:String>
+    <sys:String x:Key="SectionHelpUpdate">Help &amp; Updates</sys:String>
+    <sys:String x:Key="BtnCheckUpdates">Check for Updates</sys:String>
+    <sys:String x:Key="BtnViewReleases">View Releases</sys:String>
+    <sys:String x:Key="BtnOpenIssues">Open Issues</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Copy Email</sys:String>
+    <sys:String x:Key="SectionUi">Interface</sys:String>
+    <sys:String x:Key="ShowAdvancedDetails">Show advanced details (Chrome version, path, system info)</sys:String>
+    <sys:String x:Key="SectionLanguage">Language</sys:String>
+    <sys:String x:Key="BtnOpenChromeFolder">Open Chrome Folder</sys:String>
+
+    <!-- DownloadWindow -->
+    <sys:String x:Key="DownloadTitle">Prepare Chrome</sys:String>
+    <sys:String x:Key="DownloadPreparing">Preparing Chrome Browser</sys:String>
+    <sys:String x:Key="DownloadPreparingStatus">Preparing...</sys:String>
+    <sys:String x:Key="BtnCancel">Cancel</sys:String>
+    <sys:String x:Key="BtnClose">Close</sys:String>
+
+    <!-- Tray Menu -->
+    <sys:String x:Key="TrayOpenPanel">Open Manager</sys:String>
+    <sys:String x:Key="TrayStopAll">Stop All</sys:String>
+    <sys:String x:Key="TrayCheckUpdates">Check for Updates</sys:String>
+    <sys:String x:Key="TrayExit">Exit</sys:String>
+    <sys:String x:Key="TrayStartProfile">Start {0}</sys:String>
+    <sys:String x:Key="TrayStopProfile">Stop {0}</sys:String>
+
+    <!-- Dialogs -->
+    <sys:String x:Key="BtnOk">OK</sys:String>
+    <sys:String x:Key="MsgChromeNotFound">Chrome browser not detected. It needs to be downloaded and installed.\n\nDownload now?</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} environment(s) are still running. Exiting will close them all.\n\nConfirm exit?</sys:String>
+    <sys:String x:Key="MsgRunningEnvNoDelete">Cannot delete a running environment. Please stop it first.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">"{0}" data will be moved to the Recycle Bin.\nType the environment name to confirm.</sys:String>
+    <sys:String x:Key="MsgDeleteTitle">Confirm Delete</sys:String>
+    <sys:String x:Key="MsgRenameTitle">Rename</sys:String>
+    <sys:String x:Key="MsgRenameMessage">Enter a custom name for easy identification</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">New version available: {0}\n\nGo to download?</sys:String>
+    <sys:String x:Key="MsgUpToDate">Already up to date ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateFailed">Update check failed: {0}</sys:String>
+    <sys:String x:Key="MsgUpdateError">An error occurred while checking for updates.</sys:String>
+    <sys:String x:Key="MsgCurrentVersion">Current version: {0}</sys:String>
+    <sys:String x:Key="MsgCheckingUpdate">Checking for updates...</sys:String>
+    <sys:String x:Key="MsgUpToDateShort">Already up to date ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateFailedShort">Update check failed: {0}</sys:String>
+
+    <!-- ChromeManager -->
+    <sys:String x:Key="ChromeNotFound">Official Chrome executable not found. Future versions will provide automatic download and setup.</sys:String>
+    <sys:String x:Key="ChromeReady">Chrome is ready</sys:String>
+    <sys:String x:Key="ChromeConnecting">Connecting to download server...</sys:String>
+    <sys:String x:Key="ChromeDownloading">Downloading Chrome...</sys:String>
+    <sys:String x:Key="ChromeDownloadingProgress">Downloading Chrome... {0} MB / {1} MB</sys:String>
+    <sys:String x:Key="ChromeInstalling">Installing Chrome...</sys:String>
+    <sys:String x:Key="ChromeVerifying">Verifying Chrome...</sys:String>
+    <sys:String x:Key="ChromeInstallFailed">Chrome executable still not found after installation</sys:String>
+    <sys:String x:Key="ChromeDone">Chrome preparation complete</sys:String>
+
+    <!-- Status -->
+    <sys:String x:Key="StatusRunning">Running</sys:String>
+    <sys:String x:Key="StatusStopped">Stopped</sys:String>
+    <sys:String x:Key="StatusNotUsed">Not used</sys:String>
+    <sys:String x:Key="StatusRecentUsed">Last used {0}</sys:String>
+    <sys:String x:Key="ChromeNotFoundShort">Chrome not found</sys:String>
+    <sys:String x:Key="ChromeAvailable">Chrome available: {0} ({1})</sys:String>
+
+</ResourceDictionary>

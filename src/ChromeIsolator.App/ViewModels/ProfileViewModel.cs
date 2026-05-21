@@ -12,6 +12,7 @@ public sealed class ProfileViewModel : ObservableObject
     private int? _debugPort;
     private string? _error;
     private DateTime? _lastUsed;
+    private long _diskSizeBytes;
 
     public ProfileViewModel(Profile model)
     {
@@ -26,14 +27,23 @@ public sealed class ProfileViewModel : ObservableObject
     {
         get
         {
-            var defaultName = $"环境{Model.InstanceNumber}";
+            var defaultName = string.Format(L10n.GetString("LabelFolder") == "Folder" ? "Profile {0}" : "环境{0}", Model.InstanceNumber);
             return string.IsNullOrWhiteSpace(Model.DisplayName)
                 ? defaultName
                 : $"{defaultName} - {Model.DisplayName}";
         }
     }
 
-    public string Subtitle => LastUsedText == "-" ? "未使用" : $"最近使用 {LastUsedText}";
+    public string Subtitle
+    {
+        get
+        {
+            var parts = new List<string>();
+            if (LastUsedText != "-") parts.Add(L10n.Format("StatusRecentUsed", LastUsedText));
+            if (DiskSizeText != "-") parts.Add(DiskSizeText);
+            return parts.Count > 0 ? string.Join(" · ", parts) : L10n.GetString("StatusNotUsed");
+        }
+    }
 
     public bool IsRunning
     {
@@ -85,14 +95,66 @@ public sealed class ProfileViewModel : ObservableObject
         }
     }
 
-    public string StatusText => IsRunning ? "运行中" : "未启动";
+    public long DiskSizeBytes
+    {
+        get => _diskSizeBytes;
+        set
+        {
+            if (SetProperty(ref _diskSizeBytes, value))
+            {
+                OnPropertyChanged(nameof(DiskSizeText));
+                OnPropertyChanged(nameof(Subtitle));
+            }
+        }
+    }
+
+    public string StatusText => IsRunning ? L10n.GetString("StatusRunning") : L10n.GetString("StatusStopped");
     public MediaBrush StatusBrush => IsRunning ? MediaBrushes.ForestGreen : MediaBrushes.Gray;
     public string DebugPortText => DebugPort?.ToString(CultureInfo.InvariantCulture) ?? "-";
     public string ErrorText => string.IsNullOrWhiteSpace(Error) ? "-" : Error;
     public string LastUsedText => LastUsed?.ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture) ?? "-";
 
+    public string DiskSizeText
+    {
+        get
+        {
+            if (_diskSizeBytes <= 0) return "-";
+            if (_diskSizeBytes < 1024 * 1024) return $"{_diskSizeBytes / 1024.0:F0} KB";
+            if (_diskSizeBytes < 1024L * 1024 * 1024) return $"{_diskSizeBytes / (1024.0 * 1024.0):F1} MB";
+            return $"{_diskSizeBytes / (1024.0 * 1024.0 * 1024.0):F2} GB";
+        }
+    }
+
     public void RefreshTitle()
     {
         OnPropertyChanged(nameof(Title));
+    }
+
+    public void RefreshDiskSize()
+    {
+        var dir = AppPaths.ProfileDir(Model.Folder);
+        DiskSizeBytes = Directory.Exists(dir) ? GetDirectorySize(dir) : 0;
+    }
+
+    public void RefreshLocalizedProperties()
+    {
+        OnPropertyChanged(nameof(Title));
+        OnPropertyChanged(nameof(Subtitle));
+        OnPropertyChanged(nameof(StatusText));
+    }
+
+    private static long GetDirectorySize(string path)
+    {
+        long size = 0;
+        try
+        {
+            foreach (var file in Directory.EnumerateFiles(path, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true }))
+            {
+                try { size += new FileInfo(file).Length; }
+                catch { /* skip inaccessible files */ }
+            }
+        }
+        catch { /* skip inaccessible directories */ }
+        return size;
     }
 }

@@ -1,0 +1,103 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xml:lang="ru">
+
+    <!-- MainWindow -->
+    <sys:String x:Key="AppTitle">Мульти-открытие браузера</sys:String>
+    <sys:String x:Key="BtnAddProfile">Добавить профиль</sys:String>
+    <sys:String x:Key="BtnStart">Запустить</sys:String>
+    <sys:String x:Key="BtnStop">Остановить</sys:String>
+    <sys:String x:Key="BtnStopAll">Остановить все</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Подготовить Chrome</sys:String>
+    <sys:String x:Key="BtnSettings">Настройки</sys:String>
+    <sys:String x:Key="BtnRename">Переименовать</sys:String>
+    <sys:String x:Key="BtnDelete">Удалить</sys:String>
+    <sys:String x:Key="SectionProfiles">Профили</sys:String>
+    <sys:String x:Key="SelectProfile">Выберите профиль</sys:String>
+    <sys:String x:Key="SectionBasicInfo">Основная информация</sys:String>
+    <sys:String x:Key="LabelFolder">Папка</sys:String>
+    <sys:String x:Key="LabelProfilePath">Путь к данным</sys:String>
+    <sys:String x:Key="LabelDebugPort">Порт отладки</sys:String>
+    <sys:String x:Key="LabelLastUsed">Последнее использование</sys:String>
+    <sys:String x:Key="LabelDiskSize">Дисковое пространство</sys:String>
+    <sys:String x:Key="LabelError">Ошибка</sys:String>
+    <sys:String x:Key="SectionAdvancedInfo">Расширенная информация</sys:String>
+    <sys:String x:Key="LabelChromeVersion">Версия Chrome</sys:String>
+    <sys:String x:Key="LabelChromePath">Путь к Chrome</sys:String>
+    <sys:String x:Key="LabelCpuCores">Ядра CPU</sys:String>
+    <sys:String x:Key="LabelMemory">Память</sys:String>
+    <sys:String x:Key="EmptyProfiles">Нет профилей. Нажмите «Добавить профиль» выше, чтобы создать.</sys:String>
+
+    <!-- SettingsWindow -->
+    <sys:String x:Key="SettingsTitle">Настройки</sys:String>
+    <sys:String x:Key="SectionBrowser">Браузер</sys:String>
+    <sys:String x:Key="SectionData">Данные</sys:String>
+    <sys:String x:Key="LabelDataPath">Каталог данных</sys:String>
+    <sys:String x:Key="LabelProfilesPath">Каталог профилей</sys:String>
+    <sys:String x:Key="BtnOpenDataFolder">Открыть папку данных</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">Открыть папку профилей</sys:String>
+    <sys:String x:Key="BtnCopyPath">Копировать путь</sys:String>
+    <sys:String x:Key="SectionHelpUpdate">Справка и обновления</sys:String>
+    <sys:String x:Key="BtnCheckUpdates">Проверить обновления</sys:String>
+    <sys:String x:Key="BtnViewReleases">Просмотреть релизы</sys:String>
+    <sys:String x:Key="BtnOpenIssues">Открыть Issues</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Копировать e-mail</sys:String>
+    <sys:String x:Key="SectionUi">Интерфейс</sys:String>
+    <sys:String x:Key="ShowAdvancedDetails">Показать расширенные сведения (версия Chrome, путь, информация о системе)</sys:String>
+    <sys:String x:Key="SectionLanguage">Язык</sys:String>
+    <sys:String x:Key="BtnOpenChromeFolder">Открыть папку Chrome</sys:String>
+
+    <!-- DownloadWindow -->
+    <sys:String x:Key="DownloadTitle">Подготовить Chrome</sys:String>
+    <sys:String x:Key="DownloadPreparing">Подготовка браузера Chrome</sys:String>
+    <sys:String x:Key="DownloadPreparingStatus">Подготовка...</sys:String>
+    <sys:String x:Key="BtnCancel">Отмена</sys:String>
+    <sys:String x:Key="BtnClose">Закрыть</sys:String>
+
+    <!-- Tray Menu -->
+    <sys:String x:Key="TrayOpenPanel">Открыть панель управления</sys:String>
+    <sys:String x:Key="TrayStopAll">Остановить все</sys:String>
+    <sys:String x:Key="TrayCheckUpdates">Проверить обновления</sys:String>
+    <sys:String x:Key="TrayExit">Выход</sys:String>
+    <sys:String x:Key="TrayStartProfile">Запустить {0}</sys:String>
+    <sys:String x:Key="TrayStopProfile">Остановить {0}</sys:String>
+
+    <!-- Dialogs -->
+    <sys:String x:Key="BtnOk">OK</sys:String>
+    <sys:String x:Key="MsgChromeNotFound">Браузер Chrome не обнаружен. Необходимо загрузить и установить.\n\nЗагрузить сейчас?</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} окружение(й) ещё работает. Выход закроет все.\n\nПодтвердить выход?</sys:String>
+    <sys:String x:Key="MsgRunningEnvNoDelete">Невозможно удалить работающее окружение. Сначала остановите его.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">Данные «{0}» будут перемещены в корзину.\nВведите имя окружения для подтверждения.</sys:String>
+    <sys:String x:Key="MsgDeleteTitle">Подтвердить удаление</sys:String>
+    <sys:String x:Key="MsgRenameTitle">Переименовать</sys:String>
+    <sys:String x:Key="MsgRenameMessage">Введите пользовательское имя для удобства идентификации</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}\n\nПерейти к загрузке?</sys:String>
+    <sys:String x:Key="MsgUpToDate">Уже актуальная версия ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateFailed">Ошибка проверки обновлений: {0}</sys:String>
+    <sys:String x:Key="MsgUpdateError">Произошла ошибка при проверке обновлений.</sys:String>
+    <sys:String x:Key="MsgCurrentVersion">Текущая версия: {0}</sys:String>
+    <sys:String x:Key="MsgCheckingUpdate">Проверка обновлений...</sys:String>
+    <sys:String x:Key="MsgUpToDateShort">Уже актуальная версия ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateFailedShort">Ошибка проверки обновлений: {0}</sys:String>
+
+    <!-- ChromeManager -->
+    <sys:String x:Key="ChromeNotFound">Официальный исполняемый файл Chrome не найден. Будущие версии обеспечат автоматическую загрузку и настройку.</sys:String>
+    <sys:String x:Key="ChromeReady">Chrome готов</sys:String>
+    <sys:String x:Key="ChromeConnecting">Подключение к серверу загрузки...</sys:String>
+    <sys:String x:Key="ChromeDownloading">Загрузка Chrome...</sys:String>
+    <sys:String x:Key="ChromeDownloadingProgress">Загрузка Chrome... {0} МБ / {1} МБ</sys:String>
+    <sys:String x:Key="ChromeInstalling">Установка Chrome...</sys:String>
+    <sys:String x:Key="ChromeVerifying">Проверка Chrome...</sys:String>
+    <sys:String x:Key="ChromeInstallFailed">Исполняемый файл Chrome не найден после установки</sys:String>
+    <sys:String x:Key="ChromeDone">Подготовка Chrome завершена</sys:String>
+
+    <!-- Status -->
+    <sys:String x:Key="StatusRunning">Работает</sys:String>
+    <sys:String x:Key="StatusStopped">Остановлен</sys:String>
+    <sys:String x:Key="StatusNotUsed">Не использовался</sys:String>
+    <sys:String x:Key="StatusRecentUsed">Последнее использование {0}</sys:String>
+    <sys:String x:Key="ChromeNotFoundShort">Chrome не найден</sys:String>
+    <sys:String x:Key="ChromeAvailable">Chrome доступен: {0} ({1})</sys:String>
+
+</ResourceDictionary>

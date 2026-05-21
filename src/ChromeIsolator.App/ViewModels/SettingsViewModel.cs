@@ -6,14 +6,22 @@ public sealed class SettingsViewModel : ObservableObject
 {
     private readonly ChromeManager _chromeManager;
     private readonly UpdateService _updateService;
+    private readonly ProfileManager _profileManager;
     private string _chromeStatusText = "";
     private string _updateStatusText = "";
     private bool _isCheckingForUpdates;
+    private bool _showAdvancedDetails;
+    private (string Code, string NativeName) _selectedLanguage;
 
-    public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService)
+    public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService, ProfileManager profileManager)
     {
         _chromeManager = chromeManager;
         _updateService = updateService;
+        _profileManager = profileManager;
+        _showAdvancedDetails = profileManager.Config.ShowAdvancedDetails;
+
+        Languages = L10n.SupportedLanguages;
+        _selectedLanguage = Languages.FirstOrDefault(l => l.Code == L10n.CurrentLanguage);
 
         OpenDataFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.SupportDir));
         OpenProfilesFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.ProfilesDir));
@@ -25,7 +33,25 @@ public sealed class SettingsViewModel : ObservableObject
         CopyEmailCommand = new RelayCommand(() => ShellService.CopyText("lucas6.zju@vip.163.com"));
 
         RefreshChromeStatus();
-        UpdateStatusText = $"当前版本：{_updateService.CurrentVersion}";
+        UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
+    }
+
+    public IReadOnlyList<(string Code, string NativeName)> Languages { get; }
+
+    public (string Code, string NativeName) SelectedLanguage
+    {
+        get => _selectedLanguage;
+        set
+        {
+            if (SetProperty(ref _selectedLanguage, value) && value.Code != L10n.CurrentLanguage)
+            {
+                L10n.SetLanguage(value.Code);
+                _profileManager.Config.Language = value.Code;
+                _profileManager.Save();
+                RefreshChromeStatus();
+                UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
+            }
+        }
     }
 
     public RelayCommand OpenDataFolderCommand { get; }
@@ -66,18 +92,31 @@ public sealed class SettingsViewModel : ObservableObject
         }
     }
 
+    public bool ShowAdvancedDetails
+    {
+        get => _showAdvancedDetails;
+        set
+        {
+            if (SetProperty(ref _showAdvancedDetails, value))
+            {
+                _profileManager.Config.ShowAdvancedDetails = value;
+                _profileManager.Save();
+            }
+        }
+    }
+
     private async void CheckForUpdates()
     {
         try
         {
             IsCheckingForUpdates = true;
-            UpdateStatusText = "正在检查更新...";
+            UpdateStatusText = L10n.GetString("MsgCheckingUpdate");
             var result = await _updateService.CheckForUpdatesAsync();
             UpdateStatusText = result.Status switch
             {
-                UpdateCheckStatus.UpToDate => $"当前已是最新版本（{result.LatestVersion ?? CurrentVersion}）",
-                UpdateCheckStatus.UpdateAvailable => $"发现新版本：{result.LatestVersion}",
-                _ => $"检查更新失败：{result.ErrorMessage ?? "未知错误"}"
+                UpdateCheckStatus.UpToDate => L10n.Format("MsgUpToDateShort", result.LatestVersion ?? CurrentVersion),
+                UpdateCheckStatus.UpdateAvailable => L10n.Format("MsgUpdateAvailable", result.LatestVersion ?? "-"),
+                _ => L10n.Format("MsgUpdateFailedShort", result.ErrorMessage ?? "-")
             };
         }
         finally
@@ -90,7 +129,7 @@ public sealed class SettingsViewModel : ObservableObject
     {
         var chrome = _chromeManager.CurrentChrome;
         ChromeStatusText = chrome is null
-            ? "Chrome 未找到"
-            : $"Chrome 可用：{chrome.Version ?? "未知版本"}（{chrome.Source}）\n{chrome.ExecutablePath}";
+            ? L10n.GetString("ChromeNotFoundShort")
+            : $"{L10n.Format("ChromeAvailable", chrome.Version ?? "-", chrome.Source)}\n{chrome.ExecutablePath}";
     }
 }

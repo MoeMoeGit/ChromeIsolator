@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Forms;
 using ChromeIsolator.ViewModels;
 using Application = System.Windows.Application;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ChromeIsolator.Services;
 
@@ -23,7 +24,7 @@ public sealed class TrayService : IDisposable
         _notifyIcon = new NotifyIcon
         {
             Icon = LoadIcon(),
-            Text = "浏览器多开",
+            Text = L10n.GetString("AppTitle"),
             Visible = true
         };
         _notifyIcon.DoubleClick += (_, _) => _mainWindow.ShowFromTray();
@@ -47,19 +48,36 @@ public sealed class TrayService : IDisposable
         menu.Opening += (_, _) =>
         {
             menu.Items.Clear();
-            menu.Items.Add("打开管理面板", null, (_, _) => _mainWindow.ShowFromTray());
+            menu.Items.Add(L10n.GetString("TrayOpenPanel"), null, (_, _) => _mainWindow.ShowFromTray());
             menu.Items.Add(new ToolStripSeparator());
 
             foreach (var profile in _viewModel.Profiles)
             {
-                var text = profile.IsRunning ? $"关闭 {profile.Title}" : $"启动 {profile.Title}";
+                var text = profile.IsRunning
+                    ? L10n.Format("TrayStopProfile", profile.Title)
+                    : L10n.Format("TrayStartProfile", profile.Title);
                 menu.Items.Add(text, null, (_, _) => _viewModel.ToggleProfile(profile));
             }
 
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add("全部关闭", null, (_, _) => _viewModel.StopAll());
-            menu.Items.Add("退出", null, (_, _) =>
+            menu.Items.Add(L10n.GetString("TrayStopAll"), null, (_, _) => _viewModel.StopAll());
+            menu.Items.Add(L10n.GetString("TrayCheckUpdates"), null, async (_, _) => await _viewModel.CheckForUpdatesFromTrayAsync());
+            menu.Items.Add(L10n.GetString("TrayExit"), null, (_, _) =>
             {
+                var runningCount = _viewModel.Profiles.Count(p => p.IsRunning);
+                if (runningCount > 0)
+                {
+                    var result = MessageBox.Show(
+                        L10n.Format("MsgRunningEnvExit", runningCount),
+                        L10n.GetString("AppTitle"),
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+                    if (result != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
                 _mainWindow.ExitFromTray();
                 Application.Current.Shutdown();
             });
