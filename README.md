@@ -65,7 +65,37 @@ ChromeIsolator 不包含：
 
 ## 从源码构建
 
-项目计划使用 C#、WPF 和 .NET 实现。代码工程创建后，会在这里补充完整构建步骤。
+项目使用 C#、WPF 和 .NET 8 实现。
+
+### 前置条件
+
+- Windows 10 / Windows 11 x64
+- .NET 8 SDK
+- Visual Studio 2022 的 .NET Desktop Development 组件，或等价 Build Tools
+
+### 构建
+
+```powershell
+dotnet build ChromeIsolator.sln
+```
+
+### 运行
+
+```powershell
+dotnet run --project .\src\ChromeIsolator.App\ChromeIsolator.App.csproj
+```
+
+### 发布 win-x64
+
+```powershell
+.\scripts\publish-win-x64.ps1
+```
+
+发布产物位于：
+
+```text
+artifacts\publish\win-x64\
+```
 
 ## 许可证
 
