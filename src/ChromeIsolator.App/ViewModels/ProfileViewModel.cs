@@ -9,6 +9,8 @@ namespace ChromeIsolator.ViewModels;
 public sealed class ProfileViewModel : ObservableObject
 {
     private bool _isRunning;
+    private bool _isStarting;
+    private bool _isStopping;
     private int? _debugPort;
     private string? _error;
     private DateTime? _lastUsed;
@@ -51,6 +53,32 @@ public sealed class ProfileViewModel : ObservableObject
         set
         {
             if (SetProperty(ref _isRunning, value))
+            {
+                OnPropertyChanged(nameof(StatusText));
+                OnPropertyChanged(nameof(StatusBrush));
+            }
+        }
+    }
+
+    public bool IsStarting
+    {
+        get => _isStarting;
+        set
+        {
+            if (SetProperty(ref _isStarting, value))
+            {
+                OnPropertyChanged(nameof(StatusText));
+                OnPropertyChanged(nameof(StatusBrush));
+            }
+        }
+    }
+
+    public bool IsStopping
+    {
+        get => _isStopping;
+        set
+        {
+            if (SetProperty(ref _isStopping, value))
             {
                 OnPropertyChanged(nameof(StatusText));
                 OnPropertyChanged(nameof(StatusBrush));
@@ -108,17 +136,64 @@ public sealed class ProfileViewModel : ObservableObject
         }
     }
 
-    public string StatusText => IsRunning ? L10n.GetString("StatusRunning") : L10n.GetString("StatusStopped");
-    public MediaBrush StatusBrush => IsRunning ? MediaBrushes.ForestGreen : MediaBrushes.Gray;
+    public string StatusText
+    {
+        get
+        {
+            if (_isStarting) return L10n.GetString("StatusStarting");
+            if (_isStopping) return L10n.GetString("StatusStopping");
+            return _isRunning ? L10n.GetString("StatusRunning") : L10n.GetString("StatusStopped");
+        }
+    }
+
+    public MediaBrush StatusBrush
+    {
+        get
+        {
+            if (_isStarting || _isStopping) return MediaBrushes.Orange;
+            return _isRunning ? MediaBrushes.ForestGreen : MediaBrushes.Gray;
+        }
+    }
+
     public string DebugPortText => DebugPort?.ToString(CultureInfo.InvariantCulture) ?? "-";
     public string ErrorText => string.IsNullOrWhiteSpace(Error) ? "-" : Error;
-    public string LastUsedText => LastUsed?.ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture) ?? "-";
+
+    public string LastUsedText
+    {
+        get
+        {
+            if (_lastUsed is null) return "-";
+            var date = _lastUsed.Value;
+            var now = DateTime.Now;
+            var span = now - date;
+
+            if (span.TotalMinutes < 1) return L10n.GetString("DateJustNow");
+            if (span.TotalHours < 1) return L10n.Format("DateMinutesAgo", (int)span.TotalMinutes);
+            if (date.Date == now.Date) return L10n.GetString("DateToday");
+            if (date.Date == now.Date.AddDays(-1)) return L10n.GetString("DateYesterday");
+            if (span.TotalDays < 7) return L10n.Format("DateDaysAgo", (int)span.TotalDays);
+            if (date.Year == now.Year) return date.ToString("MM/dd", CultureInfo.CurrentCulture);
+            return date.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
+        }
+    }
 
     public string DiskSizeText
     {
         get
         {
             if (_diskSizeBytes <= 0) return "-";
+            if (_diskSizeBytes < 1024 * 1024) return $"{_diskSizeBytes / 1024.0:F0} KB";
+            if (_diskSizeBytes < 1024L * 1024 * 1024) return $"{_diskSizeBytes / (1024.0 * 1024.0):F1} MB";
+            return $"{_diskSizeBytes / (1024.0 * 1024.0 * 1024.0):F2} GB";
+        }
+    }
+
+    public string DiskSizeRaw
+    {
+        get
+        {
+            if (_diskSizeBytes <= 0) return "0 B";
+            if (_diskSizeBytes < 1024) return $"{_diskSizeBytes} B";
             if (_diskSizeBytes < 1024 * 1024) return $"{_diskSizeBytes / 1024.0:F0} KB";
             if (_diskSizeBytes < 1024L * 1024 * 1024) return $"{_diskSizeBytes / (1024.0 * 1024.0):F1} MB";
             return $"{_diskSizeBytes / (1024.0 * 1024.0 * 1024.0):F2} GB";
@@ -136,11 +211,36 @@ public sealed class ProfileViewModel : ObservableObject
         DiskSizeBytes = Directory.Exists(dir) ? GetDirectorySize(dir) : 0;
     }
 
+    public static async Task<long> GetDirectorySizeAsync(string path)
+    {
+        return await Task.Run(() =>
+        {
+            long size = 0;
+            try
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true }))
+                {
+                    try { size += new FileInfo(file).Length; }
+                    catch { /* skip inaccessible files */ }
+                }
+            }
+            catch { /* skip inaccessible directories */ }
+            return size;
+        });
+    }
+
+    public async Task RefreshDiskSizeAsync()
+    {
+        var dir = AppPaths.ProfileDir(Model.Folder);
+        DiskSizeBytes = Directory.Exists(dir) ? await GetDirectorySizeAsync(dir) : 0;
+    }
+
     public void RefreshLocalizedProperties()
     {
         OnPropertyChanged(nameof(Title));
         OnPropertyChanged(nameof(Subtitle));
         OnPropertyChanged(nameof(StatusText));
+        OnPropertyChanged(nameof(LastUsedText));
     }
 
     private static long GetDirectorySize(string path)

@@ -68,6 +68,12 @@
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{DynamicResource BtnRename}" Command="{Binding DataContext.RenameSelectedCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                <MenuItem Header="{DynamicResource BtnDelete}" Command="{Binding DataContext.DeleteSelectedCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                     </ListBox>
                     <TextBlock Text="{DynamicResource EmptyProfiles}"
                                Foreground="#A0AAB8"
@@ -146,6 +152,11 @@
                                 <Button Content="{DynamicResource BtnClearError}" Command="{Binding ClearErrorCommand}" Margin="6,0,0,0" MinWidth="70" />
                             </StackPanel>
                         </Grid>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                        <Button Content="{DynamicResource BtnOpenProfilesFolder}" Command="{Binding OpenProfileFolderCommand}" Margin="0,0,8,0" />
+                        <Button Content="{DynamicResource BtnCopyPath}" Command="{Binding CopyProfilePathCommand}" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Margin="0,20,0,0"

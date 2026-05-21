@@ -61,6 +61,25 @@ public sealed class TrayService : IDisposable
 
             menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add(L10n.GetString("TrayStopAll"), null, (_, _) => _viewModel.StopAll());
+            menu.Items.Add(L10n.GetString("TrayStopAllAndQuit"), null, async (_, _) =>
+            {
+                var runningCount = _viewModel.Profiles.Count(p => p.IsRunning);
+                if (runningCount > 0)
+                {
+                    var result = MessageBox.Show(
+                        L10n.Format("MsgRunningEnvExit", runningCount),
+                        L10n.GetString("AppTitle"),
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+                    if (result != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                _mainWindow.ExitFromTray();
+                await _viewModel.StopAllAndQuitAsync();
+            });
             menu.Items.Add(L10n.GetString("TrayCheckUpdates"), null, async (_, _) => await _viewModel.CheckForUpdatesFromTrayAsync());
             menu.Items.Add(L10n.GetString("TrayExit"), null, (_, _) =>
             {

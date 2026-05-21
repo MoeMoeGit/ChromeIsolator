@@ -64,6 +64,7 @@
     <sys:String x:Key="TrayOpenPanel">Verwaltungspanel öffnen</sys:String>
     <sys:String x:Key="TrayStopAll">Alle stoppen</sys:String>
     <sys:String x:Key="TrayCheckUpdates">Nach Updates suchen</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">Alle stoppen &amp; beenden</sys:String>
     <sys:String x:Key="TrayExit">Beenden</sys:String>
     <sys:String x:Key="TrayStartProfile">{0} starten</sys:String>
     <sys:String x:Key="TrayStopProfile">{0} stoppen</sys:String>
@@ -73,7 +74,7 @@
     <sys:String x:Key="MsgChromeNotFound">Chrome-Browser nicht erkannt. Er muss heruntergeladen und installiert werden.\n\nJetzt herunterladen?</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} Umgebung(en) laufen noch. Beenden schließt alle.\n\nBeenden bestätigen?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Laufende Umgebungen können nicht gelöscht werden. Bitte zuerst stoppen.</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">Die Daten von „{0}" werden in den Papierkorb verschoben.\nGeben Sie den Umgebungsnamen zur Bestätigung ein.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">Die Daten von „{0}" werden in den Papierkorb verschoben. Aktuelle Datengröße: {1}.\nGeben Sie den Umgebungsnamen zur Bestätigung ein.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Löschen bestätigen</sys:String>
     <sys:String x:Key="MsgRenameTitle">Umbenennen</sys:String>
     <sys:String x:Key="MsgRenameMessage">Geben Sie einen benutzerdefinierten Namen ein</sys:String>
@@ -100,8 +101,15 @@
     <!-- Status -->
     <sys:String x:Key="StatusRunning">Läuft</sys:String>
     <sys:String x:Key="StatusStopped">Gestoppt</sys:String>
+    <sys:String x:Key="StatusStarting">Startet</sys:String>
+    <sys:String x:Key="StatusStopping">Stoppt</sys:String>
     <sys:String x:Key="StatusNotUsed">Nicht verwendet</sys:String>
     <sys:String x:Key="StatusRecentUsed">Zuletzt verwendet {0}</sys:String>
+    <sys:String x:Key="DateJustNow">Gerade eben</sys:String>
+    <sys:String x:Key="DateMinutesAgo">Vor {0} Min.</sys:String>
+    <sys:String x:Key="DateToday">Heute</sys:String>
+    <sys:String x:Key="DateYesterday">Gestern</sys:String>
+    <sys:String x:Key="DateDaysAgo">Vor {0} Tagen</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Chrome nicht gefunden</sys:String>
     <sys:String x:Key="ChromeAvailable">Chrome verfügbar: {0} ({1})</sys:String>
 

@@ -64,6 +64,7 @@
     <sys:String x:Key="TrayOpenPanel">管理パネルを開く</sys:String>
     <sys:String x:Key="TrayStopAll">すべて停止</sys:String>
     <sys:String x:Key="TrayCheckUpdates">更新を確認</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">すべて停止して終了</sys:String>
     <sys:String x:Key="TrayExit">終了</sys:String>
     <sys:String x:Key="TrayStartProfile">{0} を起動</sys:String>
     <sys:String x:Key="TrayStopProfile">{0} を停止</sys:String>
@@ -73,7 +74,7 @@
     <sys:String x:Key="MsgChromeNotFound">Chrome ブラウザが検出されませんでした。ダウンロードしてインストールする必要があります。\n\n今すぐダウンロードしますか？</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} つの環境が実行中です。終了するとすべて閉じます。\n\n終了しますか？</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">実行中の環境は削除できません。先に停止してください。</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">「{0}」のデータをゴミ箱に移動します。\n環境名を入力して確認してください。</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">「{0}」のデータをゴミ箱に移動します。現在のデータサイズ：{1}。\n環境名を入力して確認してください。</sys:String>
     <sys:String x:Key="MsgDeleteTitle">削除の確認</sys:String>
     <sys:String x:Key="MsgRenameTitle">名前変更</sys:String>
     <sys:String x:Key="MsgRenameMessage">識別しやすい名前を入力してください</sys:String>
@@ -100,8 +101,15 @@
     <!-- Status -->
     <sys:String x:Key="StatusRunning">実行中</sys:String>
     <sys:String x:Key="StatusStopped">停止</sys:String>
+    <sys:String x:Key="StatusStarting">起動中</sys:String>
+    <sys:String x:Key="StatusStopping">停止中</sys:String>
     <sys:String x:Key="StatusNotUsed">未使用</sys:String>
     <sys:String x:Key="StatusRecentUsed">最終使用 {0}</sys:String>
+    <sys:String x:Key="DateJustNow">たった今</sys:String>
+    <sys:String x:Key="DateMinutesAgo">{0} 分前</sys:String>
+    <sys:String x:Key="DateToday">今日</sys:String>
+    <sys:String x:Key="DateYesterday">昨日</sys:String>
+    <sys:String x:Key="DateDaysAgo">{0} 日前</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Chrome が見つかりません</sys:String>
     <sys:String x:Key="ChromeAvailable">Chrome 利用可能：{0}（{1}）</sys:String>
 

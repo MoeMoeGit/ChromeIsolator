@@ -3,6 +3,7 @@ using System.Windows;
 using ChromeIsolator.Models;
 using ChromeIsolator.Services;
 using WpfApplication = System.Windows.Application;
+using WpfClipboard = System.Windows.Clipboard;
 using WpfMessageBox = System.Windows.MessageBox;
 using DownloadWindow = ChromeIsolator.DownloadWindow;
 
@@ -16,6 +17,7 @@ public sealed class MainViewModel : ObservableObject
     private ProfileViewModel? _selectedProfile;
     private string _chromeStatusText = "";
     private bool _showAdvancedDetails;
+    private bool _isShuttingDown;
 
     public MainViewModel(ProfileManager profileManager, ChromeManager chromeManager, UpdateService updateService)
     {
@@ -39,11 +41,13 @@ public sealed class MainViewModel : ObservableObject
         DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null);
         ClearErrorCommand = new RelayCommand(ClearError, () => SelectedProfile is not null && !string.IsNullOrEmpty(SelectedProfile?.Error));
         RetrySelectedCommand = new RelayCommand(RetrySelected, () => SelectedProfile is not null && !SelectedProfile!.IsRunning && !string.IsNullOrEmpty(SelectedProfile?.Error));
+        OpenProfileFolderCommand = new RelayCommand(OpenProfileFolder, () => SelectedProfile is not null);
+        CopyProfilePathCommand = new RelayCommand(CopyProfilePath, () => SelectedProfile is not null);
 
         _chromeManager.ProfileExited += OnProfileExited;
         L10n.LanguageChanged += OnLanguageChanged;
         RefreshChromeStatus();
-        RefreshDiskSizes();
+        _ = RefreshDiskSizesAsync();
     }
 
     public ObservableCollection<ProfileViewModel> Profiles { get; }
@@ -70,6 +74,8 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand DeleteSelectedCommand { get; }
     public RelayCommand ClearErrorCommand { get; }
     public RelayCommand RetrySelectedCommand { get; }
+    public RelayCommand OpenProfileFolderCommand { get; }
+    public RelayCommand CopyProfilePathCommand { get; }
 
     public string ChromeStatusText
     {
@@ -141,15 +147,42 @@ public sealed class MainViewModel : ObservableObject
 
     public void StopAll()
     {
+        foreach (var profile in Profiles)
+        {
+            if (profile.IsRunning)
+            {
+                profile.IsStopping = true;
+            }
+        }
+
         _chromeManager.StopAll(Profiles.Select(profile => profile.Model));
         foreach (var profile in Profiles)
         {
             profile.IsRunning = false;
+            profile.IsStarting = false;
+            profile.IsStopping = false;
             profile.DebugPort = null;
             profile.LastUsed = DateTime.Now;
-            profile.RefreshDiskSize();
         }
+        _ = RefreshDiskSizesAsync();
         SortProfiles();
+    }
+
+    public async Task StopAllAndQuitAsync()
+    {
+        if (_isShuttingDown) return;
+        _isShuttingDown = true;
+
+        foreach (var profile in Profiles)
+        {
+            if (profile.IsRunning)
+            {
+                profile.IsStopping = true;
+            }
+        }
+
+        await Task.Run(() => _chromeManager.StopAll(Profiles.Select(profile => profile.Model)));
+        WpfApplication.Current.Shutdown();
     }
 
     private void AddProfile()
@@ -158,6 +191,13 @@ public sealed class MainViewModel : ObservableObject
         var viewModel = new ProfileViewModel(profile);
         Profiles.Add(viewModel);
         SelectedProfile = viewModel;
+
+        var input = SimpleInputDialog.Show(L10n.GetString("MsgRenameTitle"), L10n.GetString("MsgRenameMessage"), "");
+        if (!string.IsNullOrWhiteSpace(input))
+        {
+            _profileManager.RenameProfile(profile, input);
+            viewModel.RefreshTitle();
+        }
     }
 
     private void PrepareChrome()
@@ -301,7 +341,10 @@ public sealed class MainViewModel : ObservableObject
             return;
         }
 
-        var confirm = SimpleInputDialog.Show(L10n.GetString("MsgDeleteTitle"), L10n.Format("MsgDeleteConfirm", SelectedProfile.Title), "");
+        var confirm = SimpleInputDialog.Show(
+            L10n.GetString("MsgDeleteTitle"),
+            L10n.Format("MsgDeleteConfirm", SelectedProfile.Title, SelectedProfile.DiskSizeRaw),
+            "");
         if (confirm != SelectedProfile.Title)
         {
             return;
@@ -331,12 +374,30 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
+    private void OpenProfileFolder()
+    {
+        if (SelectedProfile is not null)
+        {
+            ShellService.OpenFolder(AppPaths.ProfileDir(SelectedProfile.Folder));
+        }
+    }
+
+    private void CopyProfilePath()
+    {
+        if (SelectedProfile is not null)
+        {
+            WpfClipboard.SetText(AppPaths.ProfileDir(SelectedProfile.Folder));
+        }
+    }
+
     private void StartProfile(ProfileViewModel profile)
     {
         try
         {
             profile.Error = null;
+            profile.IsStarting = true;
             _chromeManager.Start(profile.Model);
+            profile.IsStarting = false;
             profile.IsRunning = true;
             profile.DebugPort = _chromeManager.DebugPort(profile.Model);
             profile.LastUsed = DateTime.Now;
@@ -344,6 +405,7 @@ public sealed class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            profile.IsStarting = false;
             profile.Error = ex.Message;
             RefreshChromeStatus();
         }
@@ -351,11 +413,13 @@ public sealed class MainViewModel : ObservableObject
 
     private void StopProfile(ProfileViewModel profile)
     {
+        profile.IsStopping = true;
         _chromeManager.Stop(profile.Model);
         profile.IsRunning = false;
+        profile.IsStopping = false;
         profile.DebugPort = null;
         profile.LastUsed = DateTime.Now;
-        profile.RefreshDiskSize();
+        _ = profile.RefreshDiskSizeAsync();
         SortProfiles();
     }
 
@@ -370,9 +434,11 @@ public sealed class MainViewModel : ObservableObject
             }
 
             profile.IsRunning = false;
+            profile.IsStarting = false;
+            profile.IsStopping = false;
             profile.DebugPort = null;
             profile.LastUsed = DateTime.Now;
-            profile.RefreshDiskSize();
+            _ = profile.RefreshDiskSizeAsync();
             SortProfiles();
         });
     }
@@ -396,6 +462,8 @@ public sealed class MainViewModel : ObservableObject
         DeleteSelectedCommand.RaiseCanExecuteChanged();
         ClearErrorCommand.RaiseCanExecuteChanged();
         RetrySelectedCommand.RaiseCanExecuteChanged();
+        OpenProfileFolderCommand.RaiseCanExecuteChanged();
+        CopyProfilePathCommand.RaiseCanExecuteChanged();
     }
 
     private void RefreshChromeStatus()
@@ -406,11 +474,11 @@ public sealed class MainViewModel : ObservableObject
             : L10n.Format("ChromeAvailable", chrome.Version ?? "-", chrome.Source);
     }
 
-    private void RefreshDiskSizes()
+    private async Task RefreshDiskSizesAsync()
     {
         foreach (var profile in Profiles)
         {
-            profile.RefreshDiskSize();
+            await profile.RefreshDiskSizeAsync();
         }
     }
 

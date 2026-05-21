@@ -64,6 +64,7 @@
     <sys:String x:Key="TrayOpenPanel">Ouvrir le panneau de gestion</sys:String>
     <sys:String x:Key="TrayStopAll">Tout arrêter</sys:String>
     <sys:String x:Key="TrayCheckUpdates">Vérifier les mises à jour</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">Tout arrêter et quitter</sys:String>
     <sys:String x:Key="TrayExit">Quitter</sys:String>
     <sys:String x:Key="TrayStartProfile">Démarrer {0}</sys:String>
     <sys:String x:Key="TrayStopProfile">Arrêter {0}</sys:String>
@@ -73,7 +74,7 @@
     <sys:String x:Key="MsgChromeNotFound">Navigateur Chrome non détecté. Il doit être téléchargé et installé.\n\nTélécharger maintenant ?</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} environnement(s) en cours d'exécution. La fermeture les arrêtera tous.\n\nConfirmer la fermeture ?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Impossible de supprimer un environnement en cours d'exécution. Veuillez l'arrêter d'abord.</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">Les données de « {0} » seront déplacées vers la corbeille.\nTapez le nom de l'environnement pour confirmer.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">Les données de « {0} » seront déplacées vers la corbeille. Taille actuelle : {1}.\nTapez le nom de l'environnement pour confirmer.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Confirmer la suppression</sys:String>
     <sys:String x:Key="MsgRenameTitle">Renommer</sys:String>
     <sys:String x:Key="MsgRenameMessage">Entrez un nom personnalisé pour faciliter l'identification</sys:String>
@@ -100,8 +101,15 @@
     <!-- Status -->
     <sys:String x:Key="StatusRunning">En cours</sys:String>
     <sys:String x:Key="StatusStopped">Arrêté</sys:String>
+    <sys:String x:Key="StatusStarting">Démarrage</sys:String>
+    <sys:String x:Key="StatusStopping">Arrêt en cours</sys:String>
     <sys:String x:Key="StatusNotUsed">Non utilisé</sys:String>
     <sys:String x:Key="StatusRecentUsed">Dernière utilisation {0}</sys:String>
+    <sys:String x:Key="DateJustNow">À l'instant</sys:String>
+    <sys:String x:Key="DateMinutesAgo">Il y a {0} min</sys:String>
+    <sys:String x:Key="DateToday">Aujourd'hui</sys:String>
+    <sys:String x:Key="DateYesterday">Hier</sys:String>
+    <sys:String x:Key="DateDaysAgo">Il y a {0} jours</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Chrome introuvable</sys:String>
     <sys:String x:Key="ChromeAvailable">Chrome disponible : {0} ({1})</sys:String>
 

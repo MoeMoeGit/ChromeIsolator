@@ -64,6 +64,7 @@
     <sys:String x:Key="TrayOpenPanel">Открыть панель управления</sys:String>
     <sys:String x:Key="TrayStopAll">Остановить все</sys:String>
     <sys:String x:Key="TrayCheckUpdates">Проверить обновления</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">Остановить все и выйти</sys:String>
     <sys:String x:Key="TrayExit">Выход</sys:String>
     <sys:String x:Key="TrayStartProfile">Запустить {0}</sys:String>
     <sys:String x:Key="TrayStopProfile">Остановить {0}</sys:String>
@@ -73,7 +74,7 @@
     <sys:String x:Key="MsgChromeNotFound">Браузер Chrome не обнаружен. Необходимо загрузить и установить.\n\nЗагрузить сейчас?</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} окружение(й) ещё работает. Выход закроет все.\n\nПодтвердить выход?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Невозможно удалить работающее окружение. Сначала остановите его.</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">Данные «{0}» будут перемещены в корзину.\nВведите имя окружения для подтверждения.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">Данные «{0}» будут перемещены в корзину. Текущий размер: {1}.\nВведите имя окружения для подтверждения.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Подтвердить удаление</sys:String>
     <sys:String x:Key="MsgRenameTitle">Переименовать</sys:String>
     <sys:String x:Key="MsgRenameMessage">Введите пользовательское имя для удобства идентификации</sys:String>
@@ -100,8 +101,15 @@
     <!-- Status -->
     <sys:String x:Key="StatusRunning">Работает</sys:String>
     <sys:String x:Key="StatusStopped">Остановлен</sys:String>
+    <sys:String x:Key="StatusStarting">Запуск</sys:String>
+    <sys:String x:Key="StatusStopping">Остановка</sys:String>
     <sys:String x:Key="StatusNotUsed">Не использовался</sys:String>
     <sys:String x:Key="StatusRecentUsed">Последнее использование {0}</sys:String>
+    <sys:String x:Key="DateJustNow">Только что</sys:String>
+    <sys:String x:Key="DateMinutesAgo">{0} мин. назад</sys:String>
+    <sys:String x:Key="DateToday">Сегодня</sys:String>
+    <sys:String x:Key="DateYesterday">Вчера</sys:String>
+    <sys:String x:Key="DateDaysAgo">{0} дн. назад</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Chrome не найден</sys:String>
     <sys:String x:Key="ChromeAvailable">Chrome доступен: {0} ({1})</sys:String>
 

@@ -64,6 +64,7 @@
     <sys:String x:Key="TrayOpenPanel">Open Manager</sys:String>
     <sys:String x:Key="TrayStopAll">Stop All</sys:String>
     <sys:String x:Key="TrayCheckUpdates">Check for Updates</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">Stop All &amp; Exit</sys:String>
     <sys:String x:Key="TrayExit">Exit</sys:String>
     <sys:String x:Key="TrayStartProfile">Start {0}</sys:String>
     <sys:String x:Key="TrayStopProfile">Stop {0}</sys:String>
@@ -73,7 +74,7 @@
     <sys:String x:Key="MsgChromeNotFound">Chrome browser not detected. It needs to be downloaded and installed.\n\nDownload now?</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} environment(s) are still running. Exiting will close them all.\n\nConfirm exit?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Cannot delete a running environment. Please stop it first.</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">"{0}" data will be moved to the Recycle Bin.\nType the environment name to confirm.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">"{0}" data will be moved to the Recycle Bin. Current data size: {1}.\nType the environment name to confirm.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Confirm Delete</sys:String>
     <sys:String x:Key="MsgRenameTitle">Rename</sys:String>
     <sys:String x:Key="MsgRenameMessage">Enter a custom name for easy identification</sys:String>
@@ -100,8 +101,15 @@
     <!-- Status -->
     <sys:String x:Key="StatusRunning">Running</sys:String>
     <sys:String x:Key="StatusStopped">Stopped</sys:String>
+    <sys:String x:Key="StatusStarting">Starting</sys:String>
+    <sys:String x:Key="StatusStopping">Closing</sys:String>
     <sys:String x:Key="StatusNotUsed">Not used</sys:String>
     <sys:String x:Key="StatusRecentUsed">Last used {0}</sys:String>
+    <sys:String x:Key="DateJustNow">Just now</sys:String>
+    <sys:String x:Key="DateMinutesAgo">{0} min ago</sys:String>
+    <sys:String x:Key="DateToday">Today</sys:String>
+    <sys:String x:Key="DateYesterday">Yesterday</sys:String>
+    <sys:String x:Key="DateDaysAgo">{0} days ago</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Chrome not found</sys:String>
     <sys:String x:Key="ChromeAvailable">Chrome available: {0} ({1})</sys:String>
 

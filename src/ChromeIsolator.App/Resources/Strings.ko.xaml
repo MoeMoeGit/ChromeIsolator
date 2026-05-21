@@ -64,6 +64,7 @@
     <sys:String x:Key="TrayOpenPanel">관리 패널 열기</sys:String>
     <sys:String x:Key="TrayStopAll">모두 중지</sys:String>
     <sys:String x:Key="TrayCheckUpdates">업데이트 확인</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">모두 중지 후 종료</sys:String>
     <sys:String x:Key="TrayExit">종료</sys:String>
     <sys:String x:Key="TrayStartProfile">{0} 시작</sys:String>
     <sys:String x:Key="TrayStopProfile">{0} 중지</sys:String>
@@ -73,7 +74,7 @@
     <sys:String x:Key="MsgChromeNotFound">Chrome 브라우저가 감지되지 않았습니다. 다운로드하여 설치해야 합니다.\n\n지금 다운로드하시겠습니까?</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0}개의 환경이 실행 중입니다. 종료하면 모두 닫힙니다.\n\n종료하시겠습니까?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">실행 중인 환경은 삭제할 수 없습니다. 먼저 중지하세요.</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">"{0}"의 데이터를 휴지통으로 이동합니다.\n환경 이름을 입력하여 확인하세요.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">"{0}"의 데이터를 휴지통으로 이동합니다. 현재 데이터 크기: {1}.\n환경 이름을 입력하여 확인하세요.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">삭제 확인</sys:String>
     <sys:String x:Key="MsgRenameTitle">이름 변경</sys:String>
     <sys:String x:Key="MsgRenameMessage">식별하기 쉬운 이름을 입력하세요</sys:String>
@@ -100,8 +101,15 @@
     <!-- Status -->
     <sys:String x:Key="StatusRunning">실행 중</sys:String>
     <sys:String x:Key="StatusStopped">중지됨</sys:String>
+    <sys:String x:Key="StatusStarting">시작 중</sys:String>
+    <sys:String x:Key="StatusStopping">중지 중</sys:String>
     <sys:String x:Key="StatusNotUsed">미사용</sys:String>
     <sys:String x:Key="StatusRecentUsed">최근 사용 {0}</sys:String>
+    <sys:String x:Key="DateJustNow">방금</sys:String>
+    <sys:String x:Key="DateMinutesAgo">{0}분 전</sys:String>
+    <sys:String x:Key="DateToday">오늘</sys:String>
+    <sys:String x:Key="DateYesterday">어제</sys:String>
+    <sys:String x:Key="DateDaysAgo">{0}일 전</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Chrome을 찾을 수 없습니다</sys:String>
     <sys:String x:Key="ChromeAvailable">Chrome 사용 가능: {0} ({1})</sys:String>
 
