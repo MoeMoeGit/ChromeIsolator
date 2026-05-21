@@ -1,0 +1,37 @@
+using System.Windows;
+using ChromeIsolator.Services;
+using ChromeIsolator.ViewModels;
+
+namespace ChromeIsolator;
+
+public partial class App : Application
+{
+    private TrayService? _trayService;
+    private MainWindow? _mainWindow;
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        AppPaths.EnsureDirectories();
+
+        var configStore = new ConfigStore();
+        var profileManager = new ProfileManager(configStore);
+        var chromeManager = new ChromeManager();
+        var mainViewModel = new MainViewModel(profileManager, chromeManager);
+
+        _mainWindow = new MainWindow(mainViewModel);
+        MainWindow = _mainWindow;
+
+        _trayService = new TrayService(_mainWindow, mainViewModel);
+        _trayService.Initialize();
+
+        _mainWindow.Show();
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        _trayService?.Dispose();
+        base.OnExit(e);
+    }
+}

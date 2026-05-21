@@ -1,0 +1,20 @@
+namespace ChromeIsolator.Models;
+
+public sealed class Profile
+{
+    public string Folder { get; set; } = "";
+    public string DisplayName { get; set; } = "";
+
+    public int InstanceNumber
+    {
+        get
+        {
+            if (Folder.Length > 1 && int.TryParse(Folder[1..], out var value))
+            {
+                return value;
+            }
+
+            return 0;
+        }
+    }
+}
