@@ -1,0 +1,56 @@
+<Window x:Class="ChromeIsolator.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="设置"
+        Width="620"
+        Height="520"
+        MinWidth="560"
+        MinHeight="440"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Icon="Assets/AppIcon.ico"
+        Background="#F7F8FB">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="22">
+            <TextBlock Text="设置" FontSize="22" FontWeight="SemiBold" />
+
+            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,18,0,0">
+                <StackPanel>
+                    <TextBlock Text="浏览器" FontWeight="SemiBold" Foreground="#687386" />
+                    <TextBlock Text="{Binding ChromeStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button Content="打开 Chrome 文件夹" Command="{Binding OpenChromeFolderCommand}" Margin="0,0,8,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,14,0,0">
+                <StackPanel>
+                    <TextBlock Text="数据" FontWeight="SemiBold" Foreground="#687386" />
+                    <TextBlock Text="数据目录" Foreground="#8A94A6" Margin="0,10,0,0" />
+                    <TextBlock Text="{Binding DataPath}" TextWrapping="Wrap" />
+                    <TextBlock Text="环境目录" Foreground="#8A94A6" Margin="0,10,0,0" />
+                    <TextBlock Text="{Binding ProfilesPath}" TextWrapping="Wrap" />
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button Content="打开数据目录" Command="{Binding OpenDataFolderCommand}" Margin="0,0,8,0" />
+                        <Button Content="打开环境目录" Command="{Binding OpenProfilesFolderCommand}" Margin="0,0,8,0" />
+                        <Button Content="复制路径" Command="{Binding CopyDataPathCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,14,0,0">
+                <StackPanel>
+                    <TextBlock Text="帮助与更新" FontWeight="SemiBold" Foreground="#687386" />
+                    <TextBlock Text="{Binding UpdateStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button Content="检查更新" Command="{Binding CheckUpdatesCommand}" Margin="0,0,8,0" />
+                        <Button Content="查看 Releases" Command="{Binding OpenReleasesCommand}" Margin="0,0,8,0" />
+                        <Button Content="打开 Issues" Command="{Binding OpenIssuesCommand}" Margin="0,0,8,0" />
+                        <Button Content="复制邮箱" Command="{Binding CopyEmailCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

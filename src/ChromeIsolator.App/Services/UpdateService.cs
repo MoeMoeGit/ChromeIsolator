@@ -1,0 +1,75 @@
+using System.Diagnostics;
+using System.Net.Http;
+using System.Reflection;
+using System.Text.Json;
+
+namespace ChromeIsolator.Services;
+
+public sealed class UpdateService
+{
+    public const string ReleasesUrl = "https://github.com/MoeMoeGit/ChromeIsolator/releases";
+    public const string IssuesUrl = "https://github.com/MoeMoeGit/ChromeIsolator/issues";
+    private const string LatestReleaseApi = "https://api.github.com/repos/MoeMoeGit/ChromeIsolator/releases/latest";
+
+    private static readonly HttpClient HttpClient = new();
+
+    public string CurrentVersion
+    {
+        get
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            return version is null ? "0.1.0" : $"{version.Major}.{version.Minor}.{version.Build}";
+        }
+    }
+
+    public async Task<UpdateCheckResult> CheckForUpdatesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, LatestReleaseApi);
+            request.Headers.UserAgent.ParseAdd("ChromeIsolator");
+            request.Headers.Accept.ParseAdd("application/vnd.github+json");
+
+            using var response = await HttpClient.SendAsync(request, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: $"HTTP {(int)response.StatusCode}");
+            }
+
+            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+            using var json = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken);
+            if (!json.RootElement.TryGetProperty("tag_name", out var tagElement))
+            {
+                return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: "无法解析版本信息");
+            }
+
+            var latestTag = tagElement.GetString();
+            if (string.IsNullOrWhiteSpace(latestTag))
+            {
+                return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: "最新版本为空");
+            }
+
+            var latestVersion = latestTag.TrimStart('v', 'V');
+            var current = CurrentVersion;
+            return IsNewer(latestVersion, current)
+                ? new UpdateCheckResult(UpdateCheckStatus.UpdateAvailable, latestTag)
+                : new UpdateCheckResult(UpdateCheckStatus.UpToDate, latestTag);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: ex.Message);
+        }
+    }
+
+    private static bool IsNewer(string latest, string current)
+    {
+        if (Version.TryParse(latest, out var latestVersion) &&
+            Version.TryParse(current, out var currentVersion))
+        {
+            return latestVersion > currentVersion;
+        }
+
+        return string.Compare(latest, current, StringComparison.OrdinalIgnoreCase) > 0;
+    }
+}

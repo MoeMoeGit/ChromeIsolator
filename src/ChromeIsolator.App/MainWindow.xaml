@@ -16,6 +16,7 @@
             <Button Content="全部关闭" Command="{Binding StopAllCommand}" Margin="0,0,8,0" />
             <Separator />
             <Button Content="准备 Chrome" Command="{Binding PrepareChromeCommand}" Margin="8,0,8,0" />
+            <Button Content="设置" Command="{Binding OpenSettingsCommand}" Margin="0,0,8,0" />
             <Separator />
             <Button Content="重命名" Command="{Binding RenameSelectedCommand}" Margin="8,0,8,0" />
             <Button Content="删除" Command="{Binding DeleteSelectedCommand}" />

@@ -19,7 +19,8 @@ public partial class App : WpfApplication
         var configStore = new ConfigStore();
         var profileManager = new ProfileManager(configStore);
         var chromeManager = new ChromeManager();
-        var mainViewModel = new MainViewModel(profileManager, chromeManager);
+        var updateService = new UpdateService();
+        var mainViewModel = new MainViewModel(profileManager, chromeManager, updateService);
 
         _mainWindow = new MainWindow(mainViewModel);
         MainWindow = _mainWindow;

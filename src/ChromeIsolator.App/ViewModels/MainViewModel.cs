@@ -11,14 +11,16 @@ public sealed class MainViewModel : ObservableObject
 {
     private readonly ProfileManager _profileManager;
     private readonly ChromeManager _chromeManager;
+    private readonly UpdateService _updateService;
     private ProfileViewModel? _selectedProfile;
     private string _chromeStatusText = "";
     private bool _isPreparingChrome;
 
-    public MainViewModel(ProfileManager profileManager, ChromeManager chromeManager)
+    public MainViewModel(ProfileManager profileManager, ChromeManager chromeManager, UpdateService updateService)
     {
         _profileManager = profileManager;
         _chromeManager = chromeManager;
+        _updateService = updateService;
 
         Profiles = new ObservableCollection<ProfileViewModel>(
             _profileManager.Config.Profiles.Select(profile => new ProfileViewModel(profile)));
@@ -29,6 +31,7 @@ public sealed class MainViewModel : ObservableObject
         StopSelectedCommand = new RelayCommand(StopSelected, () => SelectedProfile is not null);
         StopAllCommand = new RelayCommand(StopAll);
         PrepareChromeCommand = new RelayCommand(PrepareChrome, () => !IsPreparingChrome);
+        OpenSettingsCommand = new RelayCommand(OpenSettings);
         RenameSelectedCommand = new RelayCommand(RenameSelected, () => SelectedProfile is not null);
         DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null);
 
@@ -55,6 +58,7 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand StopSelectedCommand { get; }
     public RelayCommand StopAllCommand { get; }
     public RelayCommand PrepareChromeCommand { get; }
+    public RelayCommand OpenSettingsCommand { get; }
     public RelayCommand RenameSelectedCommand { get; }
     public RelayCommand DeleteSelectedCommand { get; }
 
@@ -132,6 +136,16 @@ public sealed class MainViewModel : ObservableObject
         {
             IsPreparingChrome = false;
         }
+    }
+
+    private void OpenSettings()
+    {
+        var window = new SettingsWindow(new SettingsViewModel(_chromeManager, _updateService))
+        {
+            Owner = WpfApplication.Current.MainWindow
+        };
+        window.ShowDialog();
+        RefreshChromeStatus();
     }
 
     private void StopSelected()
