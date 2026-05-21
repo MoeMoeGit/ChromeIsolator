@@ -97,6 +97,20 @@ dotnet run --project .\src\ChromeIsolator.App\ChromeIsolator.App.csproj
 artifacts\publish\win-x64\
 ```
 
+### 构建 MSI 安装包
+
+需要安装 WiX Toolset。早期安装包未签名，Windows 可能显示 SmartScreen 或未知发布者提示。
+
+```powershell
+.\scripts\build-msi.ps1
+```
+
+安装包产物位于：
+
+```text
+artifacts\installer\ChromeIsolator-Setup-x64.msi
+```
+
 ## 许可证
 
 ChromeIsolator 源码以 [Apache License 2.0](LICENSE) 授权。

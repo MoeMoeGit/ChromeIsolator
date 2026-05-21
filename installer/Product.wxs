@@ -1,0 +1,38 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Name="ChromeIsolator"
+    Manufacturer="Lucas"
+    Version="$(var.ProductVersion)"
+    UpgradeCode="{3D3597E8-A21D-4581-A7C6-B2DC1759F6AF}"
+    Scope="perMachine">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of ChromeIsolator is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <Icon Id="AppIcon.ico" SourceFile="$(var.ProjectRoot)\assets\icons\AppIcon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="ChromeIsolator" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="ChromeIsolator" />
+    </StandardDirectory>
+
+    <Component Id="ApplicationShortcut" Directory="ApplicationProgramsFolder" Guid="{533929E9-D2E1-4FF5-A575-E824281A690A}">
+      <Shortcut
+        Id="StartMenuShortcut"
+        Name="浏览器多开"
+        Description="ChromeIsolator"
+        Target="[INSTALLFOLDER]ChromeIsolator.exe"
+        WorkingDirectory="INSTALLFOLDER"
+        Icon="AppIcon.ico" />
+      <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
+      <RegistryValue Root="HKLM" Key="Software\ChromeIsolator" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+
+    <Feature Id="MainFeature" Title="ChromeIsolator" Level="1">
+      <ComponentGroupRef Id="PublishedFiles" />
+      <ComponentRef Id="ApplicationShortcut" />
+    </Feature>
+  </Package>
+</Wix>
