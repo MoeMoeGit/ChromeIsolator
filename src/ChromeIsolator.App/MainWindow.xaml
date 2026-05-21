@@ -140,7 +140,11 @@
                             <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProfile.DiskSizeText}" Margin="0,10,0,0" />
 
                             <TextBlock Grid.Row="5" Text="{DynamicResource LabelError}" Foreground="#8A94A6" Margin="0,10,0,0" />
-                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedProfile.ErrorText}" TextWrapping="Wrap" Margin="0,10,0,0" Foreground="#C0392B" />
+                            <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="{Binding SelectedProfile.ErrorText}" TextWrapping="Wrap" Foreground="#C0392B" VerticalAlignment="Center" />
+                                <Button Content="{DynamicResource BtnRetry}" Command="{Binding RetrySelectedCommand}" Margin="12,0,0,0" MinWidth="60" />
+                                <Button Content="{DynamicResource BtnClearError}" Command="{Binding ClearErrorCommand}" Margin="6,0,0,0" MinWidth="70" />
+                            </StackPanel>
                         </Grid>
                     </StackPanel>
 

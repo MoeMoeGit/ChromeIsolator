@@ -47,6 +47,10 @@
     <sys:String x:Key="ShowAdvancedDetails">Afficher les détails avancés (version Chrome, chemin, infos système)</sys:String>
     <sys:String x:Key="SectionLanguage">Langue</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Ouvrir le dossier Chrome</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Réinstaller Chrome</sys:String>
+    <sys:String x:Key="BtnRetry">Réessayer</sys:String>
+    <sys:String x:Key="BtnCopyError">Copier les détails</sys:String>
+    <sys:String x:Key="BtnClearError">Effacer l'erreur</sys:String>
 
     <!-- DownloadWindow -->
     <sys:String x:Key="DownloadTitle">Préparer Chrome</sys:String>

@@ -7,17 +7,19 @@ public sealed class SettingsViewModel : ObservableObject
     private readonly ChromeManager _chromeManager;
     private readonly UpdateService _updateService;
     private readonly ProfileManager _profileManager;
+    private readonly Action _reinstallChrome;
     private string _chromeStatusText = "";
     private string _updateStatusText = "";
     private bool _isCheckingForUpdates;
     private bool _showAdvancedDetails;
     private (string Code, string NativeName) _selectedLanguage;
 
-    public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService, ProfileManager profileManager)
+    public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService, ProfileManager profileManager, Action reinstallChrome)
     {
         _chromeManager = chromeManager;
         _updateService = updateService;
         _profileManager = profileManager;
+        _reinstallChrome = reinstallChrome;
         _showAdvancedDetails = profileManager.Config.ShowAdvancedDetails;
 
         Languages = L10n.SupportedLanguages;
@@ -31,6 +33,7 @@ public sealed class SettingsViewModel : ObservableObject
         OpenReleasesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.ReleasesUrl));
         OpenIssuesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.IssuesUrl));
         CopyEmailCommand = new RelayCommand(() => ShellService.CopyText("lucas6.zju@vip.163.com"));
+        ReinstallChromeCommand = new RelayCommand(() => { _reinstallChrome(); RefreshChromeStatus(); });
 
         RefreshChromeStatus();
         UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
@@ -62,6 +65,7 @@ public sealed class SettingsViewModel : ObservableObject
     public RelayCommand OpenReleasesCommand { get; }
     public RelayCommand OpenIssuesCommand { get; }
     public RelayCommand CopyEmailCommand { get; }
+    public RelayCommand ReinstallChromeCommand { get; }
 
     public string DataPath => AppPaths.SupportDir;
     public string ProfilesPath => AppPaths.ProfilesDir;

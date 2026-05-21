@@ -37,6 +37,8 @@ public sealed class MainViewModel : ObservableObject
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         RenameSelectedCommand = new RelayCommand(RenameSelected, () => SelectedProfile is not null);
         DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null);
+        ClearErrorCommand = new RelayCommand(ClearError, () => SelectedProfile is not null && !string.IsNullOrEmpty(SelectedProfile?.Error));
+        RetrySelectedCommand = new RelayCommand(RetrySelected, () => SelectedProfile is not null && !SelectedProfile!.IsRunning && !string.IsNullOrEmpty(SelectedProfile?.Error));
 
         _chromeManager.ProfileExited += OnProfileExited;
         L10n.LanguageChanged += OnLanguageChanged;
@@ -66,6 +68,8 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand OpenSettingsCommand { get; }
     public RelayCommand RenameSelectedCommand { get; }
     public RelayCommand DeleteSelectedCommand { get; }
+    public RelayCommand ClearErrorCommand { get; }
+    public RelayCommand RetrySelectedCommand { get; }
 
     public string ChromeStatusText
     {
@@ -239,7 +243,16 @@ public sealed class MainViewModel : ObservableObject
 
     private void OpenSettings()
     {
-        var window = new SettingsWindow(new SettingsViewModel(_chromeManager, _updateService, _profileManager))
+        void ReinstallChrome()
+        {
+            var downloadWindow = new DownloadWindow(_chromeManager)
+            {
+                Owner = WpfApplication.Current.MainWindow
+            };
+            downloadWindow.ShowDialog();
+        }
+
+        var window = new SettingsWindow(new SettingsViewModel(_chromeManager, _updateService, _profileManager, ReinstallChrome))
         {
             Owner = WpfApplication.Current.MainWindow
         };
@@ -298,6 +311,24 @@ public sealed class MainViewModel : ObservableObject
         _profileManager.MoveProfileToRecycleBin(removed.Model);
         Profiles.Remove(removed);
         SelectedProfile = Profiles.FirstOrDefault();
+    }
+
+    private void ClearError()
+    {
+        if (SelectedProfile is not null)
+        {
+            SelectedProfile.Error = null;
+            RaiseCommandState();
+        }
+    }
+
+    private void RetrySelected()
+    {
+        if (SelectedProfile is not null && !SelectedProfile.IsRunning)
+        {
+            StartProfile(SelectedProfile);
+            RaiseCommandState();
+        }
     }
 
     private void StartProfile(ProfileViewModel profile)
@@ -363,6 +394,8 @@ public sealed class MainViewModel : ObservableObject
         StopSelectedCommand.RaiseCanExecuteChanged();
         RenameSelectedCommand.RaiseCanExecuteChanged();
         DeleteSelectedCommand.RaiseCanExecuteChanged();
+        ClearErrorCommand.RaiseCanExecuteChanged();
+        RetrySelectedCommand.RaiseCanExecuteChanged();
     }
 
     private void RefreshChromeStatus()

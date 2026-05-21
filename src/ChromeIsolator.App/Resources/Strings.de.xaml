@@ -47,6 +47,10 @@
     <sys:String x:Key="ShowAdvancedDetails">Erweiterte Details anzeigen (Chrome-Version, Pfad, Systeminformationen)</sys:String>
     <sys:String x:Key="SectionLanguage">Sprache</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Chrome-Ordner öffnen</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Chrome neu installieren</sys:String>
+    <sys:String x:Key="BtnRetry">Erneut versuchen</sys:String>
+    <sys:String x:Key="BtnCopyError">Fehlerdetails kopieren</sys:String>
+    <sys:String x:Key="BtnClearError">Fehler löschen</sys:String>
 
     <!-- DownloadWindow -->
     <sys:String x:Key="DownloadTitle">Chrome vorbereiten</sys:String>

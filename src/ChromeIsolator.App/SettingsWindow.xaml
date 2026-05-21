@@ -20,6 +20,7 @@
                     <TextBlock Text="{Binding ChromeStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
                     <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                         <Button Content="{DynamicResource BtnOpenChromeFolder}" Command="{Binding OpenChromeFolderCommand}" Margin="0,0,8,0" />
+                        <Button Content="{DynamicResource BtnReinstallChrome}" Command="{Binding ReinstallChromeCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Border>

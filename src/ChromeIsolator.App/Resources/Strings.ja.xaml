@@ -47,6 +47,10 @@
     <sys:String x:Key="ShowAdvancedDetails">詳細情報を表示（Chrome バージョン、パス、システム情報）</sys:String>
     <sys:String x:Key="SectionLanguage">言語</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Chrome フォルダを開く</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Chrome を再インストール</sys:String>
+    <sys:String x:Key="BtnRetry">再試行</sys:String>
+    <sys:String x:Key="BtnCopyError">エラー詳細をコピー</sys:String>
+    <sys:String x:Key="BtnClearError">エラーをクリア</sys:String>
 
     <!-- DownloadWindow -->
     <sys:String x:Key="DownloadTitle">Chrome 準備</sys:String>
