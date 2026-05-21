@@ -1,10 +1,11 @@
 using System.Windows;
 using ChromeIsolator.Services;
 using ChromeIsolator.ViewModels;
+using WpfApplication = System.Windows.Application;
 
 namespace ChromeIsolator;
 
-public partial class App : Application
+public partial class App : WpfApplication
 {
     private TrayService? _trayService;
     private MainWindow? _mainWindow;

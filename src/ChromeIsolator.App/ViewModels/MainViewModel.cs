@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using ChromeIsolator.Models;
 using ChromeIsolator.Services;
+using WpfApplication = System.Windows.Application;
+using WpfMessageBox = System.Windows.MessageBox;
 
 namespace ChromeIsolator.ViewModels;
 
@@ -125,7 +127,7 @@ public sealed class MainViewModel : ObservableObject
 
         if (SelectedProfile.IsRunning)
         {
-            MessageBox.Show("运行中的环境不能删除，请先关闭。", "浏览器多开", MessageBoxButton.OK, MessageBoxImage.Information);
+            WpfMessageBox.Show("运行中的环境不能删除，请先关闭。", "浏览器多开", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -167,7 +169,7 @@ public sealed class MainViewModel : ObservableObject
 
     private void OnProfileExited(string folder)
     {
-        Application.Current.Dispatcher.Invoke(() =>
+        WpfApplication.Current.Dispatcher.Invoke(() =>
         {
             var profile = Profiles.FirstOrDefault(item => item.Folder == folder);
             if (profile is null)

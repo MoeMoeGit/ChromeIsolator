@@ -7,6 +7,7 @@ public sealed class ChromeManager
 {
     private readonly Dictionary<string, Process> _processes = [];
     private readonly Dictionary<string, int> _debugPorts = [];
+    private readonly Dictionary<string, FingerprintInjector> _fingerprintInjectors = [];
 
     public event Action<string>? ProfileExited;
 
@@ -51,6 +52,11 @@ public sealed class ChromeManager
         };
         process.Exited += (_, _) =>
         {
+            if (_fingerprintInjectors.Remove(profile.Folder, out var injector))
+            {
+                _ = injector.DisposeAsync();
+            }
+
             _processes.Remove(profile.Folder);
             _debugPorts.Remove(profile.Folder);
             ProfileExited?.Invoke(profile.Folder);
@@ -59,6 +65,10 @@ public sealed class ChromeManager
         process.Start();
         _processes[profile.Folder] = process;
         _debugPorts[profile.Folder] = port;
+
+        var injector = new FingerprintInjector(port, profile.InstanceNumber);
+        _fingerprintInjectors[profile.Folder] = injector;
+        _ = injector.StartAsync();
     }
 
     public void Stop(Profile profile)
@@ -70,6 +80,11 @@ public sealed class ChromeManager
 
         try
         {
+            if (_fingerprintInjectors.Remove(profile.Folder, out var injector))
+            {
+                injector.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(2));
+            }
+
             if (!process.HasExited)
             {
                 process.CloseMainWindow();

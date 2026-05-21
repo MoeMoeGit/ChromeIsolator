@@ -1,7 +1,8 @@
 using System.Globalization;
-using System.Windows.Media;
 using ChromeIsolator.Models;
 using ChromeIsolator.Services;
+using MediaBrush = System.Windows.Media.Brush;
+using MediaBrushes = System.Windows.Media.Brushes;
 
 namespace ChromeIsolator.ViewModels;
 
@@ -85,7 +86,7 @@ public sealed class ProfileViewModel : ObservableObject
     }
 
     public string StatusText => IsRunning ? "运行中" : "未启动";
-    public Brush StatusBrush => IsRunning ? Brushes.ForestGreen : Brushes.Gray;
+    public MediaBrush StatusBrush => IsRunning ? MediaBrushes.ForestGreen : MediaBrushes.Gray;
     public string DebugPortText => DebugPort?.ToString(CultureInfo.InvariantCulture) ?? "-";
     public string ErrorText => string.IsNullOrWhiteSpace(Error) ? "-" : Error;
     public string LastUsedText => LastUsed?.ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture) ?? "-";

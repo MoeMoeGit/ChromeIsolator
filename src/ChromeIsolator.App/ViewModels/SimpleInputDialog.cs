@@ -1,5 +1,10 @@
 using System.Windows;
-using System.Windows.Controls;
+using WpfButton = System.Windows.Controls.Button;
+using WpfHorizontalAlignment = System.Windows.HorizontalAlignment;
+using WpfOrientation = System.Windows.Controls.Orientation;
+using WpfStackPanel = System.Windows.Controls.StackPanel;
+using WpfTextBlock = System.Windows.Controls.TextBlock;
+using WpfTextBox = System.Windows.Controls.TextBox;
 
 namespace ChromeIsolator.ViewModels;
 
@@ -7,31 +12,31 @@ public static class SimpleInputDialog
 {
     public static string? Show(string title, string message, string initialValue)
     {
-        var input = new TextBox
+        var input = new WpfTextBox
         {
             Text = initialValue,
             MinWidth = 280,
             Margin = new Thickness(0, 10, 0, 0)
         };
 
-        var okButton = new Button
+        var okButton = new WpfButton
         {
             Content = "确定",
             IsDefault = true,
             MinWidth = 76,
             Margin = new Thickness(8, 0, 0, 0)
         };
-        var cancelButton = new Button
+        var cancelButton = new WpfButton
         {
             Content = "取消",
             IsCancel = true,
             MinWidth = 76
         };
 
-        var buttonPanel = new StackPanel
+        var buttonPanel = new WpfStackPanel
         {
-            Orientation = Orientation.Horizontal,
-            HorizontalAlignment = HorizontalAlignment.Right,
+            Orientation = WpfOrientation.Horizontal,
+            HorizontalAlignment = WpfHorizontalAlignment.Right,
             Margin = new Thickness(0, 18, 0, 0),
             Children =
             {
@@ -40,12 +45,12 @@ public static class SimpleInputDialog
             }
         };
 
-        var content = new StackPanel
+        var content = new WpfStackPanel
         {
             Margin = new Thickness(18),
             Children =
             {
-                new TextBlock
+                new WpfTextBlock
                 {
                     Text = message,
                     TextWrapping = TextWrapping.Wrap
