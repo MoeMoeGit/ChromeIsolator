@@ -1,0 +1,13 @@
+ChromeIsolator
+Copyright 2026 Lucas
+
+This product is licensed under the Apache License, Version 2.0.
+
+ChromeIsolator downloads, starts, or calls official Stable Google Chrome.
+Google Chrome is a product of Google LLC and is governed by Google's own
+terms and licenses. Google Chrome is not licensed under the Apache License,
+Version 2.0 by this project.
+
+The application icon uses letterforms rendered from MiSans. MiSans is
+published by Xiaomi as a free commercial-use font. The font software itself
+is not redistributed in this repository.

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="ChromeIsolator app icon">
+  <defs>
+    <linearGradient id="blue" x1="133" y1="96" x2="891" y2="928" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#68A9F4"/>
+      <stop offset="1" stop-color="#4B7FE8"/>
+    </linearGradient>
+  </defs>
+  <rect x="20" y="20" width="984" height="984" rx="178" fill="url(#blue)"/>
+  <text
+    x="512"
+    y="786"
+    text-anchor="middle"
+    font-family="MiSans, MiSans Heavy, Arial, Helvetica, sans-serif"
+    font-size="660"
+    font-weight="800"
+    fill="#FFFFFF">C</text>
+</svg>

@@ -1,0 +1,62 @@
+# Project-local planning and AI handoff notes
+project-log/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Windows / Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+
+# .NET build outputs
+bin/
+obj/
+artifacts/
+packages/
+*.nupkg
+*.snupkg
+
+# Rider / JetBrains
+.idea/
+*.DotSettings.user
+
+# VS Code
+.vscode/
+
+# Common AI assistant / agent files
+.claude/
+CLAUDE.md
+claude.md
+.cursor/
+.cursorignore
+.windsurf/
+.continue/
+.aider*
+.codex/
+.roo/
+.kilocode/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+~$*
+
+# Installer / publish outputs
+publish/
+dist/
+build/
+out/
+*.msi
+*.msix
+*.msixbundle
+*.appinstaller
