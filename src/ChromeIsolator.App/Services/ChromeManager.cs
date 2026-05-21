@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Net.Http;
 using ChromeIsolator.Models;
+using Microsoft.Win32;
 
 namespace ChromeIsolator.Services;
 
@@ -10,6 +12,8 @@ public sealed class ChromeManager
     private readonly Dictionary<string, FingerprintInjector> _fingerprintInjectors = [];
 
     public event Action<string>? ProfileExited;
+
+    public ChromeInfo? CurrentChrome => ResolveChrome();
 
     public bool IsRunning(Profile profile)
     {
@@ -28,7 +32,7 @@ public sealed class ChromeManager
             return;
         }
 
-        var chromePath = FindChromeExecutable()
+        var chromePath = ResolveChrome()?.ExecutablePath
             ?? throw new InvalidOperationException("找不到官方 Chrome 可执行文件。后续版本会提供自动下载和准备。");
 
         var profileDir = AppPaths.ProfileDir(profile.Folder);
@@ -110,15 +114,87 @@ public sealed class ChromeManager
         }
     }
 
-    private static string? FindChromeExecutable()
+    public async Task PrepareChromeAsync(IProgress<double>? progress = null, CancellationToken cancellationToken = default)
+    {
+        if (ResolveChrome() is not null)
+        {
+            progress?.Report(1);
+            return;
+        }
+
+        Directory.CreateDirectory(AppPaths.ChromeDir);
+        var installerPath = Path.Combine(AppPaths.ChromeDir, "GoogleChromeStandaloneEnterprise64.msi");
+        var downloadUrl = new Uri("https://dl.google.com/chrome/install/GoogleChromeStandaloneEnterprise64.msi");
+
+        using (var httpClient = new HttpClient())
+        using (var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+        {
+            response.EnsureSuccessStatusCode();
+            var totalBytes = response.Content.Headers.ContentLength;
+            await using var source = await response.Content.ReadAsStreamAsync(cancellationToken);
+            await using var destination = File.Create(installerPath);
+            var buffer = new byte[128 * 1024];
+            long readBytes = 0;
+            while (true)
+            {
+                var read = await source.ReadAsync(buffer, cancellationToken);
+                if (read == 0)
+                {
+                    break;
+                }
+
+                await destination.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
+                readBytes += read;
+                if (totalBytes is > 0)
+                {
+                    progress?.Report((double)readBytes / totalBytes.Value);
+                }
+            }
+        }
+
+        var process = Process.Start(new ProcessStartInfo
+        {
+            FileName = "msiexec.exe",
+            UseShellExecute = true,
+            Verb = "runas",
+            Arguments = $"/i \"{installerPath}\" /passive /norestart"
+        });
+        process?.WaitForExit();
+
+        if (ResolveChrome() is null)
+        {
+            throw new InvalidOperationException("Chrome 安装后仍未找到可执行文件");
+        }
+
+        progress?.Report(1);
+    }
+
+    private static ChromeInfo? ResolveChrome()
     {
         var candidates = new[]
         {
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Google", "Chrome", "Application", "chrome.exe"),
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Google", "Chrome", "Application", "chrome.exe"),
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Google", "Chrome", "Application", "chrome.exe")
+            (Path.Combine(AppPaths.ChromeDir, "chrome.exe"), "应用私有 Chrome"),
+            (ReadChromePathFromRegistry(Registry.LocalMachine), "系统 Chrome"),
+            (ReadChromePathFromRegistry(Registry.CurrentUser), "用户 Chrome"),
+            (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Google", "Chrome", "Application", "chrome.exe"), "系统 Chrome"),
+            (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Google", "Chrome", "Application", "chrome.exe"), "系统 Chrome"),
+            (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Google", "Chrome", "Application", "chrome.exe"), "用户 Chrome")
         };
 
-        return candidates.FirstOrDefault(File.Exists);
+        foreach (var (path, source) in candidates)
+        {
+            if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
+            {
+                return new ChromeInfo(path, source, FileVersionInfo.GetVersionInfo(path).ProductVersion);
+            }
+        }
+
+        return null;
+    }
+
+    private static string? ReadChromePathFromRegistry(RegistryKey root)
+    {
+        using var key = root.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe");
+        return key?.GetValue("") as string;
     }
 }

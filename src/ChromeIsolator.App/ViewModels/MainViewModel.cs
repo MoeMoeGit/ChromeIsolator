@@ -12,6 +12,8 @@ public sealed class MainViewModel : ObservableObject
     private readonly ProfileManager _profileManager;
     private readonly ChromeManager _chromeManager;
     private ProfileViewModel? _selectedProfile;
+    private string _chromeStatusText = "";
+    private bool _isPreparingChrome;
 
     public MainViewModel(ProfileManager profileManager, ChromeManager chromeManager)
     {
@@ -26,10 +28,12 @@ public sealed class MainViewModel : ObservableObject
         StartSelectedCommand = new RelayCommand(StartSelected, () => SelectedProfile is not null);
         StopSelectedCommand = new RelayCommand(StopSelected, () => SelectedProfile is not null);
         StopAllCommand = new RelayCommand(StopAll);
+        PrepareChromeCommand = new RelayCommand(PrepareChrome, () => !IsPreparingChrome);
         RenameSelectedCommand = new RelayCommand(RenameSelected, () => SelectedProfile is not null);
         DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null);
 
         _chromeManager.ProfileExited += OnProfileExited;
+        RefreshChromeStatus();
     }
 
     public ObservableCollection<ProfileViewModel> Profiles { get; }
@@ -50,8 +54,27 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand StartSelectedCommand { get; }
     public RelayCommand StopSelectedCommand { get; }
     public RelayCommand StopAllCommand { get; }
+    public RelayCommand PrepareChromeCommand { get; }
     public RelayCommand RenameSelectedCommand { get; }
     public RelayCommand DeleteSelectedCommand { get; }
+
+    public string ChromeStatusText
+    {
+        get => _chromeStatusText;
+        private set => SetProperty(ref _chromeStatusText, value);
+    }
+
+    public bool IsPreparingChrome
+    {
+        get => _isPreparingChrome;
+        private set
+        {
+            if (SetProperty(ref _isPreparingChrome, value))
+            {
+                PrepareChromeCommand.RaiseCanExecuteChanged();
+            }
+        }
+    }
 
     public void ToggleProfile(ProfileViewModel profile)
     {
@@ -90,6 +113,25 @@ public sealed class MainViewModel : ObservableObject
         var viewModel = new ProfileViewModel(profile);
         Profiles.Add(viewModel);
         SelectedProfile = viewModel;
+    }
+
+    private async void PrepareChrome()
+    {
+        try
+        {
+            IsPreparingChrome = true;
+            ChromeStatusText = "Chrome 准备中...";
+            await _chromeManager.PrepareChromeAsync();
+            RefreshChromeStatus();
+        }
+        catch (Exception ex)
+        {
+            ChromeStatusText = $"Chrome 准备失败：{ex.Message}";
+        }
+        finally
+        {
+            IsPreparingChrome = false;
+        }
     }
 
     private void StopSelected()
@@ -156,6 +198,7 @@ public sealed class MainViewModel : ObservableObject
         catch (Exception ex)
         {
             profile.Error = ex.Message;
+            RefreshChromeStatus();
         }
     }
 
@@ -189,5 +232,13 @@ public sealed class MainViewModel : ObservableObject
         StopSelectedCommand.RaiseCanExecuteChanged();
         RenameSelectedCommand.RaiseCanExecuteChanged();
         DeleteSelectedCommand.RaiseCanExecuteChanged();
+    }
+
+    private void RefreshChromeStatus()
+    {
+        var chrome = _chromeManager.CurrentChrome;
+        ChromeStatusText = chrome is null
+            ? "Chrome 未找到"
+            : $"Chrome 可用：{chrome.Version ?? "未知版本"}（{chrome.Source}）";
     }
 }
