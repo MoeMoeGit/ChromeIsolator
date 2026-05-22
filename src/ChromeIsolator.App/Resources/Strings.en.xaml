@@ -73,7 +73,7 @@
     <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome was not found. Install Chrome manually and check again, or click "Install official Chrome".</sys:String>
     <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome was not found. Install official Chrome first; if automatic download fails, open Google&apos;s official Chrome download page, install it manually, then check again. Edge is only a last resort.</sys:String>
     <sys:String x:Key="EdgeFallbackNotice">Last fallback: if Chrome cannot be installed right now, you can temporarily use system Edge. This path is not recommended first; Chrome will still be preferred once available.</sys:String>
-    <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator will download and run Google's official Stable Chrome installer. This only installs the Chrome program; isolated environment data stays in ChromeIsolator's own folders and will not use your default Chrome user data.\n\nContinue?</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator will download and run Google's official Stable Chrome installer. This only installs the Chrome program; isolated environment data stays in ChromeIsolator's own folders and will not use your default Chrome user data.&#x0A;&#x0A;Continue?</sys:String>
     <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge is only a temporary fallback when Chrome cannot be installed, and is not recommended first. Isolated environments will still use ChromeIsolator&apos;s own data folders; once Chrome is detected later, Chrome will be preferred.
 
 Use Edge temporarily?</sys:String>

@@ -73,7 +73,7 @@
     <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome が見つかりません。手動で Chrome をインストールして再確認するか、「公式 Chrome をインストール」をクリックしてください。</sys:String>
     <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome が見つかりません。まず公式 Chrome をインストールしてください。自動ダウンロードに失敗した場合は、Google 公式 Chrome ダウンロードページを開き、手動でインストールしてから再確認してください。Edge は最後の代替手段です。</sys:String>
     <sys:String x:Key="EdgeFallbackNotice">最後の代替手段: 今すぐ Chrome をインストールできない場合のみ、システム Edge を一時的に使用できます。この方法は優先推奨ではなく、Chrome が利用可能になれば Chrome を優先します。</sys:String>
-    <sys:String x:Key="MsgConfirmInstallChrome">Google 公式 Stable Chrome インストーラーをダウンロードして実行します。この操作は Chrome 本体のみをインストールします。分離環境データは ChromeIsolator 専用フォルダーに保存され、既定の Chrome ユーザーデータは使用しません。\n\n続行しますか?</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">Google 公式 Stable Chrome インストーラーをダウンロードして実行します。この操作は Chrome 本体のみをインストールします。分離環境データは ChromeIsolator 専用フォルダーに保存され、既定の Chrome ユーザーデータは使用しません。&#x0A;&#x0A;続行しますか?</sys:String>
     <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge は Chrome をインストールできない場合の一時的な代替手段であり、優先推奨ではありません。分離環境は引き続き ChromeIsolator 専用データフォルダーを使用し、後で Chrome が検出されると Chrome を優先します。
 
 一時的に Edge を使用しますか?</sys:String>

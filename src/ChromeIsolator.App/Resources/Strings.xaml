@@ -73,7 +73,7 @@
     <sys:String x:Key="BrowserSetupChromeMissingNoEdge">未检测到 Chrome。你可以手动安装 Chrome 后重新检测，或点击“安装官方 Chrome”。</sys:String>
     <sys:String x:Key="BrowserSetupChromeMissingWithEdge">未检测到 Chrome。建议先安装官方 Chrome；如果自动下载失败，可以打开 Google 官方下载页手动安装后重新检测。Edge 仅作为最后备用。</sys:String>
     <sys:String x:Key="EdgeFallbackNotice">最后备用：如果暂时无法安装 Chrome，可以临时使用系统 Edge。此路径不推荐优先使用，Chrome 可用后仍会优先使用 Chrome。</sys:String>
-    <sys:String x:Key="MsgConfirmInstallChrome">将下载并运行 Google 官方 Stable Chrome 安装包。该操作只安装 Chrome 程序；浏览器多开的环境数据仍然放在 ChromeIsolator 独立目录，不会使用你的默认 Chrome 用户数据。\n\n是否继续？</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">将下载并运行 Google 官方 Stable Chrome 安装包。该操作只安装 Chrome 程序；浏览器多开的环境数据仍然放在 ChromeIsolator 独立目录，不会使用你的默认 Chrome 用户数据。&#x0A;&#x0A;是否继续？</sys:String>
     <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge 仅作为 Chrome 无法安装时的临时备用，不推荐优先使用。继续后，隔离环境仍会使用 ChromeIsolator 独立数据目录；以后检测到 Chrome 时会优先使用 Chrome。
 
 确定临时使用 Edge 备用吗？</sys:String>

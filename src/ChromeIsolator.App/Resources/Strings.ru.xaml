@@ -73,7 +73,7 @@
     <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome не найден. Установите Chrome вручную и проверьте снова или нажмите «Установить официальный Chrome».</sys:String>
     <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome не найден. Сначала установите официальный Chrome. Если автоматическая загрузка не удалась, откройте официальную страницу загрузки Chrome от Google, установите вручную и проверьте снова. Edge — только последний резерв.</sys:String>
     <sys:String x:Key="EdgeFallbackNotice">Последний резерв: если сейчас не удается установить Chrome, можно временно использовать системный Edge. Этот путь не рекомендуется как основной; когда Chrome станет доступен, он снова будет приоритетным.</sys:String>
-    <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator скачает и запустит официальный установщик Google Stable Chrome. Это устанавливает только программу Chrome; данные изолированных сред остаются в отдельных папках ChromeIsolator и не используют ваш профиль Chrome по умолчанию.\n\nПродолжить?</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator скачает и запустит официальный установщик Google Stable Chrome. Это устанавливает только программу Chrome; данные изолированных сред остаются в отдельных папках ChromeIsolator и не используют ваш профиль Chrome по умолчанию.&#x0A;&#x0A;Продолжить?</sys:String>
     <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge — только временный резерв, когда Chrome не удается установить, и не рекомендуется как основной вариант. Изолированные среды всё равно будут использовать отдельные папки данных ChromeIsolator; когда Chrome будет обнаружен позже, он станет приоритетным.
 
 Временно использовать Edge?</sys:String>
