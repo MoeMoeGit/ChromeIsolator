@@ -1,3 +1,7 @@
+param(
+    [string]$Version
+)
+
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
@@ -6,10 +10,28 @@ $installerObjDir = Join-Path $repoRoot "artifacts\installer-obj"
 $installerOutDir = Join-Path $repoRoot "artifacts\installer"
 $generatedWxs = Join-Path $installerObjDir "PublishedFiles.wxs"
 $productWxs = Join-Path $repoRoot "installer\Product.wxs"
-$msiPath = Join-Path $installerOutDir "ChromeIsolator-Setup-x64.msi"
-$productVersion = "0.1.0"
 
-& (Join-Path $PSScriptRoot "publish-win-x64.ps1")
+function Get-ProjectVersion {
+    $propsPath = Join-Path $repoRoot "Directory.Build.props"
+    [xml]$props = Get-Content -LiteralPath $propsPath -Raw
+    return $props.Project.PropertyGroup.Version
+}
+
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    $Version = Get-ProjectVersion
+}
+
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    throw "Version is empty."
+}
+
+if ($Version -notmatch '^\d+\.\d+\.\d+$') {
+    throw "MSI ProductVersion must use numeric major.minor.patch format. Actual: $Version"
+}
+
+$msiPath = Join-Path $installerOutDir "ChromeIsolator-Setup-x64-v$Version.msi"
+
+& (Join-Path $PSScriptRoot "publish-win-x64.ps1") -Version $Version
 
 New-Item -ItemType Directory -Force -Path $installerObjDir | Out-Null
 New-Item -ItemType Directory -Force -Path $installerOutDir | Out-Null
@@ -86,7 +108,7 @@ Set-Content -LiteralPath $generatedWxs -Value $content.ToString() -Encoding UTF8
 wix build --acceptEula wix7 `
     -arch x64 `
     -d "ProjectRoot=$repoRoot" `
-    -d "ProductVersion=$productVersion" `
+    -d "ProductVersion=$Version" `
     -out $msiPath `
     $productWxs `
     $generatedWxs

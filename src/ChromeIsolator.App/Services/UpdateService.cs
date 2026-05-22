@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Text.Json;
 
 namespace ChromeIsolator.Services;
@@ -17,8 +18,18 @@ public sealed class UpdateService
     {
         get
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            return version is null ? "0.1.0" : $"{version.Major}.{version.Minor}.{version.Build}";
+            var assembly = Assembly.GetExecutingAssembly();
+            var informationalVersion = assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                .InformationalVersion;
+            var normalized = NormalizeVersion(informationalVersion);
+            if (!string.IsNullOrWhiteSpace(normalized))
+            {
+                return normalized;
+            }
+
+            var version = assembly.GetName().Version;
+            return version is null ? "1.0.0" : $"{version.Major}.{version.Minor}.{version.Build}";
         }
     }
 
@@ -49,7 +60,7 @@ public sealed class UpdateService
                 return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: "最新版本为空");
             }
 
-            var latestVersion = latestTag.TrimStart('v', 'V');
+            var latestVersion = NormalizeVersion(latestTag) ?? latestTag.TrimStart('v', 'V');
             var current = CurrentVersion;
             return IsNewer(latestVersion, current)
                 ? new UpdateCheckResult(UpdateCheckStatus.UpdateAvailable, latestTag)
@@ -71,5 +82,16 @@ public sealed class UpdateService
         }
 
         return string.Compare(latest, current, StringComparison.OrdinalIgnoreCase) > 0;
+    }
+
+    private static string? NormalizeVersion(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        var match = Regex.Match(value.Trim(), @"v?(?<version>\d+\.\d+\.\d+)");
+        return match.Success ? match.Groups["version"].Value : null;
     }
 }

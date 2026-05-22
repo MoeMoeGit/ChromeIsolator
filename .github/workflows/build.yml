@@ -8,6 +8,9 @@ on:
       - "v*"
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -24,28 +27,53 @@ jobs:
       - name: Restore
         run: dotnet restore ChromeIsolator.sln
 
+      - name: Resolve version
+        shell: pwsh
+        run: |
+          [xml]$props = Get-Content Directory.Build.props -Raw
+          $version = $props.Project.PropertyGroup.Version
+          if ($env:GITHUB_REF_TYPE -eq "tag" -and $env:GITHUB_REF_NAME.StartsWith("v")) {
+            $tagVersion = $env:GITHUB_REF_NAME.Substring(1)
+            if ($tagVersion -ne $version) {
+              throw "Tag version '$tagVersion' does not match Directory.Build.props version '$version'."
+            }
+          }
+          "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "PUBLISH_ZIP=artifacts/publish/ChromeIsolator-win-x64-v$version.zip" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "MSI_PATH=artifacts/installer/ChromeIsolator-Setup-x64-v$version.msi" | Out-File -FilePath $env:GITHUB_ENV -Append
+
       - name: Build
-        run: dotnet build ChromeIsolator.sln -c Release --no-restore
+        shell: pwsh
+        run: dotnet build ChromeIsolator.sln -c Release --no-restore -p:Version=$env:VERSION
 
       - name: Publish win-x64
         shell: pwsh
-        run: ./scripts/publish-win-x64.ps1
+        run: ./scripts/publish-win-x64.ps1 -Version $env:VERSION
 
       - name: Install WiX
         run: dotnet tool install --global wix --version 7.0.0
 
       - name: Build MSI
         shell: pwsh
-        run: ./scripts/build-msi.ps1
+        run: ./scripts/build-msi.ps1 -Version $env:VERSION
 
       - name: Upload publish artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ChromeIsolator-win-x64
-          path: artifacts/publish/win-x64
+          name: ChromeIsolator-win-x64-v${{ env.VERSION }}
+          path: ${{ env.PUBLISH_ZIP }}
 
       - name: Upload MSI artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ChromeIsolator-Setup-x64
-          path: artifacts/installer/ChromeIsolator-Setup-x64.msi
+          name: ChromeIsolator-Setup-x64-v${{ env.VERSION }}
+          path: ${{ env.MSI_PATH }}
+
+      - name: Publish GitHub Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ChromeIsolator v${{ env.VERSION }}
+          files: |
+            ${{ env.PUBLISH_ZIP }}
+            ${{ env.MSI_PATH }}

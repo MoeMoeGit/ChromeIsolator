@@ -17,7 +17,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 - **错误恢复**：环境启动失败时可重试或清除错误状态
 - **轻量环境差异**：为不同环境注入稳定的 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory` 值，自动处理新打开的标签页，断线后自动重连（最多 5 次指数退避）
 - **浏览器引擎准备**：首次运行先说明隔离策略；优先使用用户已安装的官方 Stable Chrome 程序文件；未安装 Chrome 时，用户确认后下载官方 Chrome，下载失败可打开 Google 官方 Chrome 下载页手动安装；Edge 只作为最后临时备用
-- **设置面板**：查看 Chrome 状态和版本、打开数据目录、复制路径、重新安装 Chrome、高级详情显示、语言切换，以及帮助与更新信息
+- **设置面板**：查看浏览器引擎状态和版本、打开数据目录、复制路径、浏览器引擎设置、高级详情显示、语言切换，以及帮助与更新信息
 - **多语言支持**：内置中文、English、日本語、한국어、Deutsch、Français、Русский 七种语言，自动检测系统语言，可在设置中切换
 - **系统托盘**：关闭窗口后驻留在系统托盘，右键菜单可快速启动/关闭环境、全部关闭、全部关闭并退出、检查更新；退出时自动确认运行中的环境
 - **相对时间显示**：环境最近使用时间显示为"今天"、"昨天"、"3 天前"等，更直观
@@ -33,6 +33,8 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 ## 当前状态
 
 核心功能已完成，包括环境管理、浏览器引擎准备、CDP 注入、多语言、设置面板、系统托盘和 MSI 安装包构建。项目正在验证 MSI 安装体验和完善细节。
+
+安装包使用 self-contained 发布，普通用户无需预先安装 .NET Runtime。
 
 ## 浏览器引擎
 
@@ -108,6 +110,7 @@ dotnet run --project .\src\ChromeIsolator.App\ChromeIsolator.App.csproj
 
 ```text
 artifacts\publish\win-x64\
+artifacts\publish\ChromeIsolator-win-x64-v1.0.0.zip
 ```
 
 ### 构建 MSI 安装包
@@ -121,8 +124,14 @@ artifacts\publish\win-x64\
 安装包产物位于：
 
 ```text
-artifacts\installer\ChromeIsolator-Setup-x64.msi
+artifacts\installer\ChromeIsolator-Setup-x64-v1.0.0.msi
 ```
+
+## 版本管理
+
+项目版本统一写在根目录 `Directory.Build.props`。发布新版本时只修改其中的 `Version`、`AssemblyVersion`、`FileVersion` 和 `InformationalVersion`，然后创建同版本 tag，例如 `v1.0.0`。
+
+GitHub Actions 会在 tag 推送时自动构建，并创建 GitHub Release，上传带版本号的 win-x64 zip 和 MSI 安装包。
 
 ## 许可证
 
