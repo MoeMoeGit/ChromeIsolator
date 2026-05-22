@@ -5,6 +5,8 @@ namespace ChromeIsolator.Services;
 
 public static class L10n
 {
+    public sealed record LanguageOption(string Code, string NativeName);
+
     private static readonly Dictionary<string, string> LanguageFiles = new()
     {
         ["zh"] = "Resources/Strings.xaml",
@@ -30,8 +32,8 @@ public static class L10n
     public static event Action? LanguageChanged;
     public static string CurrentLanguage { get; private set; } = "zh";
 
-    public static IReadOnlyList<(string Code, string NativeName)> SupportedLanguages =>
-        LanguageFiles.Keys.Select(k => (k, NativeNames[k])).ToList();
+    public static IReadOnlyList<LanguageOption> SupportedLanguages =>
+        LanguageFiles.Keys.Select(k => new LanguageOption(k, NativeNames[k])).ToList();
 
     public static void Initialize(string? savedLanguage)
     {

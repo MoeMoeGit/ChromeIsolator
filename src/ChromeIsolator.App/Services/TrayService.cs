@@ -28,7 +28,7 @@ public sealed class TrayService : IDisposable
             Visible = true
         };
         _notifyIcon.DoubleClick += (_, _) => _mainWindow.ShowFromTray();
-        _notifyIcon.ContextMenuStrip = BuildMenu();
+        _notifyIcon.MouseUp += NotifyIcon_MouseUp;
     }
 
     public void Dispose()
@@ -42,67 +42,72 @@ public sealed class TrayService : IDisposable
         _notifyIcon.Dispose();
     }
 
+    private void NotifyIcon_MouseUp(object? sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Right || _notifyIcon is null)
+        {
+            return;
+        }
+
+        _notifyIcon.ContextMenuStrip?.Dispose();
+        _notifyIcon.ContextMenuStrip = BuildMenu();
+        _notifyIcon.ContextMenuStrip.Show(Cursor.Position);
+    }
+
     private ContextMenuStrip BuildMenu()
     {
         var menu = new ContextMenuStrip();
-        menu.Opening += (_, _) =>
+        menu.Items.Clear();
+
+        menu.Items.Add(L10n.GetString("TrayOpenPanel"), null, (_, _) => _mainWindow.ShowFromTray());
+        menu.Items.Add(new ToolStripSeparator());
+
+        var running = _viewModel.Profiles.Where(p => p.IsRunning).ToList();
+        if (running.Count > 0)
         {
-            menu.Items.Clear();
-
-            // Primary: Open Manager
-            menu.Items.Add(L10n.GetString("TrayOpenPanel"), null, (_, _) => _mainWindow.ShowFromTray());
+            foreach (var profile in running)
+            {
+                menu.Items.Add(L10n.Format("TrayStopProfile", profile.Title), null, (_, _) => _ = _viewModel.StopProfileSafeAsync(profile));
+            }
             menu.Items.Add(new ToolStripSeparator());
-
-            // Running profiles (stop actions)
-            var running = _viewModel.Profiles.Where(p => p.IsRunning).ToList();
-            if (running.Count > 0)
-            {
-                foreach (var profile in running)
-                {
-                    menu.Items.Add(L10n.Format("TrayStopProfile", profile.Title), null, (_, _) => _ = _viewModel.StopProfileSafeAsync(profile));
-                }
-                menu.Items.Add(new ToolStripSeparator());
-                menu.Items.Add(L10n.GetString("TrayStopAll"), null, (_, _) => _ = _viewModel.StopAllSafeAsync());
-                menu.Items.Add(new ToolStripSeparator());
-            }
-
-            // Stopped profiles (start actions), sorted by last used
-            var stopped = _viewModel.Profiles
-                .Where(p => !p.IsRunning && !p.IsStarting && !p.IsStopping)
-                .OrderByDescending(p => p.LastUsed ?? DateTime.MinValue)
-                .ToList();
-            foreach (var profile in stopped)
-            {
-                menu.Items.Add(L10n.Format("TrayStartProfile", profile.Title), null, (_, _) => _viewModel.StartProfile(profile));
-            }
-
-            if (stopped.Count > 0)
-            {
-                menu.Items.Add(new ToolStripSeparator());
-            }
-
-            // Utility
-            menu.Items.Add(L10n.GetString("TrayCheckUpdates"), null, async (_, _) => await _viewModel.CheckForUpdatesFromTrayAsync());
+            menu.Items.Add(L10n.GetString("TrayStopAll"), null, (_, _) => _ = _viewModel.StopAllSafeAsync());
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add(L10n.GetString("TrayExit"), null, (_, _) =>
-            {
-                var runningCount = _viewModel.Profiles.Count(p => p.IsRunning);
-                if (runningCount > 0)
-                {
-                    var result = MessageBox.Show(
-                        L10n.Format("MsgRunningEnvExit", runningCount),
-                        L10n.GetString("AppTitle"),
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Warning);
-                    if (result != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                }
+        }
 
-                _mainWindow.ExitFromTray();
-            });
-        };
+        var stopped = _viewModel.Profiles
+            .Where(p => !p.IsRunning && !p.IsStarting && !p.IsStopping)
+            .OrderByDescending(p => p.LastUsed ?? DateTime.MinValue)
+            .ToList();
+        foreach (var profile in stopped)
+        {
+            menu.Items.Add(L10n.Format("TrayStartProfile", profile.Title), null, (_, _) => _viewModel.StartProfile(profile));
+        }
+
+        if (stopped.Count > 0)
+        {
+            menu.Items.Add(new ToolStripSeparator());
+        }
+
+        menu.Items.Add(L10n.GetString("TrayCheckUpdates"), null, async (_, _) => await _viewModel.CheckForUpdatesFromTrayAsync());
+        menu.Items.Add(new ToolStripSeparator());
+        menu.Items.Add(L10n.GetString("TrayExit"), null, (_, _) =>
+        {
+            var runningCount = _viewModel.Profiles.Count(p => p.IsRunning);
+            if (runningCount > 0)
+            {
+                var result = MessageBox.Show(
+                    L10n.Format("MsgRunningEnvExit", runningCount),
+                    L10n.GetString("AppTitle"),
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+                if (result != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            _mainWindow.ExitFromTray();
+        });
 
         return menu;
     }

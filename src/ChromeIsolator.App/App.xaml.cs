@@ -9,6 +9,8 @@ public partial class App : WpfApplication
 {
     private TrayService? _trayService;
     private MainWindow? _mainWindow;
+    private ProfileManager? _profileManager;
+    private ChromeManager? _chromeManager;
 
     public App()
     {
@@ -25,11 +27,11 @@ public partial class App : WpfApplication
             AppPaths.EnsureDirectories();
 
             var configStore = new ConfigStore();
-            var profileManager = new ProfileManager(configStore);
-            L10n.Initialize(profileManager.Config.Language);
-            var chromeManager = new ChromeManager(() => profileManager.Config.AllowEdgeFallback);
+            _profileManager = new ProfileManager(configStore);
+            L10n.Initialize(_profileManager.Config.Language);
+            _chromeManager = new ChromeManager(() => _profileManager.Config.AllowEdgeFallback);
             var updateService = new UpdateService();
-            var mainViewModel = new MainViewModel(profileManager, chromeManager, updateService);
+            var mainViewModel = new MainViewModel(_profileManager, _chromeManager, updateService);
 
             _mainWindow = new MainWindow(mainViewModel);
             MainWindow = _mainWindow;
@@ -49,6 +51,15 @@ public partial class App : WpfApplication
 
     protected override void OnExit(ExitEventArgs e)
     {
+        try
+        {
+            _chromeManager?.StopAll(_profileManager?.Config.Profiles ?? []);
+        }
+        catch
+        {
+            // Process exit is already in progress; best-effort browser cleanup only.
+        }
+
         _trayService?.Dispose();
         base.OnExit(e);
     }

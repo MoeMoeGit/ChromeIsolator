@@ -52,6 +52,7 @@ claude.md
 ~$*
 
 # Installer / publish outputs
+.wix/
 publish/
 dist/
 build/

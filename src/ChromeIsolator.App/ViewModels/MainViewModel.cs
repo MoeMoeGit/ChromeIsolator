@@ -18,6 +18,7 @@ public sealed class MainViewModel : ObservableObject
     private string _chromeStatusText = "";
     private bool _showAdvancedDetails;
     private bool _isShuttingDown;
+    private bool _isBulkStopping;
 
     public MainViewModel(ProfileManager profileManager, ChromeManager chromeManager, UpdateService updateService)
     {
@@ -43,6 +44,8 @@ public sealed class MainViewModel : ObservableObject
         OpenProfileFolderCommand = new RelayCommand(OpenProfileFolder, () => SelectedProfile is not null);
         CopyProfilePathCommand = new RelayCommand(CopyProfilePath, () => SelectedProfile is not null);
         ToggleSelectedCommand = new RelayCommand<ProfileViewModel>(ToggleProfile);
+        StartProfileCommand = new RelayCommand<ProfileViewModel>(StartProfileFromList);
+        StopProfileCommand = new RelayCommand<ProfileViewModel>(StopProfileFromList);
         SelectedProfile = Profiles.FirstOrDefault();
 
         _chromeManager.ProfileExited += OnProfileExited;
@@ -81,6 +84,8 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand OpenProfileFolderCommand { get; }
     public RelayCommand CopyProfilePathCommand { get; }
     public RelayCommand<ProfileViewModel> ToggleSelectedCommand { get; }
+    public RelayCommand<ProfileViewModel> StartProfileCommand { get; }
+    public RelayCommand<ProfileViewModel> StopProfileCommand { get; }
 
     public bool CanStartSelected => CanStartSelectedCheck();
     public bool CanStopSelected => CanStopSelectedCheck();
@@ -146,6 +151,28 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
+    public void StartProfileFromList(ProfileViewModel? profile)
+    {
+        if (_isBulkStopping || profile is null || profile.IsRunning || profile.IsStarting || profile.IsStopping)
+        {
+            return;
+        }
+
+        SelectedProfile = profile;
+        StartProfile(profile);
+    }
+
+    public void StopProfileFromList(ProfileViewModel? profile)
+    {
+        if (profile is null || !profile.IsRunning || profile.IsStarting || profile.IsStopping)
+        {
+            return;
+        }
+
+        SelectedProfile = profile;
+        _ = StopProfileSafeAsync(profile);
+    }
+
     public void StartSelected()
     {
         if (CanStartSelected && SelectedProfile is not null)
@@ -156,29 +183,55 @@ public sealed class MainViewModel : ObservableObject
 
     public async Task StopAllAsync()
     {
+        if (_isBulkStopping)
+        {
+            return;
+        }
+
+        _isBulkStopping = true;
         var affectedProfiles = Profiles
             .Where(profile => profile.IsRunning || profile.IsStarting || profile.IsStopping)
             .ToList();
+        var profileModels = Profiles.Select(profile => profile.Model).ToList();
 
-        foreach (var profile in affectedProfiles)
+        try
         {
-            profile.IsStopping = true;
+            foreach (var profile in affectedProfiles)
+            {
+                profile.IsStopping = true;
+            }
+            RaiseCommandState();
+
+            await Task.Run(() => _chromeManager.StopAll(profileModels)).ConfigureAwait(true);
+
+            foreach (var profile in affectedProfiles)
+            {
+                profile.IsRunning = false;
+                profile.IsStarting = false;
+                profile.IsStopping = false;
+                profile.DebugPort = null;
+                profile.LastUsed = DateTime.Now;
+            }
+            _ = RefreshDiskSizesAsync();
+            SortProfiles();
         }
-        RaiseCommandState();
-
-        await Task.Run(() => _chromeManager.StopAll(Profiles.Select(profile => profile.Model))).ConfigureAwait(true);
-
-        foreach (var profile in affectedProfiles)
+        catch
         {
-            profile.IsRunning = false;
-            profile.IsStarting = false;
-            profile.IsStopping = false;
-            profile.DebugPort = null;
-            profile.LastUsed = DateTime.Now;
+            foreach (var profile in affectedProfiles)
+            {
+                profile.IsStarting = false;
+                profile.IsStopping = false;
+                profile.IsRunning = _chromeManager.IsRunning(profile.Model);
+                profile.DebugPort = _chromeManager.DebugPort(profile.Model);
+            }
+
+            throw;
         }
-        _ = RefreshDiskSizesAsync();
-        RaiseCommandState();
-        SortProfiles();
+        finally
+        {
+            _isBulkStopping = false;
+            RaiseCommandState();
+        }
     }
 
     internal async Task StopAllSafeAsync()
@@ -198,16 +251,26 @@ public sealed class MainViewModel : ObservableObject
         if (_isShuttingDown) return;
         _isShuttingDown = true;
 
-        foreach (var profile in Profiles)
+        try
         {
-            if (profile.IsRunning)
-            {
-                profile.IsStopping = true;
-            }
-        }
+            _isBulkStopping = true;
+            var profileModels = Profiles.Select(profile => profile.Model).ToList();
 
-        await Task.Run(() => _chromeManager.StopAll(Profiles.Select(profile => profile.Model)));
-        WpfApplication.Current.Shutdown();
+            foreach (var profile in Profiles)
+            {
+                if (profile.IsRunning)
+                {
+                    profile.IsStopping = true;
+                }
+            }
+
+            await Task.Run(() => _chromeManager.StopAll(profileModels));
+            WpfApplication.Current.Shutdown();
+        }
+        finally
+        {
+            _isBulkStopping = false;
+        }
     }
 
     private void AddProfile()
@@ -433,6 +496,11 @@ public sealed class MainViewModel : ObservableObject
 
     public void StartProfile(ProfileViewModel profile)
     {
+        if (_isBulkStopping)
+        {
+            return;
+        }
+
         try
         {
             profile.Error = null;
@@ -521,6 +589,7 @@ public sealed class MainViewModel : ObservableObject
     private bool CanStartSelectedCheck()
     {
         return SelectedProfile is not null
+            && !_isBulkStopping
             && !SelectedProfile.IsRunning
             && !SelectedProfile.IsStarting
             && !SelectedProfile.IsStopping;

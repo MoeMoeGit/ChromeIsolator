@@ -21,12 +21,12 @@
                     <TextBlock Text="{DynamicResource SectionBrowser}" FontWeight="SemiBold"
                                Foreground="{StaticResource TextSecondaryBrush}" />
                     <TextBlock Text="{Binding ChromeStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
-                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <WrapPanel Margin="0,12,0,0">
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenChromeFolder}"
-                                Command="{Binding OpenChromeFolderCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                                Command="{Binding OpenChromeFolderCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnReinstallChrome}"
-                                Command="{Binding ReinstallChromeCommand}" Padding="10,5" FontSize="12" />
-                    </StackPanel>
+                                Command="{Binding ReinstallChromeCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
+                    </WrapPanel>
                 </StackPanel>
             </Border>
 
@@ -40,14 +40,14 @@
                     <TextBlock Text="{Binding DataPath}" TextWrapping="Wrap" />
                     <TextBlock Text="{DynamicResource LabelProfilesPath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding ProfilesPath}" TextWrapping="Wrap" />
-                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <WrapPanel Margin="0,12,0,0">
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenDataFolder}"
-                                Command="{Binding OpenDataFolderCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                                Command="{Binding OpenDataFolderCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenProfilesFolder}"
-                                Command="{Binding OpenProfilesFolderCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                                Command="{Binding OpenProfilesFolderCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnCopyPath}"
-                                Command="{Binding CopyDataPathCommand}" Padding="10,5" FontSize="12" />
-                    </StackPanel>
+                                Command="{Binding CopyDataPathCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
+                    </WrapPanel>
                 </StackPanel>
             </Border>
 
@@ -71,7 +71,7 @@
                                Foreground="{StaticResource TextSecondaryBrush}" />
                     <ComboBox ItemsSource="{Binding Languages}"
                               SelectedItem="{Binding SelectedLanguage}"
-                              DisplayMemberPath="Item2"
+                              DisplayMemberPath="NativeName"
                               Margin="0,10,0,0"
                               Width="200"
                               HorizontalAlignment="Left" />
@@ -85,16 +85,16 @@
                     <TextBlock Text="{DynamicResource SectionHelpUpdate}" FontWeight="SemiBold"
                                Foreground="{StaticResource TextSecondaryBrush}" />
                     <TextBlock Text="{Binding UpdateStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
-                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <WrapPanel Margin="0,12,0,0">
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnCheckUpdates}"
-                                Command="{Binding CheckUpdatesCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                                Command="{Binding CheckUpdatesCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnViewReleases}"
-                                Command="{Binding OpenReleasesCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                                Command="{Binding OpenReleasesCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenIssues}"
-                                Command="{Binding OpenIssuesCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                                Command="{Binding OpenIssuesCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnCopyEmail}"
-                                Command="{Binding CopyEmailCommand}" Padding="10,5" FontSize="12" />
-                    </StackPanel>
+                                Command="{Binding CopyEmailCommand}" Margin="0,0,8,8" Padding="10,5" FontSize="12" />
+                    </WrapPanel>
                 </StackPanel>
             </Border>
         </StackPanel>

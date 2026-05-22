@@ -1,14 +1,22 @@
-<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
   <Package
     Name="ChromeIsolator"
     Manufacturer="Lucas"
     Version="$(var.ProductVersion)"
     UpgradeCode="{3D3597E8-A21D-4581-A7C6-B2DC1759F6AF}"
+    Codepage="65001"
     Scope="perMachine">
     <MajorUpgrade DowngradeErrorMessage="A newer version of ChromeIsolator is already installed." />
     <MediaTemplate EmbedCab="yes" />
     <Icon Id="AppIcon.ico" SourceFile="$(var.ProjectRoot)\assets\icons\AppIcon.ico" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+    <util:CloseApplication
+      Id="PromptCloseChromeIsolator"
+      Target="ChromeIsolator.exe"
+      Description="浏览器多开正在运行。请先从系统托盘退出浏览器多开，然后点击重试继续安装。"
+      PromptToContinue="yes"
+      RebootPrompt="no" />
 
     <StandardDirectory Id="ProgramFiles64Folder">
       <Directory Id="INSTALLFOLDER" Name="ChromeIsolator" />

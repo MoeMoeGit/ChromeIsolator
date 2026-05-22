@@ -84,10 +84,12 @@
                              Margin="4"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              HorizontalContentAlignment="Stretch"
-                             MouseDoubleClick="ProfilesList_MouseDoubleClick">
+                             MouseDoubleClick="ProfilesList_MouseDoubleClick"
+                             PreviewMouseRightButtonDown="ProfilesList_PreviewMouseRightButtonDown">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid MinHeight="44">
+                                <Grid MinHeight="44"
+                                      HorizontalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -120,7 +122,8 @@
                                     </StackPanel>
 
                                     <!-- Inline action button -->
-                                    <ContentControl Grid.Column="2" VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <ContentControl Grid.Column="2" VerticalAlignment="Center" Margin="8,0,0,0"
+                                                    Content="{Binding}">
                                         <ContentControl.Style>
                                             <Style TargetType="ContentControl">
                                                 <Setter Property="ContentTemplate">
@@ -128,7 +131,7 @@
                                                         <DataTemplate>
                                                             <Button Style="{StaticResource InlineStartButton}"
                                                                     Content="&#xE768;" FontFamily="Segoe Fluent Icons" FontSize="12"
-                                                                    Command="{Binding DataContext.ToggleSelectedCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                                    Command="{Binding DataContext.StartProfileCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                                     CommandParameter="{Binding}"
                                                                     ToolTip="{DynamicResource BtnStart}" />
                                                         </DataTemplate>
@@ -141,7 +144,7 @@
                                                                 <DataTemplate>
                                                                     <Button Style="{StaticResource InlineStopButton}"
                                                                             Content="&#xE71A;" FontFamily="Segoe Fluent Icons" FontSize="12"
-                                                                            Command="{Binding DataContext.ToggleSelectedCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                                            Command="{Binding DataContext.StopProfileCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                                             CommandParameter="{Binding}"
                                                                             ToolTip="{DynamicResource BtnStop}" />
                                                                 </DataTemplate>

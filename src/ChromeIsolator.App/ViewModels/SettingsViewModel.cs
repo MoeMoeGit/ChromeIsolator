@@ -12,7 +12,7 @@ public sealed class SettingsViewModel : ObservableObject
     private string _updateStatusText = "";
     private bool _isCheckingForUpdates;
     private bool _showAdvancedDetails;
-    private (string Code, string NativeName) _selectedLanguage;
+    private L10n.LanguageOption _selectedLanguage;
 
     public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService, ProfileManager profileManager, Action reinstallChrome)
     {
@@ -23,7 +23,7 @@ public sealed class SettingsViewModel : ObservableObject
         _showAdvancedDetails = profileManager.Config.ShowAdvancedDetails;
 
         Languages = L10n.SupportedLanguages;
-        _selectedLanguage = Languages.FirstOrDefault(l => l.Code == L10n.CurrentLanguage);
+        _selectedLanguage = Languages.FirstOrDefault(l => l.Code == L10n.CurrentLanguage) ?? Languages[0];
 
         OpenDataFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.SupportDir));
         OpenProfilesFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.ProfilesDir));
@@ -39,9 +39,9 @@ public sealed class SettingsViewModel : ObservableObject
         UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
     }
 
-    public IReadOnlyList<(string Code, string NativeName)> Languages { get; }
+    public IReadOnlyList<L10n.LanguageOption> Languages { get; }
 
-    public (string Code, string NativeName) SelectedLanguage
+    public L10n.LanguageOption SelectedLanguage
     {
         get => _selectedLanguage;
         set

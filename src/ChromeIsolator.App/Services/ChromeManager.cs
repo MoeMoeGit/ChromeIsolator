@@ -1,6 +1,9 @@
 using System.Diagnostics;
 using System.Net.Http;
+using System.Net.WebSockets;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.Json;
 using ChromeIsolator.Models;
 using Microsoft.Win32;
 
@@ -13,6 +16,10 @@ public sealed class ChromeManager
     private readonly Dictionary<string, Process> _processes = [];
     private readonly Dictionary<string, int> _debugPorts = [];
     private readonly Dictionary<string, FingerprintInjector> _fingerprintInjectors = [];
+    private static readonly HttpClient CdpHttpClient = new()
+    {
+        Timeout = TimeSpan.FromSeconds(2)
+    };
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -68,79 +75,106 @@ public sealed class ChromeManager
 
     public void Start(Profile profile)
     {
-        if (IsRunning(profile))
-        {
-            return;
-        }
-
         var chromePath = CurrentChrome?.ExecutablePath
             ?? throw new InvalidOperationException(L10n.GetString("ChromeNotFound"));
 
         var profileDir = AppPaths.ProfileDir(profile.Folder);
         Directory.CreateDirectory(profileDir);
 
-        var port = PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1));
-        int runningCount;
-        lock (_syncRoot) { runningCount = _processes.Count; }
-        var offsetX = 50 + runningCount * 30;
-        var offsetY = 50 + runningCount * 30;
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = chromePath,
-            UseShellExecute = false
-        };
-        startInfo.ArgumentList.Add($"--user-data-dir={profileDir}");
-        startInfo.ArgumentList.Add("--no-first-run");
-        startInfo.ArgumentList.Add($"--remote-debugging-port={port}");
-        startInfo.ArgumentList.Add($"--window-position={offsetX},{offsetY}");
-
-        var process = new Process
-        {
-            StartInfo = startInfo,
-            EnableRaisingEvents = true
-        };
-        process.Exited += (_, _) =>
-        {
-            FingerprintInjector? injector;
-            Process? exitedProcess;
-            lock (_syncRoot)
-            {
-                _fingerprintInjectors.Remove(profile.Folder, out injector);
-                _processes.Remove(profile.Folder, out exitedProcess);
-                _debugPorts.Remove(profile.Folder);
-            }
-
-            if (injector is not null)
-            {
-                _ = injector.DisposeAsync();
-            }
-
-            exitedProcess?.Dispose();
-
-            ProfileExited?.Invoke(profile.Folder);
-        };
-
-        process.Start();
-
-        var injector = new FingerprintInjector(port, profile.InstanceNumber);
         lock (_syncRoot)
         {
+            if (_processes.TryGetValue(profile.Folder, out var existing))
+            {
+                if (!existing.HasExited)
+                {
+                    return;
+                }
+
+                _processes.Remove(profile.Folder);
+                _debugPorts.Remove(profile.Folder);
+                if (_fingerprintInjectors.Remove(profile.Folder, out var staleInjector))
+                {
+                    _ = staleInjector.DisposeAsync();
+                }
+
+                existing.Dispose();
+            }
+
+            var port = PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1));
+            var runningCount = _processes.Count;
+            var offsetX = 50 + runningCount * 30;
+            var offsetY = 50 + runningCount * 30;
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = chromePath,
+                UseShellExecute = false
+            };
+            startInfo.ArgumentList.Add($"--user-data-dir={profileDir}");
+            startInfo.ArgumentList.Add("--no-first-run");
+            startInfo.ArgumentList.Add($"--remote-debugging-port={port}");
+            startInfo.ArgumentList.Add($"--window-position={offsetX},{offsetY}");
+
+            var process = new Process
+            {
+                StartInfo = startInfo,
+                EnableRaisingEvents = true
+            };
+            process.Exited += (_, _) =>
+            {
+                FingerprintInjector? injector;
+                Process? exitedProcess;
+                lock (_syncRoot)
+                {
+                    _fingerprintInjectors.Remove(profile.Folder, out injector);
+                    _processes.Remove(profile.Folder, out exitedProcess);
+                    _debugPorts.Remove(profile.Folder);
+                }
+
+                if (injector is not null)
+                {
+                    _ = injector.DisposeAsync();
+                }
+
+                exitedProcess?.Dispose();
+
+                ProfileExited?.Invoke(profile.Folder);
+            };
+
+            try
+            {
+                if (!process.Start())
+                {
+                    process.Dispose();
+                    throw new InvalidOperationException(L10n.GetString("ChromeNotFound"));
+                }
+            }
+            catch
+            {
+                process.Dispose();
+                throw;
+            }
+
+            var injector = new FingerprintInjector(port, profile.InstanceNumber);
             _processes[profile.Folder] = process;
             _debugPorts[profile.Folder] = port;
             _fingerprintInjectors[profile.Folder] = injector;
-        }
 
-        _ = injector.StartAsync();
+            _ = injector.StartAsync();
+        }
     }
 
     public void Stop(Profile profile)
     {
         Process? process;
         FingerprintInjector? injector;
+        int? port = null;
         lock (_syncRoot)
         {
             _processes.Remove(profile.Folder, out process);
-            _debugPorts.Remove(profile.Folder);
+            if (_debugPorts.Remove(profile.Folder, out var debugPort))
+            {
+                port = debugPort;
+            }
             _fingerprintInjectors.Remove(profile.Folder, out injector);
         }
 
@@ -158,10 +192,20 @@ public sealed class ChromeManager
 
             if (!process.HasExited)
             {
-                process.CloseMainWindow();
+                if (port is not null)
+                {
+                    TryCloseBrowserViaCdpAsync(port.Value).Wait(TimeSpan.FromSeconds(2));
+                }
+
+                if (!process.HasExited)
+                {
+                    process.CloseMainWindow();
+                }
+
                 if (!process.WaitForExit(5000))
                 {
                     process.Kill(entireProcessTree: true);
+                    process.WaitForExit(5000);
                 }
             }
         }
@@ -309,5 +353,36 @@ public sealed class ChromeManager
     {
         using var key = root.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe");
         return key?.GetValue("") as string;
+    }
+
+    private static async Task TryCloseBrowserViaCdpAsync(int port)
+    {
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+            using var response = await CdpHttpClient.GetAsync($"http://127.0.0.1:{port}/json/version", cts.Token)
+                .ConfigureAwait(false);
+            if (!response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            await using var stream = await response.Content.ReadAsStreamAsync(cts.Token).ConfigureAwait(false);
+            using var json = await JsonDocument.ParseAsync(stream, cancellationToken: cts.Token).ConfigureAwait(false);
+            if (!json.RootElement.TryGetProperty("webSocketDebuggerUrl", out var wsUrl) ||
+                !Uri.TryCreate(wsUrl.GetString(), UriKind.Absolute, out var uri))
+            {
+                return;
+            }
+
+            using var webSocket = new ClientWebSocket();
+            await webSocket.ConnectAsync(uri, cts.Token).ConfigureAwait(false);
+            var payload = Encoding.UTF8.GetBytes("""{"id":1,"method":"Browser.close"}""");
+            await webSocket.SendAsync(payload, WebSocketMessageType.Text, true, cts.Token).ConfigureAwait(false);
+        }
+        catch
+        {
+            // Fall back to the normal window close / process kill path.
+        }
     }
 }

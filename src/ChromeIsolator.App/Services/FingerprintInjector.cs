@@ -17,11 +17,13 @@ public sealed class FingerprintInjector : IAsyncDisposable
     private readonly string _script;
     private readonly CancellationTokenSource _cts = new();
     private readonly ConcurrentDictionary<int, TaskCompletionSource> _pendingResponses = [];
-    private readonly HashSet<string> _injectedTargets = [];
-    private readonly HashSet<string> _attachingTargets = [];
+    private readonly ConcurrentDictionary<string, byte> _injectedTargets = [];
+    private readonly ConcurrentDictionary<string, byte> _attachingTargets = [];
     private readonly SemaphoreSlim _sendLock = new(1, 1);
     private ClientWebSocket? _webSocket;
+    private Task? _runTask;
     private int _nextCommandId;
+    private int _disposed;
 
     public FingerprintInjector(int debugPort, int instanceNumber)
     {
@@ -31,11 +33,16 @@ public sealed class FingerprintInjector : IAsyncDisposable
 
     public Task StartAsync()
     {
-        return Task.Run(RunAsync);
+        return _runTask ??= Task.Run(RunAsync);
     }
 
     public async ValueTask DisposeAsync()
     {
+        if (Interlocked.Exchange(ref _disposed, 1) == 1)
+        {
+            return;
+        }
+
         await _cts.CancelAsync();
         await CleanupWebSocketAsync();
 
@@ -45,6 +52,19 @@ public sealed class FingerprintInjector : IAsyncDisposable
         }
 
         _pendingResponses.Clear();
+
+        if (_runTask is not null)
+        {
+            try
+            {
+                await _runTask.ConfigureAwait(false);
+            }
+            catch
+            {
+                // Disposal must stay best-effort; injection is not user-visible browsing state.
+            }
+        }
+
         _sendLock.Dispose();
         _cts.Dispose();
     }
@@ -83,8 +103,7 @@ public sealed class FingerprintInjector : IAsyncDisposable
 
                 if (_cts.IsCancellationRequested) break;
 
-                _injectedTargets.Clear();
-                _attachingTargets.Clear();
+                ClearTargetState();
             }
             catch (OperationCanceledException)
             {
@@ -106,8 +125,7 @@ public sealed class FingerprintInjector : IAsyncDisposable
                 }
 
                 await CleanupWebSocketAsync();
-                _injectedTargets.Clear();
-                _attachingTargets.Clear();
+                ClearTargetState();
             }
         }
     }
@@ -285,12 +303,11 @@ public sealed class FingerprintInjector : IAsyncDisposable
 
     private async Task AttachToTargetIfNeededAsync(string targetId)
     {
-        if (_injectedTargets.Contains(targetId) || _attachingTargets.Contains(targetId))
+        if (!MarkAttachingIfNeeded(targetId))
         {
             return;
         }
 
-        _attachingTargets.Add(targetId);
         try
         {
             await SendCommandAsync("Target.attachToTarget", new
@@ -301,22 +318,22 @@ public sealed class FingerprintInjector : IAsyncDisposable
         }
         catch
         {
-            _attachingTargets.Remove(targetId);
+            _attachingTargets.TryRemove(targetId, out _);
             throw;
         }
     }
 
     private async Task InjectSessionAsync(string sessionId, string targetId)
     {
-        if (_injectedTargets.Contains(targetId))
+        if (_injectedTargets.ContainsKey(targetId))
         {
             return;
         }
 
         await SendCommandAsync("Page.addScriptToEvaluateOnNewDocument", new { source = _script }, sessionId);
         await SendCommandAsync("Runtime.evaluate", new { expression = _script }, sessionId);
-        _attachingTargets.Remove(targetId);
-        _injectedTargets.Add(targetId);
+        _attachingTargets.TryRemove(targetId, out _);
+        _injectedTargets.TryAdd(targetId, 0);
     }
 
     private async Task SendCommandAsync(string method, object parameters, string? sessionId = null)
@@ -361,5 +378,21 @@ public sealed class FingerprintInjector : IAsyncDisposable
         {
             _sendLock.Release();
         }
+    }
+
+    private bool MarkAttachingIfNeeded(string targetId)
+    {
+        if (_injectedTargets.ContainsKey(targetId))
+        {
+            return false;
+        }
+
+        return _attachingTargets.TryAdd(targetId, 0);
+    }
+
+    private void ClearTargetState()
+    {
+        _injectedTargets.Clear();
+        _attachingTargets.Clear();
     }
 }

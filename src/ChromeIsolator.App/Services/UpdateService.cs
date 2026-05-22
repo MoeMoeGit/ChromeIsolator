@@ -38,13 +38,14 @@ public sealed class UpdateService
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, LatestReleaseApi);
-            request.Headers.UserAgent.ParseAdd("ChromeIsolator");
+            request.Headers.UserAgent.ParseAdd($"ChromeIsolator/{CurrentVersion}");
             request.Headers.Accept.ParseAdd("application/vnd.github+json");
+            request.Headers.Add("X-GitHub-Api-Version", "2022-11-28");
 
             using var response = await HttpClient.SendAsync(request, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
-                return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: $"HTTP {(int)response.StatusCode}");
+                return await CheckForUpdatesFromReleaseRedirectAsync($"HTTP {(int)response.StatusCode}", cancellationToken);
             }
 
             await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
@@ -70,6 +71,42 @@ public sealed class UpdateService
         {
             Debug.WriteLine(ex);
             return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: ex.Message);
+        }
+    }
+
+    private async Task<UpdateCheckResult> CheckForUpdatesFromReleaseRedirectAsync(string apiError, CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"{ReleasesUrl}/latest");
+            request.Headers.UserAgent.ParseAdd($"ChromeIsolator/{CurrentVersion}");
+
+            using var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: $"{apiError}; fallback HTTP {(int)response.StatusCode}");
+            }
+
+            var finalUri = response.RequestMessage?.RequestUri?.ToString();
+            var latestTag = finalUri?
+                .Split('/', StringSplitOptions.RemoveEmptyEntries)
+                .LastOrDefault();
+            if (string.IsNullOrWhiteSpace(latestTag) ||
+                string.Equals(latestTag, "latest", StringComparison.OrdinalIgnoreCase))
+            {
+                return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: apiError);
+            }
+
+            var latestVersion = NormalizeVersion(latestTag) ?? latestTag.TrimStart('v', 'V');
+            var current = CurrentVersion;
+            return IsNewer(latestVersion, current)
+                ? new UpdateCheckResult(UpdateCheckStatus.UpdateAvailable, latestTag)
+                : new UpdateCheckResult(UpdateCheckStatus.UpToDate, latestTag);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            return new UpdateCheckResult(UpdateCheckStatus.Failed, ErrorMessage: apiError);
         }
     }
 

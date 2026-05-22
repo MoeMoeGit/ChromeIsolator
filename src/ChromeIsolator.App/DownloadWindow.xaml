@@ -7,101 +7,115 @@
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="{StaticResource WindowBackgroundBrush}">
-    <StackPanel Margin="28">
-        <TextBlock x:Name="TitleText"
-                   Text="{DynamicResource DownloadPreparing}"
-                   FontSize="18"
-                   FontWeight="SemiBold"
-                   Foreground="{StaticResource TextPrimaryBrush}" />
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        <TextBlock x:Name="NoticeText"
-                   Text="{DynamicResource BrowserSetupNotice}"
-                   Foreground="{StaticResource TextPrimaryBrush}"
-                   Margin="0,12,0,0"
-                   TextWrapping="Wrap" />
-
-        <TextBlock x:Name="StatusText"
-                   Text="{DynamicResource DownloadPreparingStatus}"
-                   Foreground="{StaticResource TextSecondaryBrush}"
-                   Margin="0,16,0,0"
-                   TextWrapping="Wrap" />
-
-        <ProgressBar x:Name="ProgressBar"
-                     Height="20"
-                     Margin="0,14,0,0"
-                     Minimum="0"
-                     Maximum="100"
-                     Value="0" />
-
-        <TextBlock x:Name="PercentText"
-                   Text="0%"
-                   Foreground="{StaticResource TextSecondaryBrush}"
-                   HorizontalAlignment="Center"
-                   Margin="0,6,0,0" />
-
-        <Border x:Name="EdgeFallbackPanel"
+        <Border Background="{StaticResource CardBackgroundBrush}"
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="1"
                 CornerRadius="{StaticResource CardCornerRadius}"
-                Background="{StaticResource CardBackgroundBrush}"
-                Padding="12"
-                Margin="0,16,0,0"
-                Visibility="Collapsed">
-            <DockPanel LastChildFill="True">
-                <Button x:Name="UseEdgeButton"
-                        DockPanel.Dock="Right"
-                        Style="{StaticResource SecondaryButton}"
-                        Content="{DynamicResource BtnUseEdgeFallback}"
-                        MinWidth="170"
-                        Margin="12,0,0,0"
-                        Click="UseEdgeButton_Click" />
-                <TextBlock Text="{DynamicResource EdgeFallbackNotice}"
+                Padding="18">
+            <StackPanel>
+                <TextBlock x:Name="TitleText"
+                           Text="{DynamicResource DownloadPreparing}"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimaryBrush}" />
+
+                <TextBlock x:Name="NoticeText"
+                           Text="{DynamicResource BrowserSetupNotice}"
+                           Foreground="{StaticResource TextPrimaryBrush}"
+                           Margin="0,12,0,0"
+                           TextWrapping="Wrap" />
+
+                <TextBlock x:Name="StatusText"
+                           Text="{DynamicResource DownloadPreparingStatus}"
                            Foreground="{StaticResource TextSecondaryBrush}"
-                           TextWrapping="Wrap"
-                           VerticalAlignment="Center" />
-            </DockPanel>
+                           Margin="0,16,0,0"
+                           TextWrapping="Wrap" />
+
+                <ProgressBar x:Name="ProgressBar"
+                             Style="{StaticResource ModernProgressBar}"
+                             Margin="0,14,0,0"
+                             Minimum="0"
+                             Maximum="100"
+                             Value="0" />
+
+                <TextBlock x:Name="PercentText"
+                           Text="0%"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           HorizontalAlignment="Center"
+                           Margin="0,6,0,0" />
+
+                <Border x:Name="EdgeFallbackPanel"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Background="{StaticResource WindowBackgroundBrush}"
+                        Padding="12"
+                        Margin="0,16,0,0"
+                        Visibility="Collapsed">
+                    <DockPanel LastChildFill="True">
+                        <Button x:Name="UseEdgeButton"
+                                DockPanel.Dock="Right"
+                                Style="{StaticResource SecondaryButton}"
+                                Content="{DynamicResource BtnUseEdgeFallback}"
+                                MinWidth="170"
+                                Margin="12,0,0,0"
+                                Click="UseEdgeButton_Click" />
+                        <TextBlock Text="{DynamicResource EdgeFallbackNotice}"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+            </StackPanel>
         </Border>
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,18,0,0">
+        <WrapPanel Grid.Row="1"
+                   HorizontalAlignment="Right"
+                   Margin="0,16,0,0">
             <Button x:Name="InstallButton"
                     Style="{StaticResource PrimaryButton}"
                     Content="{DynamicResource BtnInstallOfficialChrome}"
                     MinWidth="130"
-                    Margin="0,0,8,0"
+                    Margin="0,0,8,8"
                     Click="InstallButton_Click" />
             <Button x:Name="OpenOfficialButton"
                     Style="{StaticResource SecondaryButton}"
                     Content="{DynamicResource BtnOpenOfficialChromePage}"
                     MinWidth="150"
-                    Margin="0,0,8,0"
+                    Margin="0,0,8,8"
                     Click="OpenOfficialButton_Click" />
             <Button x:Name="RetryButton"
                     Style="{StaticResource PrimaryButton}"
                     Content="{DynamicResource BtnRetry}"
                     MinWidth="80"
-                    Margin="0,0,8,0"
+                    Margin="0,0,8,8"
                     Visibility="Collapsed"
                     Click="RetryButton_Click" />
             <Button x:Name="CopyErrorButton"
                     Style="{StaticResource SecondaryButton}"
                     Content="{DynamicResource BtnCopyError}"
                     MinWidth="100"
-                    Margin="0,0,8,0"
+                    Margin="0,0,8,8"
                     Visibility="Collapsed"
                     Click="CopyErrorButton_Click" />
             <Button x:Name="UseInstalledButton"
                     Style="{StaticResource PrimaryButton}"
                     Content="{DynamicResource BtnUseInstalledChrome}"
                     MinWidth="120"
-                    Margin="0,0,8,0"
+                    Margin="0,0,8,8"
                     Click="UseInstalledButton_Click" />
             <Button x:Name="CancelButton"
                     Style="{StaticResource SecondaryButton}"
                     Content="{DynamicResource BtnCancel}"
                     MinWidth="80"
+                    Margin="0,0,0,8"
                     Click="CancelButton_Click" />
-        </StackPanel>
-    </StackPanel>
+        </WrapPanel>
+    </Grid>
 </Window>

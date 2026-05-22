@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using ChromeIsolator.Services;
 using ChromeIsolator.ViewModels;
 using WpfApplication = System.Windows.Application;
@@ -30,9 +32,17 @@ public partial class MainWindow : Window
     public async void ExitFromTray()
     {
         _allowClose = true;
-        await _viewModel.StopAllAsync();
-        Close();
-        WpfApplication.Current.Shutdown();
+        try
+        {
+            await _viewModel.StopAllAsync();
+            Close();
+            WpfApplication.Current.Shutdown();
+        }
+        catch (Exception ex)
+        {
+            _allowClose = false;
+            System.Windows.MessageBox.Show(ex.Message, Services.L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     protected override void OnClosing(CancelEventArgs e)
@@ -53,5 +63,30 @@ public partial class MainWindow : Window
         {
             _viewModel.ToggleProfile(_viewModel.SelectedProfile);
         }
+    }
+
+    private void ProfilesList_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        var item = FindParent<ListBoxItem>(e.OriginalSource as DependencyObject);
+        if (item is not null)
+        {
+            item.IsSelected = true;
+            item.Focus();
+        }
+    }
+
+    private static T? FindParent<T>(DependencyObject? current) where T : DependencyObject
+    {
+        while (current is not null)
+        {
+            if (current is T match)
+            {
+                return match;
+            }
+
+            current = VisualTreeHelper.GetParent(current);
+        }
+
+        return null;
     }
 }

@@ -29,6 +29,10 @@ if ($Version -notmatch '^\d+\.\d+\.\d+$') {
     throw "MSI ProductVersion must use numeric major.minor.patch format. Actual: $Version"
 }
 
+if (-not (wix extension list --acceptEula wix7 2>$null | Select-String -SimpleMatch "WixToolset.Util.wixext")) {
+    wix extension add --acceptEula wix7 WixToolset.Util.wixext
+}
+
 $msiPath = Join-Path $installerOutDir "ChromeIsolator-Setup-x64-v$Version.msi"
 
 & (Join-Path $PSScriptRoot "publish-win-x64.ps1") -Version $Version
@@ -107,6 +111,7 @@ Set-Content -LiteralPath $generatedWxs -Value $content.ToString() -Encoding UTF8
 
 wix build --acceptEula wix7 `
     -arch x64 `
+    -ext WixToolset.Util.wixext `
     -d "ProjectRoot=$repoRoot" `
     -d "ProductVersion=$Version" `
     -out $msiPath `
