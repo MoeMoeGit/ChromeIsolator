@@ -82,6 +82,7 @@
                              BorderThickness="0"
                              Background="Transparent"
                              Margin="4"
+                             Padding="0"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              HorizontalContentAlignment="Stretch"
                              MouseDoubleClick="ProfilesList_MouseDoubleClick"
