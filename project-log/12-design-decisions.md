@@ -354,17 +354,17 @@ Windows 未签名安装包可能出现 SmartScreen、浏览器下载警告或“
 
 ---
 
-## 决策 6：环境卡片横向铺满左侧列表（未解决）
+## 决策 6：环境卡片横向铺满左侧列表
 
 **日期**：2026-05-22
 
-**状态**：❌ 未解决，当前采用临时方案
+**状态**：✅ 代码层已修复，待 Windows 实机视觉验证
 
 **类型**：UI / 布局
 
 **背景**：
 
-主窗口左侧是环境卡片列表（`ListBox`），右侧是环境详情。期望卡片横向铺满左侧列表区域宽度，但实际卡片只占左侧一部分，右侧留有空白。该问题从 V1.2.0 开始反复出现，经历 V1.4.0 ~ V1.6.1 共 5 个版本尝试，始终未彻底解决。
+主窗口左侧是环境卡片列表（`ListBox`），右侧是环境详情。期望卡片横向铺满左侧列表区域宽度，但实际卡片只占左侧一部分，右侧留有空白。该问题从 V1.2.0 开始反复出现，经历 V1.4.0 ~ V1.6.1 共 5 个版本尝试，始终未彻底解决。2026-05-23 复查时确认上游根因不在 `VirtualizingStackPanel`，而在左侧 `DockPanel` 的子元素填充规则。
 
 **布局结构**：
 
@@ -373,10 +373,13 @@ Grid 列0: Width="360"（左侧面板）
   └─ Border: BorderThickness="1", CornerRadius="8"（卡片容器）
        └─ DockPanel
             ├─ TextBlock: DockPanel.Dock="Top"（标题）
-            └─ ListBox: Margin="4", BorderThickness="0", Padding="0"
-                 └─ ListBoxItem（ModernListBoxItem 样式）
-                      └─ Border: CornerRadius="8", Padding="10,8"（卡片模板）
+            ├─ ListBox: Margin="4", BorderThickness="0", Padding="0"
+            │    └─ ListBoxItem（ModernListBoxItem 样式）
+            │         └─ Border: CornerRadius="8", Padding="10,8"（卡片模板）
+            └─ StackPanel: 空状态（最后子元素，填充剩余空间）
 ```
+
+`DockPanel.LastChildFill` 默认只让最后一个子元素填满剩余空间。由于 `ListBox` 后面还有空状态 `StackPanel`，`ListBox` 并不是填充子元素，会按默认 `Dock.Left` 和自身期望宽度布局。这使得后续所有 `ListBoxItem` 宽度补偿都建立在错误的父级测量结果上。
 
 **关键像素值**：
 
@@ -397,27 +400,23 @@ Grid 列0: Width="360"（左侧面板）
 
 **当前临时方案**：
 
-采用方案 F（V1.6.1）：`MinWidth = ListBox.ActualWidth` + `ListBox.Padding="0"`。卡片基本铺满，但选中状态的右侧圆角边框仍被轻微截断。
+已废弃方案 F（V1.6.1）的 `MinWidth = ListBox.ActualWidth` 硬撑。当前方案是把左侧容器改成两行 `Grid`：标题行 `Auto`，列表区域 `*`；`ListBox` 和空状态叠放在同一个内容 `Grid` 里。这样 `ListBox` 明确获得完整可用宽度，`ModernListBoxItem` 只保留 `HorizontalAlignment="Stretch"` / `HorizontalContentAlignment="Stretch"`。
 
 **核心未解问题**：
 
-1. **`VirtualizingStackPanel` 的横向布局行为**：WPF `ListBox` 内部的 `VirtualizingStackPanel`（垂直方向）在 `ScrollViewer` 内部时，给子元素的可用宽度是容器宽度还是无限大？`HorizontalAlignment="Stretch"` 是否生效？观察到的行为是：`Stretch` 未生效，卡片按内容自适应宽度，只有 `MinWidth` 能强制撑大。
-
-2. **`ListBox.Padding="0"` 是否传递给内部 ScrollViewer**：WPF 默认 `ListBox` ControlTemplate 中，`Border` 的 `Padding` 是否通过 `TemplateBinding` 绑定到 `ListBox.Padding`？如果未绑定，`Padding="0"` 不会影响 ScrollViewer 内容区宽度。
-
-3. **右侧截断的真实原因**：是 ScrollViewer 的默认 `Padding="1"` 导致内容区比 ListBox 内容区小 2px？还是父 `Border` 的 `CornerRadius="8"` 在右侧边缘裁切了卡片的边框？还是选中状态的 `BorderThickness="1"` 是外扩导致超出？
+1. **Windows 实机视觉验证**：确认卡片在默认宽度、拖动 `GridSplitter` 后、空列表 / 多列表状态下都能铺满且不截断。
+2. **如仍有 1px 截断**：优先检查父容器裁剪和选中边框绘制，不再回到 `ListBoxItem.MinWidth = ListBox.ActualWidth` 方案。
 
 **后续建议**：
 
-1. 查看 .NET 8 WPF 默认 `ListBox` ControlTemplate 源码，确认 `ScrollViewer` 的 `Padding` 绑定关系和 `VirtualizingStackPanel` 的布局行为。
-2. 运行时诊断：在代码中读取 `ListBox`、`ScrollViewer`、`ListBoxItem` 的 `ActualWidth`、`Padding` 等属性，输出调试日志获取真实像素值。
-3. 替代方案：自定义 `ListBox` 的 `ItemsPanelTemplate`，用 `Grid` 替代 `VirtualizingStackPanel` 强制子元素拉伸；或在 `ListBoxItem.Loaded` 事件中通过代码设置宽度。
+1. 在 Windows 10 / 11 上运行应用并人工验证主窗口左侧列表。
+2. 如果实机仍异常，再加入临时运行时诊断输出 `ListBox.ActualWidth`、第一个 `ListBoxItem.ActualWidth` 和内部 `ScrollViewer.ViewportWidth`。
 
 **相关文件**：
 
-- `MainWindow.xaml` 第 68-88 行（左侧面板布局）
+- `MainWindow.xaml` 第 68-218 行（左侧面板布局）
 - `Themes/Controls.xaml` 第 246-289 行（ModernListBoxItem 样式）
-- `06-dev-log.md` 2026-05-22 记录（完整排查过程）
+- `06-dev-log.md` 2026-05-22 / 2026-05-23 记录（完整排查和根因修复过程）
 
 ---
 
@@ -425,6 +424,7 @@ Grid 列0: Width="360"（左侧面板）
 
 | 日期 | 变更内容 |
 |------|----------|
+| 2026-05-23 | 更新决策 6：确认根因是 `DockPanel` 中 `ListBox` 不是最后填充子元素；当前改用 `Grid` 布局并移除 `MinWidth` 硬撑，待 Windows 实机验证 |
 | 2026-05-22 | 新增决策 6：环境卡片横向铺满问题（未解决），记录 5 个版本尝试和后续建议 |
 | 2026-05-22 | 收敛浏览器引擎最终方案，补充 Chrome / Edge 选择过程和放弃项 |
 | 2026-05-22 | 增加 Chrome 程序共享与 profile 绝对隔离策略 |

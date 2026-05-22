@@ -4,6 +4,43 @@
 
 ---
 
+## 2026-05-23（环境卡片宽度问题根因修复 — 待 Windows 实机验证）
+
+**状态：✅ 代码层已修复，待 Windows 实机视觉验证**
+
+**触发原因**：继续排查主窗口左侧环境卡片无法稳定横向铺满、右侧被截断的问题。
+
+**根因确认**：
+
+此前分析集中在 `ListBox` / `VirtualizingStackPanel` / `ListBoxItem.MinWidth` 的宽度计算上，但实际布局链路还有一个更上游的问题：左侧容器使用 `DockPanel`，子元素顺序为标题 `TextBlock`、`ListBox`、空状态 `StackPanel`。由于 `DockPanel.LastChildFill` 默认只让最后一个子元素填充剩余空间，而 `ListBox` 不是最后一个子元素，且未设置 `DockPanel.Dock`，因此它会按默认 `Dock.Left` 和自身期望宽度参与布局，不会天然铺满左侧区域。
+
+这会导致：
+
+- `HorizontalContentAlignment="Stretch"` 的父级可用宽度本身不稳定。
+- `ListBoxItem.MinWidth = ListBox.ActualWidth` 变成自我补偿式硬撑。
+- 卡片铺满时容易刚好顶到父容器裁剪边界，出现右侧圆角 / 边框截断。
+
+**修改内容**：
+
+1. `MainWindow.xaml` — 左侧容器从 `DockPanel` 改为两行 `Grid`：标题行 `Auto`，列表区域 `*`。`ListBox` 和空状态放在同一个内容 `Grid` 中叠放，确保 `ListBox` 明确获得完整可用宽度。
+2. `Themes/Controls.xaml` — 移除 `ModernListBoxItem` 中绑定到 `ListBox.ActualWidth` 的 `MinWidth`，恢复由父布局和 `HorizontalContentAlignment="Stretch"` 正常控制 item 宽度。
+3. `ViewModels/WidthMinusConverter.cs` — 删除前几轮宽度补偿方案遗留的未引用 converter，避免后续继续沿用像素减法修补。
+4. `Directory.Build.props` — 版本号从 `1.6.1` 推进到 `1.6.2`，用于触发 GitHub Actions 构建和测试包发布。
+
+**验证方式**：
+
+- `xmllint --noout src/ChromeIsolator.App/MainWindow.xaml src/ChromeIsolator.App/Themes/Controls.xaml`
+- `git diff --check`
+
+**验证结果**：
+
+- XAML XML 结构检查通过。
+- 空白检查通过。
+- 当前 macOS 环境中 `dotnet` 命令不可用，未能执行 `dotnet build ChromeIsolator.sln`。
+- 仍需在 Windows 10 / 11 上运行应用，视觉确认左侧环境卡片铺满且右侧不再截断。
+
+---
+
 ## 2026-05-22（环境卡片宽度问题排查 — 未解决）
 
 **状态：❌ 未解决**
