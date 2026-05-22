@@ -45,6 +45,9 @@ public partial class MainWindow : Window
 
     private void ProfilesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        _viewModel.StartSelected();
+        if (_viewModel.SelectedProfile is not null)
+        {
+            _viewModel.ToggleProfile(_viewModel.SelectedProfile);
+        }
     }
 }

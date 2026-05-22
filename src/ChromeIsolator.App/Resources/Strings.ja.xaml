@@ -8,8 +8,10 @@
     <sys:String x:Key="BtnAddProfile">プロファイル追加</sys:String>
     <sys:String x:Key="BtnStart">起動</sys:String>
     <sys:String x:Key="BtnStop">停止</sys:String>
+    <sys:String x:Key="BtnStopProfile">環境を閉じる</sys:String>
+    <sys:String x:Key="BtnStartProfile">環境を起動</sys:String>
     <sys:String x:Key="BtnStopAll">すべて停止</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">Chrome 準備</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">ブラウザーエンジン設定</sys:String>
     <sys:String x:Key="BtnSettings">設定</sys:String>
     <sys:String x:Key="BtnRename">名前変更</sys:String>
     <sys:String x:Key="BtnDelete">削除</sys:String>
@@ -23,15 +25,15 @@
     <sys:String x:Key="LabelDiskSize">ディスク容量</sys:String>
     <sys:String x:Key="LabelError">エラー</sys:String>
     <sys:String x:Key="SectionAdvancedInfo">詳細情報</sys:String>
-    <sys:String x:Key="LabelChromeVersion">Chrome バージョン</sys:String>
-    <sys:String x:Key="LabelChromePath">Chrome パス</sys:String>
+    <sys:String x:Key="LabelChromeVersion">ブラウザー バージョン</sys:String>
+    <sys:String x:Key="LabelChromePath">ブラウザー パス</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU コア</sys:String>
     <sys:String x:Key="LabelMemory">メモリ</sys:String>
     <sys:String x:Key="EmptyProfiles">プロファイルがありません。上の「プロファイル追加」で作成してください。</sys:String>
 
     <!-- SettingsWindow -->
     <sys:String x:Key="SettingsTitle">設定</sys:String>
-    <sys:String x:Key="SectionBrowser">ブラウザ</sys:String>
+    <sys:String x:Key="SectionBrowser">ブラウザーエンジン</sys:String>
     <sys:String x:Key="SectionData">データ</sys:String>
     <sys:String x:Key="LabelDataPath">データディレクトリ</sys:String>
     <sys:String x:Key="LabelProfilesPath">プロファイルディレクトリ</sys:String>
@@ -44,24 +46,25 @@
     <sys:String x:Key="BtnOpenIssues">Issues を開く</sys:String>
     <sys:String x:Key="BtnCopyEmail">メールをコピー</sys:String>
     <sys:String x:Key="SectionUi">インターフェース</sys:String>
-    <sys:String x:Key="ShowAdvancedDetails">詳細情報を表示（Chrome バージョン、パス、システム情報）</sys:String>
+    <sys:String x:Key="ShowAdvancedDetails">詳細情報を表示（ブラウザー バージョン、パス、システム情報）</sys:String>
     <sys:String x:Key="SectionLanguage">言語</sys:String>
-    <sys:String x:Key="BtnOpenChromeFolder">Chrome フォルダを開く</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">Chrome を再インストール</sys:String>
+    <sys:String x:Key="BtnOpenChromeFolder">ブラウザー フォルダーを開く</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">ブラウザーエンジン設定</sys:String>
     <sys:String x:Key="BtnRetry">再試行</sys:String>
     <sys:String x:Key="BtnCopyError">エラー詳細をコピー</sys:String>
     <sys:String x:Key="BtnClearError">エラーをクリア</sys:String>
 
     <!-- DownloadWindow -->
-    <sys:String x:Key="DownloadTitle">Chrome 準備</sys:String>
-    <sys:String x:Key="DownloadPreparing">Chrome ブラウザを準備中</sys:String>
+    <sys:String x:Key="DownloadTitle">ブラウザーエンジン設定</sys:String>
+    <sys:String x:Key="DownloadPreparing">ブラウザーエンジン設定</sys:String>
     <sys:String x:Key="DownloadPreparingStatus">準備中...</sys:String>
     <sys:String x:Key="BtnCancel">キャンセル</sys:String>
     <sys:String x:Key="BtnClose">閉じる</sys:String>
-    <sys:String x:Key="BtnUseInstalledChrome">インストール済みの Chrome を使用</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">Chrome を再検出</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">公式 Chrome をインストール</sys:String>
     <sys:String x:Key="BtnUseEdgeFallback">Edge 代替を使用</sys:String>
     <sys:String x:Key="BtnRefreshDetection">再検出</sys:String>
+    <sys:String x:Key="BtnStartUsing">使い始める</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome は利用可能です</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator はブラウザ本体のみを使用します。すべての分離データは ChromeIsolator 専用フォルダーに保存され、既存の Chrome の拡張機能、設定、ログインユーザー、起動状態は読み取りも変更もしません。</sys:String>
     <sys:String x:Key="BrowserSetupChromeFoundNotice">公式 Chrome が見つかりました。分離環境は常に ChromeIsolator 専用データフォルダーを使用し、通常のデスクトップ Chrome は既存データを使い続けます。</sys:String>
@@ -72,14 +75,14 @@
     <sys:String x:Key="TrayOpenPanel">管理パネルを開く</sys:String>
     <sys:String x:Key="TrayStopAll">すべて停止</sys:String>
     <sys:String x:Key="TrayCheckUpdates">更新を確認</sys:String>
-    <sys:String x:Key="TrayStopAllAndQuit">すべて停止して終了</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">終了</sys:String>
     <sys:String x:Key="TrayExit">終了</sys:String>
     <sys:String x:Key="TrayStartProfile">{0} を起動</sys:String>
     <sys:String x:Key="TrayStopProfile">{0} を停止</sys:String>
 
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
-    <sys:String x:Key="MsgChromeNotFound">Chrome ブラウザが検出されませんでした。ダウンロードしてインストールする必要があります。\n\n今すぐダウンロードしますか？</sys:String>
+    <sys:String x:Key="MsgChromeNotFound">利用可能なブラウザーエンジンが検出されませんでした。ブラウザーエンジン設定を開いてください。</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} つの環境が実行中です。終了するとすべて閉じます。\n\n終了しますか？</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">実行中の環境は削除できません。先に停止してください。</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">「{0}」のデータをゴミ箱に移動します。現在のデータサイズ：{1}。\n環境名を入力して確認してください。</sys:String>
@@ -96,15 +99,15 @@
     <sys:String x:Key="MsgUpdateFailedShort">更新確認に失敗しました：{0}</sys:String>
 
     <!-- ChromeManager -->
-    <sys:String x:Key="ChromeNotFound">公式 Chrome 実行ファイルが見つかりません。今後のバージョンで自動ダウンロードとセットアップを提供予定です。</sys:String>
-    <sys:String x:Key="ChromeReady">Chrome 準備完了</sys:String>
+    <sys:String x:Key="ChromeNotFound">利用可能なブラウザーエンジンが見つかりません。ブラウザーエンジン設定で公式 Chrome をインストールするか、Chrome がない場合は Edge 代替を選択してください。</sys:String>
+    <sys:String x:Key="ChromeReady">ブラウザーエンジンは準備完了です</sys:String>
     <sys:String x:Key="ChromeConnecting">ダウンロードサーバーに接続中...</sys:String>
     <sys:String x:Key="ChromeDownloading">Chrome をダウンロード中...</sys:String>
     <sys:String x:Key="ChromeDownloadingProgress">Chrome をダウンロード中... {0} MB / {1} MB</sys:String>
     <sys:String x:Key="ChromeInstalling">Chrome をインストール中...</sys:String>
     <sys:String x:Key="ChromeVerifying">Chrome を検証中...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">インストール後も Chrome 実行ファイルが見つかりません</sys:String>
-    <sys:String x:Key="ChromeDone">Chrome 準備完了</sys:String>
+    <sys:String x:Key="ChromeDone">Chrome のインストールが完了しました</sys:String>
 
     <!-- Status -->
     <sys:String x:Key="StatusRunning">実行中</sys:String>
@@ -118,7 +121,7 @@
     <sys:String x:Key="DateToday">今日</sys:String>
     <sys:String x:Key="DateYesterday">昨日</sys:String>
     <sys:String x:Key="DateDaysAgo">{0} 日前</sys:String>
-    <sys:String x:Key="ChromeNotFoundShort">Chrome が見つかりません</sys:String>
-    <sys:String x:Key="ChromeAvailable">Chrome 利用可能：{0}（{1}）</sys:String>
+    <sys:String x:Key="ChromeNotFoundShort">ブラウザーエンジンが見つかりません</sys:String>
+    <sys:String x:Key="ChromeAvailable">ブラウザーエンジン利用可能: {0}（{1}）</sys:String>
 
 </ResourceDictionary>

@@ -8,8 +8,10 @@
     <sys:String x:Key="BtnAddProfile">프로필 추가</sys:String>
     <sys:String x:Key="BtnStart">시작</sys:String>
     <sys:String x:Key="BtnStop">중지</sys:String>
+    <sys:String x:Key="BtnStopProfile">환경 닫기</sys:String>
+    <sys:String x:Key="BtnStartProfile">환경 시작</sys:String>
     <sys:String x:Key="BtnStopAll">모두 중지</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">Chrome 준비</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">브라우저 엔진 설정</sys:String>
     <sys:String x:Key="BtnSettings">설정</sys:String>
     <sys:String x:Key="BtnRename">이름 변경</sys:String>
     <sys:String x:Key="BtnDelete">삭제</sys:String>
@@ -23,15 +25,15 @@
     <sys:String x:Key="LabelDiskSize">디스크 용량</sys:String>
     <sys:String x:Key="LabelError">오류</sys:String>
     <sys:String x:Key="SectionAdvancedInfo">고급 정보</sys:String>
-    <sys:String x:Key="LabelChromeVersion">Chrome 버전</sys:String>
-    <sys:String x:Key="LabelChromePath">Chrome 경로</sys:String>
+    <sys:String x:Key="LabelChromeVersion">브라우저 버전</sys:String>
+    <sys:String x:Key="LabelChromePath">브라우저 경로</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU 코어</sys:String>
     <sys:String x:Key="LabelMemory">메모리</sys:String>
     <sys:String x:Key="EmptyProfiles">프로필이 없습니다. 위의 「프로필 추가」를 클릭하여 만드세요.</sys:String>
 
     <!-- SettingsWindow -->
     <sys:String x:Key="SettingsTitle">설정</sys:String>
-    <sys:String x:Key="SectionBrowser">브라우저</sys:String>
+    <sys:String x:Key="SectionBrowser">브라우저 엔진</sys:String>
     <sys:String x:Key="SectionData">데이터</sys:String>
     <sys:String x:Key="LabelDataPath">데이터 디렉토리</sys:String>
     <sys:String x:Key="LabelProfilesPath">프로필 디렉토리</sys:String>
@@ -44,24 +46,25 @@
     <sys:String x:Key="BtnOpenIssues">Issues 열기</sys:String>
     <sys:String x:Key="BtnCopyEmail">이메일 복사</sys:String>
     <sys:String x:Key="SectionUi">인터페이스</sys:String>
-    <sys:String x:Key="ShowAdvancedDetails">고급 정보 표시 (Chrome 버전, 경로, 시스템 정보)</sys:String>
+    <sys:String x:Key="ShowAdvancedDetails">고급 정보 표시(브라우저 버전, 경로, 시스템 정보)</sys:String>
     <sys:String x:Key="SectionLanguage">언어</sys:String>
-    <sys:String x:Key="BtnOpenChromeFolder">Chrome 폴더 열기</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">Chrome 재설치</sys:String>
+    <sys:String x:Key="BtnOpenChromeFolder">브라우저 폴더 열기</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">브라우저 엔진 설정</sys:String>
     <sys:String x:Key="BtnRetry">재시도</sys:String>
     <sys:String x:Key="BtnCopyError">오류 복사</sys:String>
     <sys:String x:Key="BtnClearError">오류 지우기</sys:String>
 
     <!-- DownloadWindow -->
-    <sys:String x:Key="DownloadTitle">Chrome 준비</sys:String>
-    <sys:String x:Key="DownloadPreparing">Chrome 브라우저 준비 중</sys:String>
+    <sys:String x:Key="DownloadTitle">브라우저 엔진 설정</sys:String>
+    <sys:String x:Key="DownloadPreparing">브라우저 엔진 설정</sys:String>
     <sys:String x:Key="DownloadPreparingStatus">준비 중...</sys:String>
     <sys:String x:Key="BtnCancel">취소</sys:String>
     <sys:String x:Key="BtnClose">닫기</sys:String>
-    <sys:String x:Key="BtnUseInstalledChrome">설치된 Chrome 사용</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">Chrome 다시 감지</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">공식 Chrome 설치</sys:String>
     <sys:String x:Key="BtnUseEdgeFallback">Edge 대체 사용</sys:String>
     <sys:String x:Key="BtnRefreshDetection">다시 감지</sys:String>
+    <sys:String x:Key="BtnStartUsing">시작하기</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome 사용 가능</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator는 브라우저 프로그램 파일만 사용합니다. 모든 격리 데이터는 ChromeIsolator 전용 폴더에 저장되며 기존 Chrome 확장, 설정, 로그인 사용자, 기본 시작 상태를 읽거나 변경하지 않습니다.</sys:String>
     <sys:String x:Key="BrowserSetupChromeFoundNotice">공식 Chrome을 감지했습니다. 격리 환경은 항상 ChromeIsolator 전용 데이터 폴더를 사용하며 일반 데스크톱 Chrome은 기존 데이터를 계속 사용합니다.</sys:String>
@@ -72,14 +75,14 @@
     <sys:String x:Key="TrayOpenPanel">관리 패널 열기</sys:String>
     <sys:String x:Key="TrayStopAll">모두 중지</sys:String>
     <sys:String x:Key="TrayCheckUpdates">업데이트 확인</sys:String>
-    <sys:String x:Key="TrayStopAllAndQuit">모두 중지 후 종료</sys:String>
+    <sys:String x:Key="TrayStopAllAndQuit">종료</sys:String>
     <sys:String x:Key="TrayExit">종료</sys:String>
     <sys:String x:Key="TrayStartProfile">{0} 시작</sys:String>
     <sys:String x:Key="TrayStopProfile">{0} 중지</sys:String>
 
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">확인</sys:String>
-    <sys:String x:Key="MsgChromeNotFound">Chrome 브라우저가 감지되지 않았습니다. 다운로드하여 설치해야 합니다.\n\n지금 다운로드하시겠습니까?</sys:String>
+    <sys:String x:Key="MsgChromeNotFound">사용 가능한 브라우저 엔진을 감지하지 못했습니다. 브라우저 엔진 설정을 여세요.</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0}개의 환경이 실행 중입니다. 종료하면 모두 닫힙니다.\n\n종료하시겠습니까?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">실행 중인 환경은 삭제할 수 없습니다. 먼저 중지하세요.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">"{0}"의 데이터를 휴지통으로 이동합니다. 현재 데이터 크기: {1}.\n환경 이름을 입력하여 확인하세요.</sys:String>
@@ -96,15 +99,15 @@
     <sys:String x:Key="MsgUpdateFailedShort">업데이트 확인 실패: {0}</sys:String>
 
     <!-- ChromeManager -->
-    <sys:String x:Key="ChromeNotFound">공식 Chrome 실행 파일을 찾을 수 없습니다. 향후 버전에서 자동 다운로드 및 설정을 제공할 예정입니다.</sys:String>
-    <sys:String x:Key="ChromeReady">Chrome 준비 완료</sys:String>
+    <sys:String x:Key="ChromeNotFound">사용 가능한 브라우저 엔진을 찾지 못했습니다. 브라우저 엔진 설정에서 공식 Chrome을 설치하거나 Chrome이 없을 때 Edge 대체를 선택하세요.</sys:String>
+    <sys:String x:Key="ChromeReady">브라우저 엔진 준비 완료</sys:String>
     <sys:String x:Key="ChromeConnecting">다운로드 서버에 연결 중...</sys:String>
     <sys:String x:Key="ChromeDownloading">Chrome 다운로드 중...</sys:String>
     <sys:String x:Key="ChromeDownloadingProgress">Chrome 다운로드 중... {0} MB / {1} MB</sys:String>
     <sys:String x:Key="ChromeInstalling">Chrome 설치 중...</sys:String>
     <sys:String x:Key="ChromeVerifying">Chrome 확인 중...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">설치 후에도 Chrome 실행 파일을 찾을 수 없습니다</sys:String>
-    <sys:String x:Key="ChromeDone">Chrome 준비 완료</sys:String>
+    <sys:String x:Key="ChromeDone">Chrome 설치 완료</sys:String>
 
     <!-- Status -->
     <sys:String x:Key="StatusRunning">실행 중</sys:String>
@@ -118,7 +121,7 @@
     <sys:String x:Key="DateToday">오늘</sys:String>
     <sys:String x:Key="DateYesterday">어제</sys:String>
     <sys:String x:Key="DateDaysAgo">{0}일 전</sys:String>
-    <sys:String x:Key="ChromeNotFoundShort">Chrome을 찾을 수 없습니다</sys:String>
-    <sys:String x:Key="ChromeAvailable">Chrome 사용 가능: {0} ({1})</sys:String>
+    <sys:String x:Key="ChromeNotFoundShort">브라우저 엔진 없음</sys:String>
+    <sys:String x:Key="ChromeAvailable">브라우저 엔진 사용 가능: {0}({1})</sys:String>
 
 </ResourceDictionary>

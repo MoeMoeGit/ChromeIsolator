@@ -48,7 +48,7 @@ public partial class DownloadWindow : Window
             StatusText.Text = L10n.GetString("ChromeReady");
             InstallButton.Visibility = Visibility.Collapsed;
             UseEdgeButton.Visibility = Visibility.Collapsed;
-            UseInstalledButton.Content = L10n.GetString("BtnOk");
+            UseInstalledButton.Content = L10n.GetString("BtnStartUsing");
         }
         else
         {

@@ -32,8 +32,8 @@ public sealed class MainViewModel : ObservableObject
         _showAdvancedDetails = _profileManager.Config.ShowAdvancedDetails;
 
         AddProfileCommand = new RelayCommand(AddProfile);
-        StartSelectedCommand = new RelayCommand(StartSelected, () => SelectedProfile is not null);
-        StopSelectedCommand = new RelayCommand(StopSelected, () => SelectedProfile is not null);
+        StartSelectedCommand = new RelayCommand(StartSelected, CanStartSelected);
+        StopSelectedCommand = new RelayCommand(StopSelected, CanStopSelected);
         StopAllCommand = new RelayCommand(StopAll);
         PrepareChromeCommand = new RelayCommand(PrepareChrome);
         OpenSettingsCommand = new RelayCommand(OpenSettings);
@@ -131,7 +131,7 @@ public sealed class MainViewModel : ObservableObject
         {
             StopProfile(profile);
         }
-        else
+        else if (!profile.IsStarting && !profile.IsStopping)
         {
             StartProfile(profile);
         }
@@ -139,7 +139,7 @@ public sealed class MainViewModel : ObservableObject
 
     public void StartSelected()
     {
-        if (SelectedProfile is not null && !SelectedProfile.IsRunning)
+        if (CanStartSelected() && SelectedProfile is not null)
         {
             StartProfile(SelectedProfile);
         }
@@ -147,16 +147,18 @@ public sealed class MainViewModel : ObservableObject
 
     public void StopAll()
     {
-        foreach (var profile in Profiles)
+        var affectedProfiles = Profiles
+            .Where(profile => profile.IsRunning || profile.IsStarting || profile.IsStopping)
+            .ToList();
+
+        foreach (var profile in affectedProfiles)
         {
-            if (profile.IsRunning)
-            {
-                profile.IsStopping = true;
-            }
+            profile.IsStopping = true;
         }
+        RaiseCommandState();
 
         _chromeManager.StopAll(Profiles.Select(profile => profile.Model));
-        foreach (var profile in Profiles)
+        foreach (var profile in affectedProfiles)
         {
             profile.IsRunning = false;
             profile.IsStarting = false;
@@ -165,6 +167,7 @@ public sealed class MainViewModel : ObservableObject
             profile.LastUsed = DateTime.Now;
         }
         _ = RefreshDiskSizesAsync();
+        RaiseCommandState();
         SortProfiles();
     }
 
@@ -208,17 +211,7 @@ public sealed class MainViewModel : ObservableObject
         };
         downloadWindow.ShowDialog();
 
-        if (downloadWindow.UseEdgeFallback)
-        {
-            _profileManager.Config.AllowEdgeFallback = true;
-            _profileManager.Config.FirstRunCompleted = true;
-            _profileManager.Save();
-        }
-        else if (downloadWindow.UseInstalled || downloadWindow.DownloadSucceeded)
-        {
-            _profileManager.Config.FirstRunCompleted = true;
-            _profileManager.Save();
-        }
+        ApplyBrowserSetupResult(downloadWindow);
 
         if (downloadWindow.UseInstalled)
         {
@@ -249,17 +242,7 @@ public sealed class MainViewModel : ObservableObject
         };
         downloadWindow.ShowDialog();
 
-        if (downloadWindow.UseEdgeFallback)
-        {
-            _profileManager.Config.AllowEdgeFallback = true;
-            _profileManager.Config.FirstRunCompleted = true;
-            _profileManager.Save();
-        }
-        else if (downloadWindow.UseInstalled || downloadWindow.DownloadSucceeded)
-        {
-            _profileManager.Config.FirstRunCompleted = true;
-            _profileManager.Save();
-        }
+        ApplyBrowserSetupResult(downloadWindow);
 
         RefreshChromeStatus();
     }
@@ -311,12 +294,7 @@ public sealed class MainViewModel : ObservableObject
                 Owner = WpfApplication.Current.MainWindow
             };
             downloadWindow.ShowDialog();
-            if (downloadWindow.UseEdgeFallback)
-            {
-                _profileManager.Config.AllowEdgeFallback = true;
-                _profileManager.Config.FirstRunCompleted = true;
-                _profileManager.Save();
-            }
+            ApplyBrowserSetupResult(downloadWindow);
         }
 
         var window = new SettingsWindow(new SettingsViewModel(_chromeManager, _updateService, _profileManager, ReinstallChrome))
@@ -331,7 +309,7 @@ public sealed class MainViewModel : ObservableObject
 
     private void StopSelected()
     {
-        if (SelectedProfile is not null)
+        if (CanStopSelected() && SelectedProfile is not null)
         {
             StopProfile(SelectedProfile);
         }
@@ -423,11 +401,13 @@ public sealed class MainViewModel : ObservableObject
         {
             profile.Error = null;
             profile.IsStarting = true;
+            RaiseCommandState();
             _chromeManager.Start(profile.Model);
             profile.IsStarting = false;
             profile.IsRunning = true;
             profile.DebugPort = _chromeManager.DebugPort(profile.Model);
             profile.LastUsed = DateTime.Now;
+            RaiseCommandState();
             SortProfiles();
         }
         catch (Exception ex)
@@ -435,17 +415,20 @@ public sealed class MainViewModel : ObservableObject
             profile.IsStarting = false;
             profile.Error = ex.Message;
             RefreshChromeStatus();
+            RaiseCommandState();
         }
     }
 
     private void StopProfile(ProfileViewModel profile)
     {
         profile.IsStopping = true;
+        RaiseCommandState();
         _chromeManager.Stop(profile.Model);
         profile.IsRunning = false;
         profile.IsStopping = false;
         profile.DebugPort = null;
         profile.LastUsed = DateTime.Now;
+        RaiseCommandState();
         _ = profile.RefreshDiskSizeAsync();
         SortProfiles();
     }
@@ -466,6 +449,7 @@ public sealed class MainViewModel : ObservableObject
             profile.DebugPort = null;
             profile.LastUsed = DateTime.Now;
             _ = profile.RefreshDiskSizeAsync();
+            RaiseCommandState();
             SortProfiles();
         });
     }
@@ -493,12 +477,43 @@ public sealed class MainViewModel : ObservableObject
         CopyProfilePathCommand.RaiseCanExecuteChanged();
     }
 
+    private bool CanStartSelected()
+    {
+        return SelectedProfile is not null
+            && !SelectedProfile.IsRunning
+            && !SelectedProfile.IsStarting
+            && !SelectedProfile.IsStopping;
+    }
+
+    private bool CanStopSelected()
+    {
+        return SelectedProfile is not null
+            && SelectedProfile.IsRunning
+            && !SelectedProfile.IsStarting
+            && !SelectedProfile.IsStopping;
+    }
+
     private void RefreshChromeStatus()
     {
         var chrome = _chromeManager.CurrentChrome;
         ChromeStatusText = chrome is null
             ? L10n.GetString("ChromeNotFoundShort")
             : L10n.Format("ChromeAvailable", chrome.Version ?? "-", chrome.Source);
+    }
+
+    private void ApplyBrowserSetupResult(DownloadWindow downloadWindow)
+    {
+        if (downloadWindow.UseEdgeFallback)
+        {
+            _profileManager.Config.AllowEdgeFallback = true;
+            _profileManager.Config.FirstRunCompleted = true;
+            _profileManager.Save();
+        }
+        else if (downloadWindow.UseInstalled || downloadWindow.DownloadSucceeded)
+        {
+            _profileManager.Config.FirstRunCompleted = true;
+            _profileManager.Save();
+        }
     }
 
     private async Task RefreshDiskSizesAsync()
