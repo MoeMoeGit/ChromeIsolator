@@ -62,15 +62,20 @@
     <sys:String x:Key="BtnClose">Close</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Detect Chrome again</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">Install official Chrome</sys:String>
-    <sys:String x:Key="BtnUseEdgeFallback">Use Edge fallback</sys:String>
+    <sys:String x:Key="BtnOpenOfficialChromePage">Open official Chrome page</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">Use Edge temporarily (not recommended)</sys:String>
     <sys:String x:Key="BtnRefreshDetection">Detect again</sys:String>
     <sys:String x:Key="BtnStartUsing">Start using</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome is ready</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator only uses the browser program file. All isolated data is written to ChromeIsolator's own folders, so your original Chrome extensions, settings, signed-in users, and default startup state are not read or changed.</sys:String>
     <sys:String x:Key="BrowserSetupChromeFoundNotice">Official Chrome was detected. Isolated environments always use ChromeIsolator's own data folders; normal desktop Chrome keeps using your existing data.</sys:String>
     <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome was not detected. Install Chrome manually and detect again, or click "Install official Chrome".</sys:String>
-    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome was not detected. You can install official Chrome, or temporarily use system Edge as a fallback engine; both use isolated environment folders.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome was not detected. Install official Chrome first; if automatic download fails, open Google&apos;s official Chrome download page, install it manually, then detect again. Edge is only the last fallback.</sys:String>
+    <sys:String x:Key="EdgeFallbackNotice">Last fallback: if Chrome cannot be installed right now, you can temporarily use system Edge. This path is not recommended first; Chrome will still be preferred once available.</sys:String>
     <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator will download and run Google's official Stable Chrome installer. This only installs the Chrome program; isolated environment data stays in ChromeIsolator's own folders and will not use your default Chrome user data.\n\nContinue?</sys:String>
+    <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge is only a temporary fallback when Chrome cannot be installed, and is not recommended first. Isolated environments will still use ChromeIsolator&apos;s own data folders; once Chrome is detected later, Chrome will be preferred.
+
+Use Edge temporarily?</sys:String>
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">Open Manager</sys:String>
     <sys:String x:Key="TrayStopAll">Stop All</sys:String>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource DownloadTitle}"
         Width="680"
-        Height="330"
+        Height="430"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Icon="Assets/AppIcon.ico"
@@ -39,6 +39,28 @@
                    HorizontalAlignment="Center"
                    Margin="0,6,0,0" />
 
+        <Border x:Name="EdgeFallbackPanel"
+                BorderBrush="#D9DEE8"
+                BorderThickness="1"
+                CornerRadius="8"
+                Background="#FFFFFF"
+                Padding="12"
+                Margin="0,16,0,0"
+                Visibility="Collapsed">
+            <DockPanel LastChildFill="True">
+                <Button x:Name="UseEdgeButton"
+                        DockPanel.Dock="Right"
+                        Content="{DynamicResource BtnUseEdgeFallback}"
+                        MinWidth="170"
+                        Margin="12,0,0,0"
+                        Click="UseEdgeButton_Click" />
+                <TextBlock Text="{DynamicResource EdgeFallbackNotice}"
+                           Foreground="#687386"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+        </Border>
+
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,18,0,0">
@@ -47,11 +69,11 @@
                     MinWidth="130"
                     Margin="0,0,8,0"
                     Click="InstallButton_Click" />
-            <Button x:Name="UseEdgeButton"
-                    Content="{DynamicResource BtnUseEdgeFallback}"
-                    MinWidth="120"
+            <Button x:Name="OpenOfficialButton"
+                    Content="{DynamicResource BtnOpenOfficialChromePage}"
+                    MinWidth="150"
                     Margin="0,0,8,0"
-                    Click="UseEdgeButton_Click" />
+                    Click="OpenOfficialButton_Click" />
             <Button x:Name="RetryButton"
                     Content="{DynamicResource BtnRetry}"
                     MinWidth="80"

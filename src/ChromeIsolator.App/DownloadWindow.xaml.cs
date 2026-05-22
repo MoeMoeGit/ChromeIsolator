@@ -6,6 +6,7 @@ namespace ChromeIsolator;
 
 public partial class DownloadWindow : Window
 {
+    private const string OfficialChromeDownloadUrl = "https://www.google.cn/chrome/";
     private readonly ChromeManager _chromeManager;
     private CancellationTokenSource? _cts;
     private string? _lastError;
@@ -36,9 +37,10 @@ public partial class DownloadWindow : Window
         RetryButton.Visibility = Visibility.Collapsed;
         CopyErrorButton.Visibility = Visibility.Collapsed;
         InstallButton.Visibility = Visibility.Visible;
+        OpenOfficialButton.Visibility = Visibility.Visible;
         UseInstalledButton.IsEnabled = true;
         CancelButton.IsEnabled = true;
-        UseEdgeButton.Visibility = _chromeManager.InstalledEdge is null ? Visibility.Collapsed : Visibility.Visible;
+        EdgeFallbackPanel.Visibility = _chromeManager.InstalledEdge is null ? Visibility.Collapsed : Visibility.Visible;
         CancelButton.Content = L10n.GetString("BtnClose");
 
         if (_chromeManager.InstalledChrome is not null)
@@ -47,7 +49,8 @@ public partial class DownloadWindow : Window
             NoticeText.Text = L10n.GetString("BrowserSetupChromeFoundNotice");
             StatusText.Text = L10n.GetString("ChromeReady");
             InstallButton.Visibility = Visibility.Collapsed;
-            UseEdgeButton.Visibility = Visibility.Collapsed;
+            OpenOfficialButton.Visibility = Visibility.Collapsed;
+            EdgeFallbackPanel.Visibility = Visibility.Collapsed;
             UseInstalledButton.Content = L10n.GetString("BtnStartUsing");
         }
         else
@@ -67,7 +70,8 @@ public partial class DownloadWindow : Window
         RetryButton.Visibility = Visibility.Collapsed;
         CopyErrorButton.Visibility = Visibility.Collapsed;
         InstallButton.Visibility = Visibility.Collapsed;
-        UseEdgeButton.Visibility = Visibility.Collapsed;
+        OpenOfficialButton.Visibility = Visibility.Collapsed;
+        EdgeFallbackPanel.Visibility = Visibility.Collapsed;
         UseInstalledButton.IsEnabled = false;
         CancelButton.IsEnabled = true;
         CancelButton.Content = L10n.GetString("BtnCancel");
@@ -109,6 +113,8 @@ public partial class DownloadWindow : Window
             CancelButton.IsEnabled = true;
             RetryButton.Visibility = Visibility.Visible;
             CopyErrorButton.Visibility = Visibility.Visible;
+            OpenOfficialButton.Visibility = Visibility.Visible;
+            EdgeFallbackPanel.Visibility = _chromeManager.InstalledEdge is null ? Visibility.Collapsed : Visibility.Visible;
             UseInstalledButton.IsEnabled = true;
         }
     }
@@ -140,6 +146,11 @@ public partial class DownloadWindow : Window
         }
     }
 
+    private void OpenOfficialButton_Click(object sender, RoutedEventArgs e)
+    {
+        ShellService.OpenUrl(OfficialChromeDownloadUrl);
+    }
+
     private void UseInstalledButton_Click(object sender, RoutedEventArgs e)
     {
         if (_chromeManager.InstalledChrome is not null)
@@ -154,8 +165,17 @@ public partial class DownloadWindow : Window
 
     private void UseEdgeButton_Click(object sender, RoutedEventArgs e)
     {
-        UseEdgeFallback = true;
-        DialogResult = true;
+        var result = System.Windows.MessageBox.Show(
+            L10n.GetString("MsgConfirmUseEdgeFallback"),
+            L10n.GetString("AppTitle"),
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            UseEdgeFallback = true;
+            DialogResult = true;
+        }
     }
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)

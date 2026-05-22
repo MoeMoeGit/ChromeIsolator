@@ -62,15 +62,20 @@
     <sys:String x:Key="BtnClose">Закрыть</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Проверить Chrome снова</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">Установить официальный Chrome</sys:String>
-    <sys:String x:Key="BtnUseEdgeFallback">Использовать Edge</sys:String>
+    <sys:String x:Key="BtnOpenOfficialChromePage">Открыть официальную страницу Chrome</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">Временно использовать Edge (не рекомендуется)</sys:String>
     <sys:String x:Key="BtnRefreshDetection">Проверить снова</sys:String>
     <sys:String x:Key="BtnStartUsing">Начать</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome готов</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator использует только файл программы браузера. Все изолированные данные записываются в отдельные папки ChromeIsolator; существующие расширения Chrome, настройки, пользователи и обычный запуск не читаются и не изменяются.</sys:String>
     <sys:String x:Key="BrowserSetupChromeFoundNotice">Официальный Chrome найден. Изолированные среды всегда используют собственные папки данных ChromeIsolator; обычный Chrome на рабочем столе продолжает использовать ваши существующие данные.</sys:String>
     <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome не найден. Установите Chrome вручную и проверьте снова или нажмите «Установить официальный Chrome».</sys:String>
-    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome не найден. Можно установить официальный Chrome или временно использовать системный Edge как резервный движок; оба варианта используют изолированные папки сред.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome не найден. Сначала установите официальный Chrome. Если автоматическая загрузка не удалась, откройте официальную страницу загрузки Chrome от Google, установите вручную и проверьте снова. Edge — только последний резерв.</sys:String>
+    <sys:String x:Key="EdgeFallbackNotice">Последний резерв: если сейчас не удается установить Chrome, можно временно использовать системный Edge. Этот путь не рекомендуется как основной; когда Chrome станет доступен, он снова будет приоритетным.</sys:String>
     <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator скачает и запустит официальный установщик Google Stable Chrome. Это устанавливает только программу Chrome; данные изолированных сред остаются в отдельных папках ChromeIsolator и не используют ваш профиль Chrome по умолчанию.\n\nПродолжить?</sys:String>
+    <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge — только временный резерв, когда Chrome не удается установить, и не рекомендуется как основной вариант. Изолированные среды всё равно будут использовать отдельные папки данных ChromeIsolator; когда Chrome будет обнаружен позже, он станет приоритетным.
+
+Временно использовать Edge?</sys:String>
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">Открыть панель управления</sys:String>
     <sys:String x:Key="TrayStopAll">Остановить все</sys:String>

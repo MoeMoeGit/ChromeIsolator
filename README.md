@@ -16,7 +16,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 - **安全删除**：删除环境需要输入环境名称确认，对话框显示数据大小，数据会先移到 Windows 回收站
 - **错误恢复**：环境启动失败时可重试或清除错误状态
 - **轻量环境差异**：为不同环境注入稳定的 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory` 值，自动处理新打开的标签页，断线后自动重连（最多 5 次指数退避）
-- **浏览器引擎准备**：首次运行先说明隔离策略；优先使用用户已安装的官方 Stable Chrome 程序文件；未安装 Chrome 时，用户确认后才下载并运行官方 Chrome 安装包，也可临时使用系统 Edge 作为备用引擎
+- **浏览器引擎准备**：首次运行先说明隔离策略；优先使用用户已安装的官方 Stable Chrome 程序文件；未安装 Chrome 时，用户确认后下载官方 Chrome，下载失败可打开 Google 官方 Chrome 下载页手动安装；Edge 只作为最后临时备用
 - **设置面板**：查看 Chrome 状态和版本、打开数据目录、复制路径、重新安装 Chrome、高级详情显示、语言切换，以及帮助与更新信息
 - **多语言支持**：内置中文、English、日本語、한국어、Deutsch、Français、Русский 七种语言，自动检测系统语言，可在设置中切换
 - **系统托盘**：关闭窗口后驻留在系统托盘，右键菜单可快速启动/关闭环境、全部关闭、全部关闭并退出、检查更新；退出时自动确认运行中的环境
@@ -43,7 +43,8 @@ ChromeIsolator 的核心策略是“浏览器程序文件可共享，用户数�
 如果用户没有安装 Chrome，首次运行窗口会让用户明确选择：
 
 - 下载并运行 Google 官方 Stable Chrome 安装包。安装完成后，用户从桌面正常打开 Chrome 时仍使用 Chrome 自己的默认用户数据；ChromeIsolator 环境继续使用独立 profile。
-- 临时使用 Windows 系统自带的 Microsoft Edge Stable 作为备用 Chromium 引擎。Edge 备用同样只使用 ChromeIsolator 的独立 profile 目录，不触碰 Edge 默认用户数据。
+- 如果自动下载失败，打开 Google 官方 Chrome 下载页手动安装，安装后回到 ChromeIsolator 重新检测。
+- 如果暂时无法安装 Chrome，可临时使用 Windows 系统自带的 Microsoft Edge Stable 作为最后备用。Edge 不作为推荐主路径；Edge 备用同样只使用 ChromeIsolator 的独立 profile 目录，不触碰 Edge 默认用户数据。
 
 ## 数据位置
 

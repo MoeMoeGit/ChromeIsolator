@@ -62,15 +62,20 @@
     <sys:String x:Key="BtnClose">閉じる</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Chrome を再検出</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">公式 Chrome をインストール</sys:String>
-    <sys:String x:Key="BtnUseEdgeFallback">Edge 代替を使用</sys:String>
+    <sys:String x:Key="BtnOpenOfficialChromePage">公式 Chrome ページを開く</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">Edge を一時的に使用（非推奨）</sys:String>
     <sys:String x:Key="BtnRefreshDetection">再検出</sys:String>
     <sys:String x:Key="BtnStartUsing">使い始める</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome は利用可能です</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator はブラウザ本体のみを使用します。すべての分離データは ChromeIsolator 専用フォルダーに保存され、既存の Chrome の拡張機能、設定、ログインユーザー、起動状態は読み取りも変更もしません。</sys:String>
     <sys:String x:Key="BrowserSetupChromeFoundNotice">公式 Chrome が見つかりました。分離環境は常に ChromeIsolator 専用データフォルダーを使用し、通常のデスクトップ Chrome は既存データを使い続けます。</sys:String>
     <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome が見つかりません。手動で Chrome をインストールして再検出するか、「公式 Chrome をインストール」をクリックしてください。</sys:String>
-    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome が見つかりません。公式 Chrome をインストールするか、システム Edge を一時的な代替エンジンとして使用できます。どちらも分離環境フォルダーを使用します。</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome が見つかりません。まず公式 Chrome をインストールしてください。自動ダウンロードに失敗した場合は、Google 公式 Chrome ダウンロードページを開き、手動でインストールしてから再検出してください。Edge は最後の代替手段です。</sys:String>
+    <sys:String x:Key="EdgeFallbackNotice">最後の代替手段: 今すぐ Chrome をインストールできない場合のみ、システム Edge を一時的に使用できます。この方法は優先推奨ではなく、Chrome が利用可能になれば Chrome を優先します。</sys:String>
     <sys:String x:Key="MsgConfirmInstallChrome">Google 公式 Stable Chrome インストーラーをダウンロードして実行します。この操作は Chrome 本体のみをインストールします。分離環境データは ChromeIsolator 専用フォルダーに保存され、既定の Chrome ユーザーデータは使用しません。\n\n続行しますか?</sys:String>
+    <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge は Chrome をインストールできない場合の一時的な代替手段であり、優先推奨ではありません。分離環境は引き続き ChromeIsolator 専用データフォルダーを使用し、後で Chrome が検出されると Chrome を優先します。
+
+一時的に Edge を使用しますか?</sys:String>
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">管理パネルを開く</sys:String>
     <sys:String x:Key="TrayStopAll">すべて停止</sys:String>
