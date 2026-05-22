@@ -2,16 +2,16 @@
 
 > **最后更新**：2026-05-23
 > **最后更新人**：Codex
-> **最近开发日志**：`06-dev-log.md` 中的 2026-05-23（环境卡片宽度问题根因修复 — 待 Windows 实机验证）
+> **最近开发日志**：`06-dev-log.md` 中的 2026-05-23（环境卡片宽度问题根因修复 — 已验证）
 > **当前可信度**：已复核
 
 ## 当前版本
 
-**V1.6.2** — 已确认环境卡片宽度问题的上游根因是左侧 `DockPanel` 子元素顺序导致 `ListBox` 不是填充子元素。代码已改为 `Grid` 行布局，并移除 `ListBoxItem.MinWidth = ListBox.ActualWidth` 硬撑。**待 GitHub Actions 构建与 Windows 实机视觉验证。**
+**V1.6.2** — 已确认并修复环境卡片宽度问题。根因是左侧 `DockPanel` 子元素顺序导致 `ListBox` 不是填充子元素；代码已改为 `Grid` 行布局，并移除 `ListBoxItem.MinWidth = ListBox.ActualWidth` 硬撑。**用户实机验证：完美修复成功。**
 
 ## 当前阶段
 
-V1.6.2 用于触发 GitHub Actions 构建测试包。环境卡片宽度问题已在代码层做根因修复，详见 `06-dev-log.md` 中 2026-05-23 记录；当前仍需 Windows 实机确认视觉效果。
+V1.6.2 已用于触发 GitHub Actions 构建测试包。环境卡片宽度问题已在 Windows 实机测试中确认修复成功，详见 `06-dev-log.md` 中 2026-05-23 记录。
 
 ## 已完成
 
@@ -107,7 +107,7 @@ V1.6.2 用于触发 GitHub Actions 构建测试包。环境卡片宽度问题已
 
 | 问题 | 影响 | 状态 | 备注 |
 |------|------|------|------|
-| **环境卡片宽度未铺满 / 右侧截断** | **主窗口左侧列表视觉效果差** | **待验证** | **2026-05-23 已确认根因是 `DockPanel` 中 `ListBox` 不是最后填充子元素，已改为 `Grid` 布局并移除 `MinWidth` 硬撑；待 Windows 实机视觉验证** |
+| **环境卡片宽度未铺满 / 右侧截断** | **主窗口左侧列表视觉效果差** | **已解决** | **2026-05-23 已确认根因是 `DockPanel` 中 `ListBox` 不是最后填充子元素，已改为 `Grid` 布局并移除 `MinWidth` 硬撑；用户实机验证修复成功** |
 | 官方 Stable Chrome 私有程序副本 | 不作为 MVP / 默认方案 | 已收敛 | 当前正式策略是共享官方 Chrome 程序文件 + 隔离 profile；只有 Google 提供清晰私有部署包时才重评 |
 | GitHub 仓库 owner / Releases 地址 | 影响更新检查 URL | 已确认 | 代码中使用 `MoeMoeGit/ChromeIsolator` |
 | .NET 和 WiX 具体版本尚未锁定 | 影响工程和 CI | 待确认 | 创建工程时选择 LTS 和稳定版本 |
