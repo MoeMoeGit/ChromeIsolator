@@ -19,15 +19,7 @@ public sealed class ProfileManager
 
     public Profile AddProfile()
     {
-        var usedNumbers = Config.Profiles
-            .Select(profile => profile.InstanceNumber)
-            .Where(number => number > 0)
-            .ToHashSet();
-        var nextNumber = 1;
-        while (usedNumbers.Contains(nextNumber))
-        {
-            nextNumber++;
-        }
+        var nextNumber = GetNextAvailableProfileNumber();
 
         var profile = new Profile { Folder = $"p{nextNumber}" };
         Config.Profiles.Add(profile);
@@ -44,13 +36,14 @@ public sealed class ProfileManager
 
     public void MoveProfileToRecycleBin(Profile profile)
     {
+        var folder = profile.Folder;
         var path = AppPaths.ProfileDir(profile.Folder);
         if (Directory.Exists(path))
         {
             FileSystem.DeleteDirectory(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
         }
 
-        Config.Profiles.Remove(profile);
+        Config.Profiles.RemoveAll(item => string.Equals(item.Folder, folder, StringComparison.OrdinalIgnoreCase));
         Save();
     }
 
@@ -135,5 +128,21 @@ public sealed class ProfileManager
             folder[0] is 'p' or 'P' &&
             int.TryParse(folder[1..], out var number) &&
             number > 0;
+    }
+
+    private int GetNextAvailableProfileNumber()
+    {
+        var usedNumbers = Config.Profiles
+            .Select(profile => profile.InstanceNumber)
+            .Where(number => number > 0)
+            .ToHashSet();
+
+        var nextNumber = 1;
+        while (usedNumbers.Contains(nextNumber))
+        {
+            nextNumber++;
+        }
+
+        return nextNumber;
     }
 }

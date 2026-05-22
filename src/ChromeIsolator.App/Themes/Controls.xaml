@@ -244,7 +244,8 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="4,2" />
+        <Setter Property="Margin" Value="0,2" />
+        <Setter Property="MinWidth" Value="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ListBox}}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -253,7 +254,10 @@
                 <ControlTemplate TargetType="ListBoxItem">
                     <Border x:Name="border"
                             Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="8"
+                            HorizontalAlignment="Stretch"
                             Padding="10,8"
                             SnapsToDevicePixels="True">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
