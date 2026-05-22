@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using ChromeIsolator.Services;
 using ChromeIsolator.ViewModels;
+using WpfApplication = System.Windows.Application;
 
 namespace ChromeIsolator;
 
@@ -26,11 +27,12 @@ public partial class MainWindow : Window
         Activate();
     }
 
-    public void ExitFromTray()
+    public async void ExitFromTray()
     {
         _allowClose = true;
-        _viewModel.StopAll();
+        await _viewModel.StopAllAsync();
         Close();
+        WpfApplication.Current.Shutdown();
     }
 
     protected override void OnClosing(CancelEventArgs e)

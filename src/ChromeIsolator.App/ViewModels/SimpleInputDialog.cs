@@ -1,5 +1,8 @@
 using System.Windows;
 using ChromeIsolator.Services;
+using MediaBrush = System.Windows.Media.Brush;
+using MediaBrushes = System.Windows.Media.Brushes;
+using WpfApplication = System.Windows.Application;
 using WpfButton = System.Windows.Controls.Button;
 using WpfHorizontalAlignment = System.Windows.HorizontalAlignment;
 using WpfOrientation = System.Windows.Controls.Orientation;
@@ -16,23 +19,37 @@ public static class SimpleInputDialog
         var input = new WpfTextBox
         {
             Text = initialValue,
-            MinWidth = 280,
-            Margin = new Thickness(0, 10, 0, 0)
+            MinWidth = 300,
+            FontSize = 13,
+            Padding = new Thickness(8, 6, 8, 6),
+            Margin = new Thickness(0, 12, 0, 0),
+            VerticalContentAlignment = VerticalAlignment.Center
         };
 
         var okButton = new WpfButton
         {
             Content = L10n.GetString("BtnOk"),
             IsDefault = true,
-            MinWidth = 76,
+            MinWidth = 80,
             Margin = new Thickness(8, 0, 0, 0)
         };
         var cancelButton = new WpfButton
         {
             Content = L10n.GetString("BtnCancel"),
             IsCancel = true,
-            MinWidth = 76
+            MinWidth = 80
         };
+
+        // Apply styles from theme resources if available
+        var app = WpfApplication.Current;
+        if (app?.Resources.Contains("PrimaryButton") == true)
+        {
+            okButton.Style = (Style)app.Resources["PrimaryButton"];
+        }
+        if (app?.Resources.Contains("SecondaryButton") == true)
+        {
+            cancelButton.Style = (Style)app.Resources["SecondaryButton"];
+        }
 
         var buttonPanel = new WpfStackPanel
         {
@@ -46,16 +63,22 @@ public static class SimpleInputDialog
             }
         };
 
+        var messageBlock = new WpfTextBlock
+        {
+            Text = message,
+            TextWrapping = TextWrapping.Wrap,
+            FontSize = 13,
+            Foreground = app?.Resources.Contains("TextPrimaryBrush") == true
+                ? (MediaBrush)app.Resources["TextPrimaryBrush"]
+                : MediaBrushes.Black
+        };
+
         var content = new WpfStackPanel
         {
-            Margin = new Thickness(18),
+            Margin = new Thickness(20),
             Children =
             {
-                new WpfTextBlock
-                {
-                    Text = message,
-                    TextWrapping = TextWrapping.Wrap
-                },
+                messageBlock,
                 input,
                 buttonPanel
             }
@@ -64,11 +87,15 @@ public static class SimpleInputDialog
         var window = new Window
         {
             Title = title,
-            Width = 380,
-            Height = 190,
+            Width = 420,
+            SizeToContent = SizeToContent.Height,
+            MaxHeight = 400,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
             ResizeMode = ResizeMode.NoResize,
-            Content = content
+            Content = content,
+            Background = app?.Resources.Contains("WindowBackgroundBrush") == true
+                ? (MediaBrush)app.Resources["WindowBackgroundBrush"]
+                : MediaBrushes.White
         };
 
         string? result = null;

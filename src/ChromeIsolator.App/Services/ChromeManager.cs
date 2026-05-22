@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using ChromeIsolator.Models;
 using Microsoft.Win32;
 
@@ -12,6 +13,14 @@ public sealed class ChromeManager
     private readonly Dictionary<string, Process> _processes = [];
     private readonly Dictionary<string, int> _debugPorts = [];
     private readonly Dictionary<string, FingerprintInjector> _fingerprintInjectors = [];
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    private const int SW_RESTORE = 9;
 
     public event Action<string>? ProfileExited;
 
@@ -40,6 +49,23 @@ public sealed class ChromeManager
         }
     }
 
+    public void BringToFront(Profile profile)
+    {
+        Process? process;
+        lock (_syncRoot)
+        {
+            _processes.TryGetValue(profile.Folder, out process);
+        }
+
+        if (process is null || process.HasExited) return;
+
+        var handle = process.MainWindowHandle;
+        if (handle == IntPtr.Zero) return;
+
+        ShowWindow(handle, SW_RESTORE);
+        SetForegroundWindow(handle);
+    }
+
     public void Start(Profile profile)
     {
         if (IsRunning(profile))
@@ -54,6 +80,10 @@ public sealed class ChromeManager
         Directory.CreateDirectory(profileDir);
 
         var port = PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1));
+        int runningCount;
+        lock (_syncRoot) { runningCount = _processes.Count; }
+        var offsetX = 50 + runningCount * 30;
+        var offsetY = 50 + runningCount * 30;
         var startInfo = new ProcessStartInfo
         {
             FileName = chromePath,
@@ -62,6 +92,7 @@ public sealed class ChromeManager
         startInfo.ArgumentList.Add($"--user-data-dir={profileDir}");
         startInfo.ArgumentList.Add("--no-first-run");
         startInfo.ArgumentList.Add($"--remote-debugging-port={port}");
+        startInfo.ArgumentList.Add($"--window-position={offsetX},{offsetY}");
 
         var process = new Process
         {
@@ -71,10 +102,11 @@ public sealed class ChromeManager
         process.Exited += (_, _) =>
         {
             FingerprintInjector? injector;
+            Process? exitedProcess;
             lock (_syncRoot)
             {
                 _fingerprintInjectors.Remove(profile.Folder, out injector);
-                _processes.Remove(profile.Folder);
+                _processes.Remove(profile.Folder, out exitedProcess);
                 _debugPorts.Remove(profile.Folder);
             }
 
@@ -82,6 +114,8 @@ public sealed class ChromeManager
             {
                 _ = injector.DisposeAsync();
             }
+
+            exitedProcess?.Dispose();
 
             ProfileExited?.Invoke(profile.Folder);
         };

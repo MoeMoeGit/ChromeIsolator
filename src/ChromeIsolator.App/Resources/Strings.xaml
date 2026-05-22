@@ -92,7 +92,7 @@
     <sys:String x:Key="MsgChromeNotFound">未检测到可用的浏览器引擎。请打开浏览器引擎设置。</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">还有 {0} 个环境正在运行，退出将全部关闭。\n\n确定退出？</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">运行中的环境不能删除，请先关闭。</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">将把"{0}"的数据移到回收站。当前数据大小：{1}。\n请输入环境名称确认。</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">将把"{0}"的数据移到回收站。当前数据大小：{1}。&#x0a;请输入 delete 确认删除。</sys:String>
     <sys:String x:Key="MsgDeleteTitle">确认删除</sys:String>
     <sys:String x:Key="MsgRenameTitle">重命名</sys:String>
     <sys:String x:Key="MsgRenameMessage">自定义名称，方便识别</sys:String>

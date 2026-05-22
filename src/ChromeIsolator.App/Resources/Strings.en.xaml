@@ -91,7 +91,7 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgChromeNotFound">No usable browser engine was detected. Open Browser engine settings.</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} environment(s) are still running. Exiting will close them all.\n\nConfirm exit?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Cannot delete a running environment. Please stop it first.</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">"{0}" data will be moved to the Recycle Bin. Current data size: {1}.\nType the environment name to confirm.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">"{0}" data will be moved to the Recycle Bin. Current data size: {1}.&#x0a;Type delete to confirm.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Confirm Delete</sys:String>
     <sys:String x:Key="MsgRenameTitle">Rename</sys:String>
     <sys:String x:Key="MsgRenameMessage">Enter a custom name for easy identification</sys:String>

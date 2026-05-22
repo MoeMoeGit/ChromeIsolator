@@ -91,7 +91,7 @@ Utiliser Edge temporairement ?</sys:String>
     <sys:String x:Key="MsgChromeNotFound">Aucun moteur de navigateur utilisable n’a été détecté. Ouvrez les paramètres du moteur.</sys:String>
     <sys:String x:Key="MsgRunningEnvExit">{0} environnement(s) en cours d'exécution. La fermeture les arrêtera tous.\n\nConfirmer la fermeture ?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Impossible de supprimer un environnement en cours d'exécution. Veuillez l'arrêter d'abord.</sys:String>
-    <sys:String x:Key="MsgDeleteConfirm">Les données de « {0} » seront déplacées vers la corbeille. Taille actuelle : {1}.\nTapez le nom de l'environnement pour confirmer.</sys:String>
+    <sys:String x:Key="MsgDeleteConfirm">Les données de « {0} » seront déplacées vers la corbeille. Taille actuelle : {1}.&#x0a;Tapez delete pour confirmer.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Confirmer la suppression</sys:String>
     <sys:String x:Key="MsgRenameTitle">Renommer</sys:String>
     <sys:String x:Key="MsgRenameMessage">Entrez un nom personnalisé pour faciliter l'identification</sys:String>

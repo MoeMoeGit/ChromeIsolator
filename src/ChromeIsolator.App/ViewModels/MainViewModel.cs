@@ -33,7 +33,7 @@ public sealed class MainViewModel : ObservableObject
         AddProfileCommand = new RelayCommand(AddProfile);
         StartSelectedCommand = new RelayCommand(StartSelected, CanStartSelectedCheck);
         StopSelectedCommand = new RelayCommand(StopSelected, CanStopSelectedCheck);
-        StopAllCommand = new RelayCommand(StopAll);
+        StopAllCommand = new RelayCommand(() => _ = StopAllSafeAsync());
         PrepareChromeCommand = new RelayCommand(PrepareChrome);
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         RenameSelectedCommand = new RelayCommand(RenameSelected, () => SelectedProfile is not null);
@@ -138,7 +138,7 @@ public sealed class MainViewModel : ObservableObject
         if (profile is null) return;
         if (profile.IsRunning)
         {
-            StopProfile(profile);
+            _chromeManager.BringToFront(profile.Model);
         }
         else if (!profile.IsStarting && !profile.IsStopping)
         {
@@ -154,7 +154,7 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    public void StopAll()
+    public async Task StopAllAsync()
     {
         var affectedProfiles = Profiles
             .Where(profile => profile.IsRunning || profile.IsStarting || profile.IsStopping)
@@ -166,7 +166,8 @@ public sealed class MainViewModel : ObservableObject
         }
         RaiseCommandState();
 
-        _chromeManager.StopAll(Profiles.Select(profile => profile.Model));
+        await Task.Run(() => _chromeManager.StopAll(Profiles.Select(profile => profile.Model))).ConfigureAwait(true);
+
         foreach (var profile in affectedProfiles)
         {
             profile.IsRunning = false;
@@ -178,6 +179,18 @@ public sealed class MainViewModel : ObservableObject
         _ = RefreshDiskSizesAsync();
         RaiseCommandState();
         SortProfiles();
+    }
+
+    internal async Task StopAllSafeAsync()
+    {
+        try
+        {
+            await StopAllAsync();
+        }
+        catch (Exception ex)
+        {
+            WpfMessageBox.Show(ex.Message, L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     public async Task StopAllAndQuitAsync()
@@ -321,7 +334,19 @@ public sealed class MainViewModel : ObservableObject
     {
         if (CanStopSelected && SelectedProfile is not null)
         {
-            StopProfile(SelectedProfile);
+            _ = StopProfileSafeAsync(SelectedProfile);
+        }
+    }
+
+    internal async Task StopProfileSafeAsync(ProfileViewModel profile)
+    {
+        try
+        {
+            await StopProfileAsync(profile);
+        }
+        catch (Exception ex)
+        {
+            WpfMessageBox.Show(ex.Message, L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -361,7 +386,7 @@ public sealed class MainViewModel : ObservableObject
             L10n.GetString("MsgDeleteTitle"),
             L10n.Format("MsgDeleteConfirm", SelectedProfile.Title, SelectedProfile.DiskSizeRaw),
             "");
-        if (confirm != SelectedProfile.Title)
+        if (!string.Equals(confirm, "delete", StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
@@ -430,11 +455,13 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    public void StopProfile(ProfileViewModel profile)
+    public async Task StopProfileAsync(ProfileViewModel profile)
     {
         profile.IsStopping = true;
         RaiseCommandState();
-        _chromeManager.Stop(profile.Model);
+
+        await Task.Run(() => _chromeManager.Stop(profile.Model)).ConfigureAwait(true);
+
         profile.IsRunning = false;
         profile.IsStopping = false;
         profile.DebugPort = null;
@@ -446,7 +473,7 @@ public sealed class MainViewModel : ObservableObject
 
     private void OnProfileExited(string folder)
     {
-        WpfApplication.Current.Dispatcher.Invoke(() =>
+        WpfApplication.Current.Dispatcher.BeginInvoke(() =>
         {
             var profile = Profiles.FirstOrDefault(item => item.Folder == folder);
             if (profile is null)
