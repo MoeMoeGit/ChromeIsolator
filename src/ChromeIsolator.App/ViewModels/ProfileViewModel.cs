@@ -106,6 +106,7 @@ public sealed class ProfileViewModel : ObservableObject
             if (SetProperty(ref _error, value))
             {
                 OnPropertyChanged(nameof(ErrorText));
+                OnPropertyChanged(nameof(HasError));
             }
         }
     }
@@ -157,6 +158,10 @@ public sealed class ProfileViewModel : ObservableObject
 
     public string DebugPortText => DebugPort?.ToString(CultureInfo.InvariantCulture) ?? "-";
     public string ErrorText => string.IsNullOrWhiteSpace(Error) ? "-" : Error;
+
+    public bool HasError => !string.IsNullOrWhiteSpace(Error);
+    public bool HasMeta => LastUsedText != "-" || DiskSizeText != "-";
+    public bool HasDiskSize => DiskSizeText != "-";
 
     public string LastUsedText
     {

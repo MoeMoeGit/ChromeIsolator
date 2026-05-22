@@ -12,6 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\..\assets\icons\AppIcon.ico" Link="Assets\AppIcon.ico" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="..\..\assets\icons\AppIcon.ico" Link="Assets\AppIcon.ico" />
   </ItemGroup>
 </Project>

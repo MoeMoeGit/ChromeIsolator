@@ -8,68 +8,97 @@
         MinHeight="440"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
-        Icon="Assets/AppIcon.ico"
-        Background="#F7F8FB">
+        Background="{StaticResource WindowBackgroundBrush}">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="22">
-            <TextBlock Text="{DynamicResource SettingsTitle}" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Text="{DynamicResource SettingsTitle}" FontSize="22" FontWeight="SemiBold"
+                       Foreground="{StaticResource TextPrimaryBrush}" />
 
-            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,18,0,0">
+            <Border Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,18,0,0">
                 <StackPanel>
-                    <TextBlock Text="{DynamicResource SectionBrowser}" FontWeight="SemiBold" Foreground="#687386" />
+                    <TextBlock Text="{DynamicResource SectionBrowser}" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
                     <TextBlock Text="{Binding ChromeStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
                     <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
-                        <Button Content="{DynamicResource BtnOpenChromeFolder}" Command="{Binding OpenChromeFolderCommand}" Margin="0,0,8,0" />
-                        <Button Content="{DynamicResource BtnReinstallChrome}" Command="{Binding ReinstallChromeCommand}" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenChromeFolder}"
+                                Command="{Binding OpenChromeFolderCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnReinstallChrome}"
+                                Command="{Binding ReinstallChromeCommand}" Padding="10,5" FontSize="12" />
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,14,0,0">
+            <Border Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
                 <StackPanel>
-                    <TextBlock Text="{DynamicResource SectionData}" FontWeight="SemiBold" Foreground="#687386" />
-                    <TextBlock Text="{DynamicResource LabelDataPath}" Foreground="#8A94A6" Margin="0,10,0,0" />
+                    <TextBlock Text="{DynamicResource SectionData}" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                    <TextBlock Text="{DynamicResource LabelDataPath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding DataPath}" TextWrapping="Wrap" />
-                    <TextBlock Text="{DynamicResource LabelProfilesPath}" Foreground="#8A94A6" Margin="0,10,0,0" />
+                    <TextBlock Text="{DynamicResource LabelProfilesPath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding ProfilesPath}" TextWrapping="Wrap" />
                     <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
-                        <Button Content="{DynamicResource BtnOpenDataFolder}" Command="{Binding OpenDataFolderCommand}" Margin="0,0,8,0" />
-                        <Button Content="{DynamicResource BtnOpenProfilesFolder}" Command="{Binding OpenProfilesFolderCommand}" Margin="0,0,8,0" />
-                        <Button Content="{DynamicResource BtnCopyPath}" Command="{Binding CopyDataPathCommand}" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenDataFolder}"
+                                Command="{Binding OpenDataFolderCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenProfilesFolder}"
+                                Command="{Binding OpenProfilesFolderCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnCopyPath}"
+                                Command="{Binding CopyDataPathCommand}" Padding="10,5" FontSize="12" />
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,14,0,0">
+            <Border Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
                 <StackPanel>
-                    <TextBlock Text="{DynamicResource SectionUi}" FontWeight="SemiBold" Foreground="#687386" />
+                    <TextBlock Text="{DynamicResource SectionUi}" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
                     <CheckBox Content="{DynamicResource ShowAdvancedDetails}"
                               IsChecked="{Binding ShowAdvancedDetails}"
                               Margin="0,10,0,0" />
                 </StackPanel>
             </Border>
 
-            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,14,0,0">
+            <Border Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
                 <StackPanel>
-                    <TextBlock Text="{DynamicResource SectionLanguage}" FontWeight="SemiBold" Foreground="#687386" />
+                    <TextBlock Text="{DynamicResource SectionLanguage}" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
                     <ComboBox ItemsSource="{Binding Languages}"
                               SelectedItem="{Binding SelectedLanguage}"
-                              DisplayMemberPath="NativeName"
                               Margin="0,10,0,0"
                               Width="200"
-                              HorizontalAlignment="Left" />
+                              HorizontalAlignment="Left">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Item2}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
             </Border>
 
-            <Border Background="White" BorderBrush="#D9DEE8" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,14,0,0">
+            <Border Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
                 <StackPanel>
-                    <TextBlock Text="{DynamicResource SectionHelpUpdate}" FontWeight="SemiBold" Foreground="#687386" />
+                    <TextBlock Text="{DynamicResource SectionHelpUpdate}" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
                     <TextBlock Text="{Binding UpdateStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
                     <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
-                        <Button Content="{DynamicResource BtnCheckUpdates}" Command="{Binding CheckUpdatesCommand}" Margin="0,0,8,0" />
-                        <Button Content="{DynamicResource BtnViewReleases}" Command="{Binding OpenReleasesCommand}" Margin="0,0,8,0" />
-                        <Button Content="{DynamicResource BtnOpenIssues}" Command="{Binding OpenIssuesCommand}" Margin="0,0,8,0" />
-                        <Button Content="{DynamicResource BtnCopyEmail}" Command="{Binding CopyEmailCommand}" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnCheckUpdates}"
+                                Command="{Binding CheckUpdatesCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnViewReleases}"
+                                Command="{Binding OpenReleasesCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenIssues}"
+                                Command="{Binding OpenIssuesCommand}" Margin="0,0,8,0" Padding="10,5" FontSize="12" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnCopyEmail}"
+                                Command="{Binding CopyEmailCommand}" Padding="10,5" FontSize="12" />
                     </StackPanel>
                 </StackPanel>
             </Border>

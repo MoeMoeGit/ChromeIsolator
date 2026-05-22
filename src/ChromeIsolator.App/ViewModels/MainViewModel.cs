@@ -27,13 +27,12 @@ public sealed class MainViewModel : ObservableObject
 
         Profiles = new ObservableCollection<ProfileViewModel>(
             _profileManager.Config.Profiles.Select(profile => new ProfileViewModel(profile)));
-        SelectedProfile = Profiles.FirstOrDefault();
 
         _showAdvancedDetails = _profileManager.Config.ShowAdvancedDetails;
 
         AddProfileCommand = new RelayCommand(AddProfile);
-        StartSelectedCommand = new RelayCommand(StartSelected, CanStartSelected);
-        StopSelectedCommand = new RelayCommand(StopSelected, CanStopSelected);
+        StartSelectedCommand = new RelayCommand(StartSelected, CanStartSelectedCheck);
+        StopSelectedCommand = new RelayCommand(StopSelected, CanStopSelectedCheck);
         StopAllCommand = new RelayCommand(StopAll);
         PrepareChromeCommand = new RelayCommand(PrepareChrome);
         OpenSettingsCommand = new RelayCommand(OpenSettings);
@@ -43,6 +42,8 @@ public sealed class MainViewModel : ObservableObject
         RetrySelectedCommand = new RelayCommand(RetrySelected, () => SelectedProfile is not null && !SelectedProfile!.IsRunning && !string.IsNullOrEmpty(SelectedProfile?.Error));
         OpenProfileFolderCommand = new RelayCommand(OpenProfileFolder, () => SelectedProfile is not null);
         CopyProfilePathCommand = new RelayCommand(CopyProfilePath, () => SelectedProfile is not null);
+        ToggleSelectedCommand = new RelayCommand<ProfileViewModel>(ToggleProfile);
+        SelectedProfile = Profiles.FirstOrDefault();
 
         _chromeManager.ProfileExited += OnProfileExited;
         L10n.LanguageChanged += OnLanguageChanged;
@@ -60,9 +61,12 @@ public sealed class MainViewModel : ObservableObject
             if (SetProperty(ref _selectedProfile, value))
             {
                 RaiseCommandState();
+                OnPropertyChanged(nameof(SelectedProfileTitle));
             }
         }
     }
+
+    public string SelectedProfileTitle => _selectedProfile?.Title ?? L10n.GetString("SelectProfile");
 
     public RelayCommand AddProfileCommand { get; }
     public RelayCommand StartSelectedCommand { get; }
@@ -76,6 +80,10 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand RetrySelectedCommand { get; }
     public RelayCommand OpenProfileFolderCommand { get; }
     public RelayCommand CopyProfilePathCommand { get; }
+    public RelayCommand<ProfileViewModel> ToggleSelectedCommand { get; }
+
+    public bool CanStartSelected => CanStartSelectedCheck();
+    public bool CanStopSelected => CanStopSelectedCheck();
 
     public string ChromeStatusText
     {
@@ -125,8 +133,9 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    public void ToggleProfile(ProfileViewModel profile)
+    public void ToggleProfile(ProfileViewModel? profile)
     {
+        if (profile is null) return;
         if (profile.IsRunning)
         {
             StopProfile(profile);
@@ -139,7 +148,7 @@ public sealed class MainViewModel : ObservableObject
 
     public void StartSelected()
     {
-        if (CanStartSelected() && SelectedProfile is not null)
+        if (CanStartSelected && SelectedProfile is not null)
         {
             StartProfile(SelectedProfile);
         }
@@ -200,6 +209,7 @@ public sealed class MainViewModel : ObservableObject
         {
             _profileManager.RenameProfile(profile, input);
             viewModel.RefreshTitle();
+            OnPropertyChanged(nameof(SelectedProfileTitle));
         }
     }
 
@@ -309,7 +319,7 @@ public sealed class MainViewModel : ObservableObject
 
     private void StopSelected()
     {
-        if (CanStopSelected() && SelectedProfile is not null)
+        if (CanStopSelected && SelectedProfile is not null)
         {
             StopProfile(SelectedProfile);
         }
@@ -331,6 +341,7 @@ public sealed class MainViewModel : ObservableObject
 
         _profileManager.RenameProfile(SelectedProfile.Model, input);
         SelectedProfile.RefreshTitle();
+        OnPropertyChanged(nameof(SelectedProfileTitle));
     }
 
     private void DeleteSelected()
@@ -395,7 +406,7 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    private void StartProfile(ProfileViewModel profile)
+    public void StartProfile(ProfileViewModel profile)
     {
         try
         {
@@ -419,7 +430,7 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    private void StopProfile(ProfileViewModel profile)
+    public void StopProfile(ProfileViewModel profile)
     {
         profile.IsStopping = true;
         RaiseCommandState();
@@ -463,6 +474,7 @@ public sealed class MainViewModel : ObservableObject
         }
         OnPropertyChanged(nameof(ChromeVersionText));
         OnPropertyChanged(nameof(ChromePathText));
+        OnPropertyChanged(nameof(SelectedProfileTitle));
     }
 
     private void RaiseCommandState()
@@ -475,9 +487,11 @@ public sealed class MainViewModel : ObservableObject
         RetrySelectedCommand.RaiseCanExecuteChanged();
         OpenProfileFolderCommand.RaiseCanExecuteChanged();
         CopyProfilePathCommand.RaiseCanExecuteChanged();
+        OnPropertyChanged(nameof(CanStartSelected));
+        OnPropertyChanged(nameof(CanStopSelected));
     }
 
-    private bool CanStartSelected()
+    private bool CanStartSelectedCheck()
     {
         return SelectedProfile is not null
             && !SelectedProfile.IsRunning
@@ -485,7 +499,7 @@ public sealed class MainViewModel : ObservableObject
             && !SelectedProfile.IsStopping;
     }
 
-    private bool CanStopSelected()
+    private bool CanStopSelectedCheck()
     {
         return SelectedProfile is not null
             && SelectedProfile.IsRunning

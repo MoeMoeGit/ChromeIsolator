@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using ChromeIsolator.Services;
 using ChromeIsolator.ViewModels;
 
 namespace ChromeIsolator;
@@ -15,6 +16,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         _viewModel = viewModel;
         DataContext = viewModel;
+        IconHelper.ApplyIcon(this);
     }
 
     public void ShowFromTray()

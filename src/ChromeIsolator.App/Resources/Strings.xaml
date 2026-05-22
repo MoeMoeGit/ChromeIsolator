@@ -18,6 +18,7 @@
     <sys:String x:Key="SectionProfiles">环境</sys:String>
     <sys:String x:Key="SelectProfile">选择一个环境</sys:String>
     <sys:String x:Key="SectionBasicInfo">基础信息</sys:String>
+    <sys:String x:Key="SectionActions">操作</sys:String>
     <sys:String x:Key="LabelFolder">目录</sys:String>
     <sys:String x:Key="LabelProfilePath">数据路径</sys:String>
     <sys:String x:Key="LabelDebugPort">调试端口</sys:String>
@@ -38,7 +39,7 @@
     <sys:String x:Key="LabelDataPath">数据目录</sys:String>
     <sys:String x:Key="LabelProfilesPath">环境目录</sys:String>
     <sys:String x:Key="BtnOpenDataFolder">打开数据目录</sys:String>
-    <sys:String x:Key="BtnOpenProfilesFolder">打开环境目录</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">打开目录</sys:String>
     <sys:String x:Key="BtnCopyPath">复制路径</sys:String>
     <sys:String x:Key="SectionHelpUpdate">帮助与更新</sys:String>
     <sys:String x:Key="BtnCheckUpdates">检查更新</sys:String>

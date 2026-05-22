@@ -18,6 +18,8 @@
       <Directory Id="ApplicationProgramsFolder" Name="ChromeIsolator" />
     </StandardDirectory>
 
+    <StandardDirectory Id="DesktopFolder" />
+
     <Component Id="ApplicationShortcut" Directory="ApplicationProgramsFolder" Guid="{533929E9-D2E1-4FF5-A575-E824281A690A}">
       <Shortcut
         Id="StartMenuShortcut"
@@ -30,9 +32,21 @@
       <RegistryValue Root="HKLM" Key="Software\ChromeIsolator" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
     </Component>
 
+    <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="{A7B8C9D0-E1F2-4A5B-8C7D-9E0F1A2B3C4D}">
+      <Shortcut
+        Id="DesktopShortcut"
+        Name="浏览器多开"
+        Description="ChromeIsolator"
+        Target="[INSTALLFOLDER]ChromeIsolator.exe"
+        WorkingDirectory="INSTALLFOLDER"
+        Icon="AppIcon.ico" />
+      <RegistryValue Root="HKLM" Key="Software\ChromeIsolator" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+
     <Feature Id="MainFeature" Title="ChromeIsolator" Level="1">
       <ComponentGroupRef Id="PublishedFiles" />
       <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="DesktopShortcut" />
     </Feature>
   </Package>
 </Wix>

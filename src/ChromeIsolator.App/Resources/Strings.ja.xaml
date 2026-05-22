@@ -18,6 +18,7 @@
     <sys:String x:Key="SectionProfiles">プロファイル</sys:String>
     <sys:String x:Key="SelectProfile">プロファイルを選択</sys:String>
     <sys:String x:Key="SectionBasicInfo">基本情報</sys:String>
+    <sys:String x:Key="SectionActions">操作</sys:String>
     <sys:String x:Key="LabelFolder">フォルダ</sys:String>
     <sys:String x:Key="LabelProfilePath">データパス</sys:String>
     <sys:String x:Key="LabelDebugPort">デバッグポート</sys:String>
@@ -38,7 +39,7 @@
     <sys:String x:Key="LabelDataPath">データディレクトリ</sys:String>
     <sys:String x:Key="LabelProfilesPath">プロファイルディレクトリ</sys:String>
     <sys:String x:Key="BtnOpenDataFolder">データフォルダを開く</sys:String>
-    <sys:String x:Key="BtnOpenProfilesFolder">プロファイルフォルダを開く</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">フォルダを開く</sys:String>
     <sys:String x:Key="BtnCopyPath">パスをコピー</sys:String>
     <sys:String x:Key="SectionHelpUpdate">ヘルプと更新</sys:String>
     <sys:String x:Key="BtnCheckUpdates">更新を確認</sys:String>

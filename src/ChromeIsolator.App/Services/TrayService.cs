@@ -48,19 +48,40 @@ public sealed class TrayService : IDisposable
         menu.Opening += (_, _) =>
         {
             menu.Items.Clear();
-            menu.Items.Add(L10n.GetString("TrayOpenPanel"), null, (_, _) => _mainWindow.ShowFromTray());
-            menu.Items.Add(new ToolStripSeparator());
 
-            foreach (var profile in _viewModel.Profiles)
+            // Group: Running profiles (stop actions)
+            var running = _viewModel.Profiles.Where(p => p.IsRunning).ToList();
+            if (running.Count > 0)
             {
-                var text = profile.IsRunning
-                    ? L10n.Format("TrayStopProfile", profile.Title)
-                    : L10n.Format("TrayStartProfile", profile.Title);
-                menu.Items.Add(text, null, (_, _) => _viewModel.ToggleProfile(profile));
+                foreach (var profile in running)
+                {
+                    menu.Items.Add(L10n.Format("TrayStopProfile", profile.Title), null, (_, _) => _viewModel.StopProfile(profile));
+                }
+                menu.Items.Add(new ToolStripSeparator());
+                menu.Items.Add(L10n.GetString("TrayStopAll"), null, (_, _) => _viewModel.StopAll());
+                menu.Items.Add(L10n.GetString("TrayStopAllAndQuit"), null, (_, _) =>
+                {
+                    _mainWindow.ExitFromTray();
+                    Application.Current.Shutdown();
+                });
+                menu.Items.Add(new ToolStripSeparator());
+            }
+
+            // Group: Stopped profiles (start actions), sorted by last used
+            var stopped = _viewModel.Profiles
+                .Where(p => !p.IsRunning && !p.IsStarting && !p.IsStopping)
+                .OrderByDescending(p => p.LastUsed ?? DateTime.MinValue)
+                .ToList();
+            foreach (var profile in stopped)
+            {
+                menu.Items.Add(L10n.Format("TrayStartProfile", profile.Title), null, (_, _) => _viewModel.StartProfile(profile));
             }
 
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add(L10n.GetString("TrayStopAll"), null, (_, _) => _viewModel.StopAll());
+
+            // Utility
+            menu.Items.Add(L10n.GetString("TrayOpenPanel"), null, (_, _) => _mainWindow.ShowFromTray());
+            menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add(L10n.GetString("TrayCheckUpdates"), null, async (_, _) => await _viewModel.CheckForUpdatesFromTrayAsync());
             menu.Items.Add(L10n.GetString("TrayExit"), null, (_, _) =>
             {
@@ -89,6 +110,23 @@ public sealed class TrayService : IDisposable
     private static Icon LoadIcon()
     {
         var path = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
-        return File.Exists(path) ? new Icon(path) : SystemIcons.Application;
+        if (File.Exists(path))
+        {
+            return new Icon(path);
+        }
+
+        var assembly = typeof(TrayService).Assembly;
+        var resourceName = assembly.GetManifestResourceNames()
+            .FirstOrDefault(n => n.EndsWith("AppIcon.ico", StringComparison.OrdinalIgnoreCase));
+        if (resourceName is not null)
+        {
+            var stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream is not null)
+            {
+                return new Icon(stream);
+            }
+        }
+
+        return SystemIcons.Application;
     }
 }

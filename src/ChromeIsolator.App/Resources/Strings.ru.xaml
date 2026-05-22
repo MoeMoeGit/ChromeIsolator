@@ -18,6 +18,7 @@
     <sys:String x:Key="SectionProfiles">Профили</sys:String>
     <sys:String x:Key="SelectProfile">Выберите профиль</sys:String>
     <sys:String x:Key="SectionBasicInfo">Основная информация</sys:String>
+    <sys:String x:Key="SectionActions">Действия</sys:String>
     <sys:String x:Key="LabelFolder">Папка</sys:String>
     <sys:String x:Key="LabelProfilePath">Путь к данным</sys:String>
     <sys:String x:Key="LabelDebugPort">Порт отладки</sys:String>
@@ -38,7 +39,7 @@
     <sys:String x:Key="LabelDataPath">Каталог данных</sys:String>
     <sys:String x:Key="LabelProfilesPath">Каталог профилей</sys:String>
     <sys:String x:Key="BtnOpenDataFolder">Открыть папку данных</sys:String>
-    <sys:String x:Key="BtnOpenProfilesFolder">Открыть папку профилей</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">Открыть папку</sys:String>
     <sys:String x:Key="BtnCopyPath">Копировать путь</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Справка и обновления</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Проверить обновления</sys:String>

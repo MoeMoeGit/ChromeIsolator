@@ -18,6 +18,7 @@
     <sys:String x:Key="SectionProfiles">Profile</sys:String>
     <sys:String x:Key="SelectProfile">Profil auswählen</sys:String>
     <sys:String x:Key="SectionBasicInfo">Grundinformationen</sys:String>
+    <sys:String x:Key="SectionActions">Aktionen</sys:String>
     <sys:String x:Key="LabelFolder">Ordner</sys:String>
     <sys:String x:Key="LabelProfilePath">Datenpfad</sys:String>
     <sys:String x:Key="LabelDebugPort">Debug-Port</sys:String>
@@ -38,7 +39,7 @@
     <sys:String x:Key="LabelDataPath">Datenverzeichnis</sys:String>
     <sys:String x:Key="LabelProfilesPath">Profilverzeichnis</sys:String>
     <sys:String x:Key="BtnOpenDataFolder">Datenordner öffnen</sys:String>
-    <sys:String x:Key="BtnOpenProfilesFolder">Profilordner öffnen</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">Ordner öffnen</sys:String>
     <sys:String x:Key="BtnCopyPath">Pfad kopieren</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Hilfe &amp; Updates</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Nach Updates suchen</sys:String>

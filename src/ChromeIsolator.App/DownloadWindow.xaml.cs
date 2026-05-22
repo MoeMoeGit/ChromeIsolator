@@ -20,6 +20,7 @@ public partial class DownloadWindow : Window
     {
         _chromeManager = chromeManager;
         InitializeComponent();
+        IconHelper.ApplyIcon(this);
         Loaded += OnLoaded;
     }
 
@@ -48,13 +49,19 @@ public partial class DownloadWindow : Window
             TitleText.Text = L10n.GetString("BrowserSetupReadyTitle");
             NoticeText.Text = L10n.GetString("BrowserSetupChromeFoundNotice");
             StatusText.Text = L10n.GetString("ChromeReady");
+            ProgressBar.Visibility = Visibility.Collapsed;
+            PercentText.Visibility = Visibility.Collapsed;
             InstallButton.Visibility = Visibility.Collapsed;
             OpenOfficialButton.Visibility = Visibility.Collapsed;
             EdgeFallbackPanel.Visibility = Visibility.Collapsed;
             UseInstalledButton.Content = L10n.GetString("BtnStartUsing");
+            CancelButton.Visibility = Visibility.Collapsed;
         }
         else
         {
+            ProgressBar.Visibility = Visibility.Visible;
+            PercentText.Visibility = Visibility.Visible;
+            CancelButton.Visibility = Visibility.Visible;
             TitleText.Text = L10n.GetString("DownloadPreparing");
             NoticeText.Text = L10n.GetString("BrowserSetupNotice");
             StatusText.Text = _chromeManager.InstalledEdge is null

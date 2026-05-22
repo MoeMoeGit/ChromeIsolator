@@ -1,4 +1,5 @@
 using System.Windows;
+using ChromeIsolator.Services;
 using ChromeIsolator.ViewModels;
 
 namespace ChromeIsolator;
@@ -9,5 +10,6 @@ public partial class SettingsWindow : Window
     {
         InitializeComponent();
         DataContext = viewModel;
+        IconHelper.ApplyIcon(this);
     }
 }

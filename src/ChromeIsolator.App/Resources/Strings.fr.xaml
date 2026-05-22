@@ -18,6 +18,7 @@
     <sys:String x:Key="SectionProfiles">Profils</sys:String>
     <sys:String x:Key="SelectProfile">Sélectionnez un profil</sys:String>
     <sys:String x:Key="SectionBasicInfo">Informations de base</sys:String>
+    <sys:String x:Key="SectionActions">Actions</sys:String>
     <sys:String x:Key="LabelFolder">Dossier</sys:String>
     <sys:String x:Key="LabelProfilePath">Chemin des données</sys:String>
     <sys:String x:Key="LabelDebugPort">Port de débogage</sys:String>
@@ -38,7 +39,7 @@
     <sys:String x:Key="LabelDataPath">Répertoire de données</sys:String>
     <sys:String x:Key="LabelProfilesPath">Répertoire des profils</sys:String>
     <sys:String x:Key="BtnOpenDataFolder">Ouvrir le dossier de données</sys:String>
-    <sys:String x:Key="BtnOpenProfilesFolder">Ouvrir le dossier des profils</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">Ouvrir le dossier</sys:String>
     <sys:String x:Key="BtnCopyPath">Copier le chemin</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Aide et mises à jour</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Vérifier les mises à jour</sys:String>
