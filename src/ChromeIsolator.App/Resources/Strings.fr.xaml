@@ -59,7 +59,15 @@
     <sys:String x:Key="BtnCancel">Annuler</sys:String>
     <sys:String x:Key="BtnClose">Fermer</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Utiliser Chrome installé</sys:String>
-
+    <sys:String x:Key="BtnInstallOfficialChrome">Installer Chrome officiel</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">Utiliser Edge en secours</sys:String>
+    <sys:String x:Key="BtnRefreshDetection">Détecter à nouveau</sys:String>
+    <sys:String x:Key="BrowserSetupReadyTitle">Chrome est prêt</sys:String>
+    <sys:String x:Key="BrowserSetupNotice">ChromeIsolator utilise uniquement le fichier programme du navigateur. Toutes les données isolées sont écrites dans les dossiers propres à ChromeIsolator; vos extensions, réglages, utilisateurs connectés et état de démarrage Chrome existants ne sont ni lus ni modifiés.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeFoundNotice">Chrome officiel a été détecté. Les environnements isolés utilisent toujours les dossiers de données de ChromeIsolator; Chrome lancé normalement continue d'utiliser vos données existantes.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome n'a pas été détecté. Installez Chrome manuellement puis détectez à nouveau, ou cliquez sur « Installer Chrome officiel ».</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome n'a pas été détecté. Vous pouvez installer Chrome officiel ou utiliser temporairement Edge comme moteur de secours; les deux utilisent des dossiers d'environnement isolés.</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator va télécharger et lancer l'installateur officiel Stable Chrome de Google. Cette action installe seulement le programme Chrome; les données d'environnement isolé restent dans les dossiers propres à ChromeIsolator et n'utilisent pas vos données utilisateur Chrome par défaut.\n\nContinuer ?</sys:String>
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">Ouvrir le panneau de gestion</sys:String>
     <sys:String x:Key="TrayStopAll">Tout arrêter</sys:String>

@@ -59,7 +59,15 @@
     <sys:String x:Key="BtnCancel">Abbrechen</sys:String>
     <sys:String x:Key="BtnClose">Schließen</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Installierten Chrome verwenden</sys:String>
-
+    <sys:String x:Key="BtnInstallOfficialChrome">Offizielles Chrome installieren</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">Edge als Reserve nutzen</sys:String>
+    <sys:String x:Key="BtnRefreshDetection">Erneut suchen</sys:String>
+    <sys:String x:Key="BrowserSetupReadyTitle">Chrome ist bereit</sys:String>
+    <sys:String x:Key="BrowserSetupNotice">ChromeIsolator verwendet nur die Browser-Programmdatei. Alle isolierten Daten werden in eigene ChromeIsolator-Ordner geschrieben; vorhandene Chrome-Erweiterungen, Einstellungen, angemeldete Nutzer und der normale Startzustand werden nicht gelesen oder geändert.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeFoundNotice">Offizielles Chrome wurde gefunden. Isolierte Umgebungen verwenden immer eigene ChromeIsolator-Datenordner; normales Desktop-Chrome nutzt weiter Ihre vorhandenen Daten.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome wurde nicht gefunden. Installieren Sie Chrome manuell und suchen Sie erneut, oder klicken Sie auf „Offizielles Chrome installieren“.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome wurde nicht gefunden. Sie können offizielles Chrome installieren oder vorübergehend System-Edge als Reserve-Engine verwenden; beide nutzen isolierte Umgebungsordner.</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator lädt den offiziellen Stable-Chrome-Installer von Google herunter und führt ihn aus. Dabei wird nur das Chrome-Programm installiert; isolierte Umgebungsdaten bleiben in eigenen ChromeIsolator-Ordnern und verwenden nicht Ihre Standard-Chrome-Nutzerdaten.\n\nFortfahren?</sys:String>
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">Verwaltungspanel öffnen</sys:String>
     <sys:String x:Key="TrayStopAll">Alle stoppen</sys:String>

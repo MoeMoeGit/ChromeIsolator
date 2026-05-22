@@ -16,13 +16,13 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 - **安全删除**：删除环境需要输入环境名称确认，对话框显示数据大小，数据会先移到 Windows 回收站
 - **错误恢复**：环境启动失败时可重试或清除错误状态
 - **轻量环境差异**：为不同环境注入稳定的 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory` 值，自动处理新打开的标签页，断线后自动重连（最多 5 次指数退避）
-- **自动浏览器准备**：首次运行时自动下载并安装官方 Stable Google Chrome Enterprise，带进度显示；也支持跳过下载直接使用系统已安装的 Chrome；下载失败可重试或复制错误详情
+- **浏览器引擎准备**：首次运行先说明隔离策略；优先使用用户已安装的官方 Stable Chrome 程序文件；未安装 Chrome 时，用户确认后才下载并运行官方 Chrome 安装包，也可临时使用系统 Edge 作为备用引擎
 - **设置面板**：查看 Chrome 状态和版本、打开数据目录、复制路径、重新安装 Chrome、高级详情显示、语言切换，以及帮助与更新信息
 - **多语言支持**：内置中文、English、日本語、한국어、Deutsch、Français、Русский 七种语言，自动检测系统语言，可在设置中切换
 - **系统托盘**：关闭窗口后驻留在系统托盘，右键菜单可快速启动/关闭环境、全部关闭、全部关闭并退出、检查更新；退出时自动确认运行中的环境
 - **相对时间显示**：环境最近使用时间显示为"今天"、"昨天"、"3 天前"等，更直观
 - **更新检查**：通过 GitHub Releases 检查新版本，支持从设置页和托盘菜单触发
-- **本地优先**：配置、浏览器和环境数据都保存在本机，不上传、不收集用户数据
+- **本地优先**：配置和环境数据都保存在本机，不上传、不收集用户数据
 
 ## 系统要求
 
@@ -32,13 +32,18 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 
 ## 当前状态
 
-核心功能已完成，包括环境管理、Chrome 准备、CDP 注入、多语言、设置面板、系统托盘和 MSI 安装包构建。项目正在验证 MSI 安装体验和完善细节。
+核心功能已完成，包括环境管理、浏览器引擎准备、CDP 注入、多语言、设置面板、系统托盘和 MSI 安装包构建。项目正在验证 MSI 安装体验和完善细节。
 
 ## 浏览器引擎
 
-ChromeIsolator 使用官方 Stable Google Chrome。项目不会使用 Chrome for Testing、Beta、Dev 或 Canary 渠道。
+ChromeIsolator 优先使用官方 Stable Google Chrome。项目不会使用 Chrome for Testing、Beta、Dev 或 Canary 渠道。
 
-ChromeIsolator 的目标是尽量准备独立的 Chrome 运行文件，同时始终使用自己的 profile 数据目录。即使在 Windows 平台上需要调用系统已安装的官方 Stable Chrome，也不会读取用户默认 Chrome profile，不会复用用户日常 Chrome 的登录状态、Cookie、扩展或密码。
+ChromeIsolator 的核心策略是“浏览器程序文件可共享，用户数据目录必须隔离”。如果用户已经安装 Chrome，ChromeIsolator 只复用 `chrome.exe` 程序文件；启动隔离环境时始终传入自己的 `--user-data-dir=%LOCALAPPDATA%\ChromeIsolator\Profiles\pN`，不会读取或修改用户默认 Chrome profile，也不会影响用户日常 Chrome 的插件、设置、登录用户、启动提示、Cookie、扩展或密码。
+
+如果用户没有安装 Chrome，首次运行窗口会让用户明确选择：
+
+- 下载并运行 Google 官方 Stable Chrome 安装包。安装完成后，用户从桌面正常打开 Chrome 时仍使用 Chrome 自己的默认用户数据；ChromeIsolator 环境继续使用独立 profile。
+- 临时使用 Windows 系统自带的 Microsoft Edge Stable 作为备用 Chromium 引擎。Edge 备用同样只使用 ChromeIsolator 的独立 profile 目录，不触碰 Edge 默认用户数据。
 
 ## 数据位置
 
@@ -47,7 +52,6 @@ ChromeIsolator 的目标是尽量准备独立的 Chrome 运行文件，同时始
 ```text
 %LOCALAPPDATA%\ChromeIsolator\
 ├── config.json
-├── Chrome\
 └── Profiles\
     ├── p1\
     ├── p2\

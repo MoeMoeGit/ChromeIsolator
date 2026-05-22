@@ -208,6 +208,18 @@ public sealed class MainViewModel : ObservableObject
         };
         downloadWindow.ShowDialog();
 
+        if (downloadWindow.UseEdgeFallback)
+        {
+            _profileManager.Config.AllowEdgeFallback = true;
+            _profileManager.Config.FirstRunCompleted = true;
+            _profileManager.Save();
+        }
+        else if (downloadWindow.UseInstalled || downloadWindow.DownloadSucceeded)
+        {
+            _profileManager.Config.FirstRunCompleted = true;
+            _profileManager.Save();
+        }
+
         if (downloadWindow.UseInstalled)
         {
             RefreshChromeStatus();
@@ -226,21 +238,30 @@ public sealed class MainViewModel : ObservableObject
 
     public void ShowDownloadIfNeeded()
     {
-        if (_chromeManager.CurrentChrome is not null)
+        if (_profileManager.Config.FirstRunCompleted && _chromeManager.CurrentChrome is not null)
         {
             return;
         }
 
-        var result = WpfMessageBox.Show(
-            L10n.GetString("MsgChromeNotFound"),
-            L10n.GetString("AppTitle"),
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question);
-
-        if (result == MessageBoxResult.Yes)
+        var downloadWindow = new DownloadWindow(_chromeManager)
         {
-            PrepareChrome();
+            Owner = WpfApplication.Current.MainWindow
+        };
+        downloadWindow.ShowDialog();
+
+        if (downloadWindow.UseEdgeFallback)
+        {
+            _profileManager.Config.AllowEdgeFallback = true;
+            _profileManager.Config.FirstRunCompleted = true;
+            _profileManager.Save();
         }
+        else if (downloadWindow.UseInstalled || downloadWindow.DownloadSucceeded)
+        {
+            _profileManager.Config.FirstRunCompleted = true;
+            _profileManager.Save();
+        }
+
+        RefreshChromeStatus();
     }
 
     public async Task CheckForUpdatesFromTrayAsync()
@@ -290,6 +311,12 @@ public sealed class MainViewModel : ObservableObject
                 Owner = WpfApplication.Current.MainWindow
             };
             downloadWindow.ShowDialog();
+            if (downloadWindow.UseEdgeFallback)
+            {
+                _profileManager.Config.AllowEdgeFallback = true;
+                _profileManager.Config.FirstRunCompleted = true;
+                _profileManager.Save();
+            }
         }
 
         var window = new SettingsWindow(new SettingsViewModel(_chromeManager, _updateService, _profileManager, ReinstallChrome))

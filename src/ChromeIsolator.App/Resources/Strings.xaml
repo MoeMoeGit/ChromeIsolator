@@ -59,6 +59,15 @@
     <sys:String x:Key="BtnCancel">取消</sys:String>
     <sys:String x:Key="BtnClose">关闭</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">使用已安装的 Chrome</sys:String>
+    <sys:String x:Key="BtnInstallOfficialChrome">安装官方 Chrome</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">使用 Edge 备用</sys:String>
+    <sys:String x:Key="BtnRefreshDetection">重新检测</sys:String>
+    <sys:String x:Key="BrowserSetupReadyTitle">Chrome 已可用</sys:String>
+    <sys:String x:Key="BrowserSetupNotice">浏览器多开只使用浏览器程序文件，所有环境数据都会写入 ChromeIsolator 自己的独立目录，不会读取或修改你原来的 Chrome 插件、设置、登录用户或默认启动状态。</sys:String>
+    <sys:String x:Key="BrowserSetupChromeFoundNotice">已检测到官方 Chrome。启动隔离环境时会强制使用 ChromeIsolator 的独立数据目录，普通桌面 Chrome 仍然使用你原来的数据。</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">未检测到 Chrome。你可以手动安装 Chrome 后重新检测，或点击“安装官方 Chrome”。</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">未检测到 Chrome。可安装官方 Chrome，也可临时使用系统 Edge 作为备用引擎；两者都会使用独立环境目录。</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">将下载并运行 Google 官方 Stable Chrome 安装包。该操作只安装 Chrome 程序；浏览器多开的环境数据仍然放在 ChromeIsolator 独立目录，不会使用你的默认 Chrome 用户数据。\n\n是否继续？</sys:String>
 
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">打开管理面板</sys:String>

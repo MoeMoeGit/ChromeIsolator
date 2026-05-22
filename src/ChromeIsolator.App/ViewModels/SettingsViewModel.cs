@@ -27,7 +27,7 @@ public sealed class SettingsViewModel : ObservableObject
 
         OpenDataFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.SupportDir));
         OpenProfilesFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.ProfilesDir));
-        OpenChromeFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.ChromeDir));
+        OpenChromeFolderCommand = new RelayCommand(OpenChromeFolder);
         CopyDataPathCommand = new RelayCommand(() => ShellService.CopyText(AppPaths.SupportDir));
         CheckUpdatesCommand = new RelayCommand(CheckForUpdates, () => !IsCheckingForUpdates);
         OpenReleasesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.ReleasesUrl));
@@ -135,5 +135,17 @@ public sealed class SettingsViewModel : ObservableObject
         ChromeStatusText = chrome is null
             ? L10n.GetString("ChromeNotFoundShort")
             : $"{L10n.Format("ChromeAvailable", chrome.Version ?? "-", chrome.Source)}\n{chrome.ExecutablePath}";
+    }
+
+    private void OpenChromeFolder()
+    {
+        var chrome = _chromeManager.CurrentChrome;
+        if (chrome is not null)
+        {
+            ShellService.OpenFolder(Path.GetDirectoryName(chrome.ExecutablePath) ?? AppPaths.SupportDir);
+            return;
+        }
+
+        ShellService.OpenFolder(AppPaths.SupportDir);
     }
 }

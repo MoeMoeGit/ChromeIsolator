@@ -1,3 +1,9 @@
 namespace ChromeIsolator.Services;
 
-public sealed record ChromeInfo(string ExecutablePath, string Source, string? Version);
+public enum BrowserEngineKind
+{
+    Chrome,
+    Edge
+}
+
+public sealed record ChromeInfo(BrowserEngineKind Kind, string ExecutablePath, string Source, string? Version);

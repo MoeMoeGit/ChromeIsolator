@@ -11,4 +11,6 @@ public sealed class AppConfig
 
     public bool ShowAdvancedDetails { get; set; }
     public string? Language { get; set; }
+    public bool FirstRunCompleted { get; set; }
+    public bool AllowEdgeFallback { get; set; }
 }

@@ -59,7 +59,15 @@
     <sys:String x:Key="BtnCancel">キャンセル</sys:String>
     <sys:String x:Key="BtnClose">閉じる</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">インストール済みの Chrome を使用</sys:String>
-
+    <sys:String x:Key="BtnInstallOfficialChrome">公式 Chrome をインストール</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">Edge 代替を使用</sys:String>
+    <sys:String x:Key="BtnRefreshDetection">再検出</sys:String>
+    <sys:String x:Key="BrowserSetupReadyTitle">Chrome は利用可能です</sys:String>
+    <sys:String x:Key="BrowserSetupNotice">ChromeIsolator はブラウザ本体のみを使用します。すべての分離データは ChromeIsolator 専用フォルダーに保存され、既存の Chrome の拡張機能、設定、ログインユーザー、起動状態は読み取りも変更もしません。</sys:String>
+    <sys:String x:Key="BrowserSetupChromeFoundNotice">公式 Chrome が見つかりました。分離環境は常に ChromeIsolator 専用データフォルダーを使用し、通常のデスクトップ Chrome は既存データを使い続けます。</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome が見つかりません。手動で Chrome をインストールして再検出するか、「公式 Chrome をインストール」をクリックしてください。</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome が見つかりません。公式 Chrome をインストールするか、システム Edge を一時的な代替エンジンとして使用できます。どちらも分離環境フォルダーを使用します。</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">Google 公式 Stable Chrome インストーラーをダウンロードして実行します。この操作は Chrome 本体のみをインストールします。分離環境データは ChromeIsolator 専用フォルダーに保存され、既定の Chrome ユーザーデータは使用しません。\n\n続行しますか?</sys:String>
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">管理パネルを開く</sys:String>
     <sys:String x:Key="TrayStopAll">すべて停止</sys:String>

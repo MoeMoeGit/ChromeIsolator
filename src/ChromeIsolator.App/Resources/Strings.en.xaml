@@ -59,7 +59,15 @@
     <sys:String x:Key="BtnCancel">Cancel</sys:String>
     <sys:String x:Key="BtnClose">Close</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Use Installed Chrome</sys:String>
-
+    <sys:String x:Key="BtnInstallOfficialChrome">Install official Chrome</sys:String>
+    <sys:String x:Key="BtnUseEdgeFallback">Use Edge fallback</sys:String>
+    <sys:String x:Key="BtnRefreshDetection">Detect again</sys:String>
+    <sys:String x:Key="BrowserSetupReadyTitle">Chrome is ready</sys:String>
+    <sys:String x:Key="BrowserSetupNotice">ChromeIsolator only uses the browser program file. All isolated data is written to ChromeIsolator's own folders, so your original Chrome extensions, settings, signed-in users, and default startup state are not read or changed.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeFoundNotice">Official Chrome was detected. Isolated environments always use ChromeIsolator's own data folders; normal desktop Chrome keeps using your existing data.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome was not detected. Install Chrome manually and detect again, or click "Install official Chrome".</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome was not detected. You can install official Chrome, or temporarily use system Edge as a fallback engine; both use isolated environment folders.</sys:String>
+    <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator will download and run Google's official Stable Chrome installer. This only installs the Chrome program; isolated environment data stays in ChromeIsolator's own folders and will not use your default Chrome user data.\n\nContinue?</sys:String>
     <!-- Tray Menu -->
     <sys:String x:Key="TrayOpenPanel">Open Manager</sys:String>
     <sys:String x:Key="TrayStopAll">Stop All</sys:String>
