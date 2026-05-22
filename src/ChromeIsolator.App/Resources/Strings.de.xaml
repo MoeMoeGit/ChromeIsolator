@@ -4,19 +4,19 @@
                     xml:lang="de">
 
     <!-- MainWindow -->
-    <sys:String x:Key="AppTitle">Browser-Multi-Open</sys:String>
-    <sys:String x:Key="BtnAddProfile">Profil hinzufügen</sys:String>
+    <sys:String x:Key="AppTitle">ChromeIsolator</sys:String>
+    <sys:String x:Key="BtnAddProfile">Umgebung hinzufügen</sys:String>
     <sys:String x:Key="BtnStart">Starten</sys:String>
-    <sys:String x:Key="BtnStop">Stoppen</sys:String>
+    <sys:String x:Key="BtnStop">Schließen</sys:String>
     <sys:String x:Key="BtnStopProfile">Umgebung schließen</sys:String>
     <sys:String x:Key="BtnStartProfile">Umgebung starten</sys:String>
-    <sys:String x:Key="BtnStopAll">Alle stoppen</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">Browser-Engine-Einstellungen</sys:String>
+    <sys:String x:Key="BtnStopAll">Alle schließen</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Browser-Engine</sys:String>
     <sys:String x:Key="BtnSettings">Einstellungen</sys:String>
     <sys:String x:Key="BtnRename">Umbenennen</sys:String>
     <sys:String x:Key="BtnDelete">Löschen</sys:String>
-    <sys:String x:Key="SectionProfiles">Profile</sys:String>
-    <sys:String x:Key="SelectProfile">Profil auswählen</sys:String>
+    <sys:String x:Key="SectionProfiles">Umgebungen</sys:String>
+    <sys:String x:Key="SelectProfile">Umgebung auswählen</sys:String>
     <sys:String x:Key="SectionBasicInfo">Grundinformationen</sys:String>
     <sys:String x:Key="SectionActions">Aktionen</sys:String>
     <sys:String x:Key="LabelFolder">Ordner</sys:String>
@@ -30,71 +30,71 @@
     <sys:String x:Key="LabelChromePath">Browser-Pfad</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU-Kerne</sys:String>
     <sys:String x:Key="LabelMemory">Arbeitsspeicher</sys:String>
-    <sys:String x:Key="EmptyProfiles">Keine Profile vorhanden. Klicken Sie oben auf „Profil hinzufügen".</sys:String>
+    <sys:String x:Key="EmptyProfiles">Keine Umgebungen vorhanden. Klicken Sie oben auf „Umgebung hinzufügen“.</sys:String>
 
     <!-- SettingsWindow -->
     <sys:String x:Key="SettingsTitle">Einstellungen</sys:String>
     <sys:String x:Key="SectionBrowser">Browser-Engine</sys:String>
     <sys:String x:Key="SectionData">Daten</sys:String>
     <sys:String x:Key="LabelDataPath">Datenverzeichnis</sys:String>
-    <sys:String x:Key="LabelProfilesPath">Profilverzeichnis</sys:String>
+    <sys:String x:Key="LabelProfilesPath">Umgebungsverzeichnis</sys:String>
     <sys:String x:Key="BtnOpenDataFolder">Datenordner öffnen</sys:String>
     <sys:String x:Key="BtnOpenProfilesFolder">Ordner öffnen</sys:String>
     <sys:String x:Key="BtnCopyPath">Pfad kopieren</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Hilfe &amp; Updates</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Nach Updates suchen</sys:String>
-    <sys:String x:Key="BtnViewReleases">Releases anzeigen</sys:String>
-    <sys:String x:Key="BtnOpenIssues">Issues öffnen</sys:String>
+    <sys:String x:Key="BtnViewReleases">Versionen anzeigen</sys:String>
+    <sys:String x:Key="BtnOpenIssues">Probleme melden</sys:String>
     <sys:String x:Key="BtnCopyEmail">E-Mail kopieren</sys:String>
     <sys:String x:Key="SectionUi">Oberfläche</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Erweiterte Details anzeigen (Browser-Version, Pfad, Systeminfos)</sys:String>
     <sys:String x:Key="SectionLanguage">Sprache</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Browser-Ordner öffnen</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">Browser-Engine-Einstellungen</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Browser-Engine</sys:String>
     <sys:String x:Key="BtnRetry">Erneut versuchen</sys:String>
     <sys:String x:Key="BtnCopyError">Fehlerdetails kopieren</sys:String>
     <sys:String x:Key="BtnClearError">Fehler löschen</sys:String>
 
     <!-- DownloadWindow -->
-    <sys:String x:Key="DownloadTitle">Browser-Engine-Einstellungen</sys:String>
-    <sys:String x:Key="DownloadPreparing">Browser-Engine-Einstellungen</sys:String>
+    <sys:String x:Key="DownloadTitle">Browser-Engine</sys:String>
+    <sys:String x:Key="DownloadPreparing">Browser-Engine</sys:String>
     <sys:String x:Key="DownloadPreparingStatus">Vorbereitung...</sys:String>
     <sys:String x:Key="BtnCancel">Abbrechen</sys:String>
     <sys:String x:Key="BtnClose">Schließen</sys:String>
-    <sys:String x:Key="BtnUseInstalledChrome">Chrome erneut suchen</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">Erneut prüfen</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">Offizielles Chrome installieren</sys:String>
     <sys:String x:Key="BtnOpenOfficialChromePage">Offizielle Chrome-Seite öffnen</sys:String>
     <sys:String x:Key="BtnUseEdgeFallback">Edge vorübergehend nutzen (nicht empfohlen)</sys:String>
-    <sys:String x:Key="BtnRefreshDetection">Erneut suchen</sys:String>
-    <sys:String x:Key="BtnStartUsing">Loslegen</sys:String>
+    <sys:String x:Key="BtnRefreshDetection">Erneut prüfen</sys:String>
+    <sys:String x:Key="BtnStartUsing">Starten</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome ist bereit</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator verwendet nur die Browser-Programmdatei. Alle isolierten Daten werden in eigene ChromeIsolator-Ordner geschrieben; vorhandene Chrome-Erweiterungen, Einstellungen, angemeldete Nutzer und der normale Startzustand werden nicht gelesen oder geändert.</sys:String>
     <sys:String x:Key="BrowserSetupChromeFoundNotice">Offizielles Chrome wurde gefunden. Isolierte Umgebungen verwenden immer eigene ChromeIsolator-Datenordner; normales Desktop-Chrome nutzt weiter Ihre vorhandenen Daten.</sys:String>
-    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome wurde nicht gefunden. Installieren Sie Chrome manuell und suchen Sie erneut, oder klicken Sie auf „Offizielles Chrome installieren“.</sys:String>
-    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome wurde nicht gefunden. Installieren Sie zuerst offizielles Chrome. Wenn der automatische Download fehlschlägt, öffnen Sie Googles offizielle Chrome-Downloadseite, installieren Sie manuell und suchen Sie erneut. Edge ist nur die letzte Reserve.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome wurde nicht gefunden. Installieren Sie Chrome manuell und prüfen Sie erneut, oder klicken Sie auf „Offizielles Chrome installieren“.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome wurde nicht gefunden. Installieren Sie zuerst offizielles Chrome. Wenn der automatische Download fehlschlägt, öffnen Sie Googles offizielle Chrome-Downloadseite, installieren Sie manuell und prüfen Sie erneut. Edge ist nur die letzte Reserve.</sys:String>
     <sys:String x:Key="EdgeFallbackNotice">Letzte Reserve: Wenn Chrome momentan nicht installiert werden kann, können Sie vorübergehend System-Edge verwenden. Dieser Weg wird nicht zuerst empfohlen; sobald Chrome verfügbar ist, wird Chrome bevorzugt.</sys:String>
     <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator lädt den offiziellen Stable-Chrome-Installer von Google herunter und führt ihn aus. Dabei wird nur das Chrome-Programm installiert; isolierte Umgebungsdaten bleiben in eigenen ChromeIsolator-Ordnern und verwenden nicht Ihre Standard-Chrome-Nutzerdaten.\n\nFortfahren?</sys:String>
     <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge ist nur eine vorübergehende Reserve, wenn Chrome nicht installiert werden kann, und wird nicht zuerst empfohlen. Isolierte Umgebungen nutzen weiterhin eigene ChromeIsolator-Datenordner; sobald Chrome später erkannt wird, wird Chrome bevorzugt.
 
 Edge vorübergehend verwenden?</sys:String>
     <!-- Tray Menu -->
-    <sys:String x:Key="TrayOpenPanel">Verwaltungspanel öffnen</sys:String>
-    <sys:String x:Key="TrayStopAll">Alle stoppen</sys:String>
+    <sys:String x:Key="TrayOpenPanel">Verwaltung öffnen</sys:String>
+    <sys:String x:Key="TrayStopAll">Alle schließen</sys:String>
     <sys:String x:Key="TrayCheckUpdates">Nach Updates suchen</sys:String>
     <sys:String x:Key="TrayStopAllAndQuit">Beenden</sys:String>
     <sys:String x:Key="TrayExit">Beenden</sys:String>
     <sys:String x:Key="TrayStartProfile">{0} starten</sys:String>
-    <sys:String x:Key="TrayStopProfile">{0} stoppen</sys:String>
+    <sys:String x:Key="TrayStopProfile">{0} schließen</sys:String>
 
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
     <sys:String x:Key="MsgChromeNotFound">Keine nutzbare Browser-Engine erkannt. Öffnen Sie die Browser-Engine-Einstellungen.</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">{0} Umgebung(en) laufen noch. Beenden schließt alle.\n\nBeenden bestätigen?</sys:String>
-    <sys:String x:Key="MsgRunningEnvNoDelete">Laufende Umgebungen können nicht gelöscht werden. Bitte zuerst stoppen.</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} Umgebungen laufen noch. Beenden schließt alle.\n\nBeenden bestätigen?</sys:String>
+    <sys:String x:Key="MsgRunningEnvNoDelete">Laufende Umgebungen können nicht gelöscht werden. Bitte zuerst schließen.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">Die Daten von „{0}" werden in den Papierkorb verschoben. Aktuelle Datengröße: {1}.&#x0a;Geben Sie delete zur Bestätigung ein.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Löschen bestätigen</sys:String>
     <sys:String x:Key="MsgRenameTitle">Umbenennen</sys:String>
-    <sys:String x:Key="MsgRenameMessage">Geben Sie einen benutzerdefinierten Namen ein</sys:String>
+    <sys:String x:Key="MsgRenameMessage">Geben Sie einen Namen ein</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Neue Version verfügbar: {0}\n\nZur Download-Seite gehen?</sys:String>
     <sys:String x:Key="MsgUpToDate">Bereits aktuell ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Update-Prüfung fehlgeschlagen: {0}</sys:String>
@@ -117,9 +117,9 @@ Edge vorübergehend verwenden?</sys:String>
 
     <!-- Status -->
     <sys:String x:Key="StatusRunning">Läuft</sys:String>
-    <sys:String x:Key="StatusStopped">Gestoppt</sys:String>
+    <sys:String x:Key="StatusStopped">Nicht gestartet</sys:String>
     <sys:String x:Key="StatusStarting">Startet</sys:String>
-    <sys:String x:Key="StatusStopping">Stoppt</sys:String>
+    <sys:String x:Key="StatusStopping">Wird geschlossen</sys:String>
     <sys:String x:Key="StatusNotUsed">Nicht verwendet</sys:String>
     <sys:String x:Key="StatusRecentUsed">Zuletzt verwendet {0}</sys:String>
     <sys:String x:Key="DateJustNow">Gerade eben</sys:String>

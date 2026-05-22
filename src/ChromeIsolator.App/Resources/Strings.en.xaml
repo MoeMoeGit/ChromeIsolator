@@ -4,97 +4,97 @@
                     xml:lang="en">
 
     <!-- MainWindow -->
-    <sys:String x:Key="AppTitle">Browser Multi-Open</sys:String>
-    <sys:String x:Key="BtnAddProfile">Add Profile</sys:String>
+    <sys:String x:Key="AppTitle">ChromeIsolator</sys:String>
+    <sys:String x:Key="BtnAddProfile">Add environment</sys:String>
     <sys:String x:Key="BtnStart">Start</sys:String>
-    <sys:String x:Key="BtnStop">Stop</sys:String>
-    <sys:String x:Key="BtnStopProfile">Stop environment</sys:String>
+    <sys:String x:Key="BtnStop">Close</sys:String>
+    <sys:String x:Key="BtnStopProfile">Close environment</sys:String>
     <sys:String x:Key="BtnStartProfile">Start environment</sys:String>
-    <sys:String x:Key="BtnStopAll">Stop All</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">Browser engine settings</sys:String>
+    <sys:String x:Key="BtnStopAll">Close all</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Browser engine</sys:String>
     <sys:String x:Key="BtnSettings">Settings</sys:String>
     <sys:String x:Key="BtnRename">Rename</sys:String>
     <sys:String x:Key="BtnDelete">Delete</sys:String>
-    <sys:String x:Key="SectionProfiles">Profiles</sys:String>
-    <sys:String x:Key="SelectProfile">Select a profile</sys:String>
-    <sys:String x:Key="SectionBasicInfo">Basic Info</sys:String>
+    <sys:String x:Key="SectionProfiles">Environments</sys:String>
+    <sys:String x:Key="SelectProfile">Select an environment</sys:String>
+    <sys:String x:Key="SectionBasicInfo">Basic info</sys:String>
     <sys:String x:Key="SectionActions">Actions</sys:String>
     <sys:String x:Key="LabelFolder">Folder</sys:String>
-    <sys:String x:Key="LabelProfilePath">Data Path</sys:String>
-    <sys:String x:Key="LabelDebugPort">Debug Port</sys:String>
-    <sys:String x:Key="LabelLastUsed">Last Used</sys:String>
-    <sys:String x:Key="LabelDiskSize">Disk Size</sys:String>
+    <sys:String x:Key="LabelProfilePath">Data path</sys:String>
+    <sys:String x:Key="LabelDebugPort">Debug port</sys:String>
+    <sys:String x:Key="LabelLastUsed">Last used</sys:String>
+    <sys:String x:Key="LabelDiskSize">Storage used</sys:String>
     <sys:String x:Key="LabelError">Error</sys:String>
-    <sys:String x:Key="SectionAdvancedInfo">Advanced Info</sys:String>
+    <sys:String x:Key="SectionAdvancedInfo">Advanced info</sys:String>
     <sys:String x:Key="LabelChromeVersion">Browser version</sys:String>
     <sys:String x:Key="LabelChromePath">Browser path</sys:String>
-    <sys:String x:Key="LabelCpuCores">CPU Cores</sys:String>
+    <sys:String x:Key="LabelCpuCores">CPU cores</sys:String>
     <sys:String x:Key="LabelMemory">Memory</sys:String>
-    <sys:String x:Key="EmptyProfiles">No profiles yet. Click "Add Profile" above to create one.</sys:String>
+    <sys:String x:Key="EmptyProfiles">No environments yet. Click "Add environment" above to create one.</sys:String>
 
     <!-- SettingsWindow -->
     <sys:String x:Key="SettingsTitle">Settings</sys:String>
     <sys:String x:Key="SectionBrowser">Browser engine</sys:String>
     <sys:String x:Key="SectionData">Data</sys:String>
-    <sys:String x:Key="LabelDataPath">Data Directory</sys:String>
-    <sys:String x:Key="LabelProfilesPath">Profiles Directory</sys:String>
-    <sys:String x:Key="BtnOpenDataFolder">Open Data Folder</sys:String>
-    <sys:String x:Key="BtnOpenProfilesFolder">Open Folder</sys:String>
-    <sys:String x:Key="BtnCopyPath">Copy Path</sys:String>
-    <sys:String x:Key="SectionHelpUpdate">Help &amp; Updates</sys:String>
-    <sys:String x:Key="BtnCheckUpdates">Check for Updates</sys:String>
-    <sys:String x:Key="BtnViewReleases">View Releases</sys:String>
-    <sys:String x:Key="BtnOpenIssues">Open Issues</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Copy Email</sys:String>
+    <sys:String x:Key="LabelDataPath">Data directory</sys:String>
+    <sys:String x:Key="LabelProfilesPath">Environment directory</sys:String>
+    <sys:String x:Key="BtnOpenDataFolder">Open data folder</sys:String>
+    <sys:String x:Key="BtnOpenProfilesFolder">Open folder</sys:String>
+    <sys:String x:Key="BtnCopyPath">Copy path</sys:String>
+    <sys:String x:Key="SectionHelpUpdate">Help &amp; updates</sys:String>
+    <sys:String x:Key="BtnCheckUpdates">Check for updates</sys:String>
+    <sys:String x:Key="BtnViewReleases">View releases</sys:String>
+    <sys:String x:Key="BtnOpenIssues">Report issue</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Copy email</sys:String>
     <sys:String x:Key="SectionUi">Interface</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Show advanced details (browser version, path, system info)</sys:String>
     <sys:String x:Key="SectionLanguage">Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Open browser folder</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">Browser engine settings</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Browser engine</sys:String>
     <sys:String x:Key="BtnRetry">Retry</sys:String>
-    <sys:String x:Key="BtnCopyError">Copy Error Details</sys:String>
-    <sys:String x:Key="BtnClearError">Clear Error</sys:String>
+    <sys:String x:Key="BtnCopyError">Copy error details</sys:String>
+    <sys:String x:Key="BtnClearError">Clear error</sys:String>
 
     <!-- DownloadWindow -->
-    <sys:String x:Key="DownloadTitle">Browser engine settings</sys:String>
-    <sys:String x:Key="DownloadPreparing">Browser engine settings</sys:String>
+    <sys:String x:Key="DownloadTitle">Browser engine</sys:String>
+    <sys:String x:Key="DownloadPreparing">Browser engine</sys:String>
     <sys:String x:Key="DownloadPreparingStatus">Preparing...</sys:String>
     <sys:String x:Key="BtnCancel">Cancel</sys:String>
     <sys:String x:Key="BtnClose">Close</sys:String>
-    <sys:String x:Key="BtnUseInstalledChrome">Detect Chrome again</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">Check again</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">Install official Chrome</sys:String>
-    <sys:String x:Key="BtnOpenOfficialChromePage">Open official Chrome page</sys:String>
+    <sys:String x:Key="BtnOpenOfficialChromePage">Open Chrome download page</sys:String>
     <sys:String x:Key="BtnUseEdgeFallback">Use Edge temporarily (not recommended)</sys:String>
-    <sys:String x:Key="BtnRefreshDetection">Detect again</sys:String>
-    <sys:String x:Key="BtnStartUsing">Start using</sys:String>
+    <sys:String x:Key="BtnRefreshDetection">Check again</sys:String>
+    <sys:String x:Key="BtnStartUsing">Start</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome is ready</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator only uses the browser program file. All isolated data is written to ChromeIsolator's own folders, so your original Chrome extensions, settings, signed-in users, and default startup state are not read or changed.</sys:String>
-    <sys:String x:Key="BrowserSetupChromeFoundNotice">Official Chrome was detected. Isolated environments always use ChromeIsolator's own data folders; normal desktop Chrome keeps using your existing data.</sys:String>
-    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome was not detected. Install Chrome manually and detect again, or click "Install official Chrome".</sys:String>
-    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome was not detected. Install official Chrome first; if automatic download fails, open Google&apos;s official Chrome download page, install it manually, then detect again. Edge is only the last fallback.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeFoundNotice">Official Chrome was found. Isolated environments always use ChromeIsolator's own data folders; normal desktop Chrome keeps using your existing data.</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingNoEdge">Chrome was not found. Install Chrome manually and check again, or click "Install official Chrome".</sys:String>
+    <sys:String x:Key="BrowserSetupChromeMissingWithEdge">Chrome was not found. Install official Chrome first; if automatic download fails, open Google&apos;s official Chrome download page, install it manually, then check again. Edge is only a last resort.</sys:String>
     <sys:String x:Key="EdgeFallbackNotice">Last fallback: if Chrome cannot be installed right now, you can temporarily use system Edge. This path is not recommended first; Chrome will still be preferred once available.</sys:String>
     <sys:String x:Key="MsgConfirmInstallChrome">ChromeIsolator will download and run Google's official Stable Chrome installer. This only installs the Chrome program; isolated environment data stays in ChromeIsolator's own folders and will not use your default Chrome user data.\n\nContinue?</sys:String>
     <sys:String x:Key="MsgConfirmUseEdgeFallback">Edge is only a temporary fallback when Chrome cannot be installed, and is not recommended first. Isolated environments will still use ChromeIsolator&apos;s own data folders; once Chrome is detected later, Chrome will be preferred.
 
 Use Edge temporarily?</sys:String>
     <!-- Tray Menu -->
-    <sys:String x:Key="TrayOpenPanel">Open Manager</sys:String>
-    <sys:String x:Key="TrayStopAll">Stop All</sys:String>
-    <sys:String x:Key="TrayCheckUpdates">Check for Updates</sys:String>
+    <sys:String x:Key="TrayOpenPanel">Open manager</sys:String>
+    <sys:String x:Key="TrayStopAll">Close all</sys:String>
+    <sys:String x:Key="TrayCheckUpdates">Check for updates</sys:String>
     <sys:String x:Key="TrayStopAllAndQuit">Exit</sys:String>
     <sys:String x:Key="TrayExit">Exit</sys:String>
     <sys:String x:Key="TrayStartProfile">Start {0}</sys:String>
-    <sys:String x:Key="TrayStopProfile">Stop {0}</sys:String>
+    <sys:String x:Key="TrayStopProfile">Close {0}</sys:String>
 
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
-    <sys:String x:Key="MsgChromeNotFound">No usable browser engine was detected. Open Browser engine settings.</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">{0} environment(s) are still running. Exiting will close them all.\n\nConfirm exit?</sys:String>
-    <sys:String x:Key="MsgRunningEnvNoDelete">Cannot delete a running environment. Please stop it first.</sys:String>
+    <sys:String x:Key="MsgChromeNotFound">No usable browser engine was detected. Open browser engine settings.</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} environments are still running. Exiting will close them all.\n\nExit now?</sys:String>
+    <sys:String x:Key="MsgRunningEnvNoDelete">Cannot delete a running environment. Please close it first.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">"{0}" data will be moved to the Recycle Bin. Current data size: {1}.&#x0a;Type delete to confirm.</sys:String>
-    <sys:String x:Key="MsgDeleteTitle">Confirm Delete</sys:String>
+    <sys:String x:Key="MsgDeleteTitle">Confirm delete</sys:String>
     <sys:String x:Key="MsgRenameTitle">Rename</sys:String>
-    <sys:String x:Key="MsgRenameMessage">Enter a custom name for easy identification</sys:String>
+    <sys:String x:Key="MsgRenameMessage">Enter a name to help identify it</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">New version available: {0}\n\nGo to download?</sys:String>
     <sys:String x:Key="MsgUpToDate">Already up to date ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Update check failed: {0}</sys:String>
@@ -105,7 +105,7 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgUpdateFailedShort">Update check failed: {0}</sys:String>
 
     <!-- ChromeManager -->
-    <sys:String x:Key="ChromeNotFound">No usable browser engine was found. Install official Chrome in Browser engine settings, or choose Edge fallback when Chrome is missing.</sys:String>
+    <sys:String x:Key="ChromeNotFound">No usable browser engine was found. Install official Chrome in browser engine settings, or choose Edge fallback when Chrome is missing.</sys:String>
     <sys:String x:Key="ChromeReady">Browser engine is ready</sys:String>
     <sys:String x:Key="ChromeConnecting">Connecting to download server...</sys:String>
     <sys:String x:Key="ChromeDownloading">Downloading Chrome...</sys:String>
@@ -117,7 +117,7 @@ Use Edge temporarily?</sys:String>
 
     <!-- Status -->
     <sys:String x:Key="StatusRunning">Running</sys:String>
-    <sys:String x:Key="StatusStopped">Stopped</sys:String>
+    <sys:String x:Key="StatusStopped">Not started</sys:String>
     <sys:String x:Key="StatusStarting">Starting</sys:String>
     <sys:String x:Key="StatusStopping">Closing</sys:String>
     <sys:String x:Key="StatusNotUsed">Not used</sys:String>

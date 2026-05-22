@@ -4,19 +4,19 @@
                     xml:lang="ru">
 
     <!-- MainWindow -->
-    <sys:String x:Key="AppTitle">Мульти-открытие браузера</sys:String>
-    <sys:String x:Key="BtnAddProfile">Добавить профиль</sys:String>
+    <sys:String x:Key="AppTitle">ChromeIsolator</sys:String>
+    <sys:String x:Key="BtnAddProfile">Добавить среду</sys:String>
     <sys:String x:Key="BtnStart">Запустить</sys:String>
-    <sys:String x:Key="BtnStop">Остановить</sys:String>
+    <sys:String x:Key="BtnStop">Закрыть</sys:String>
     <sys:String x:Key="BtnStopProfile">Закрыть среду</sys:String>
     <sys:String x:Key="BtnStartProfile">Запустить среду</sys:String>
-    <sys:String x:Key="BtnStopAll">Остановить все</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">Настройки движка</sys:String>
+    <sys:String x:Key="BtnStopAll">Закрыть все</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Движок браузера</sys:String>
     <sys:String x:Key="BtnSettings">Настройки</sys:String>
     <sys:String x:Key="BtnRename">Переименовать</sys:String>
     <sys:String x:Key="BtnDelete">Удалить</sys:String>
-    <sys:String x:Key="SectionProfiles">Профили</sys:String>
-    <sys:String x:Key="SelectProfile">Выберите профиль</sys:String>
+    <sys:String x:Key="SectionProfiles">Среды</sys:String>
+    <sys:String x:Key="SelectProfile">Выберите среду</sys:String>
     <sys:String x:Key="SectionBasicInfo">Основная информация</sys:String>
     <sys:String x:Key="SectionActions">Действия</sys:String>
     <sys:String x:Key="LabelFolder">Папка</sys:String>
@@ -30,43 +30,43 @@
     <sys:String x:Key="LabelChromePath">Путь браузера</sys:String>
     <sys:String x:Key="LabelCpuCores">Ядра CPU</sys:String>
     <sys:String x:Key="LabelMemory">Память</sys:String>
-    <sys:String x:Key="EmptyProfiles">Нет профилей. Нажмите «Добавить профиль» выше, чтобы создать.</sys:String>
+    <sys:String x:Key="EmptyProfiles">Нет сред. Нажмите «Добавить среду» выше, чтобы создать.</sys:String>
 
     <!-- SettingsWindow -->
     <sys:String x:Key="SettingsTitle">Настройки</sys:String>
     <sys:String x:Key="SectionBrowser">Движок браузера</sys:String>
     <sys:String x:Key="SectionData">Данные</sys:String>
     <sys:String x:Key="LabelDataPath">Каталог данных</sys:String>
-    <sys:String x:Key="LabelProfilesPath">Каталог профилей</sys:String>
+    <sys:String x:Key="LabelProfilesPath">Каталог сред</sys:String>
     <sys:String x:Key="BtnOpenDataFolder">Открыть папку данных</sys:String>
     <sys:String x:Key="BtnOpenProfilesFolder">Открыть папку</sys:String>
     <sys:String x:Key="BtnCopyPath">Копировать путь</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Справка и обновления</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Проверить обновления</sys:String>
     <sys:String x:Key="BtnViewReleases">Просмотреть релизы</sys:String>
-    <sys:String x:Key="BtnOpenIssues">Открыть Issues</sys:String>
+    <sys:String x:Key="BtnOpenIssues">Сообщить о проблеме</sys:String>
     <sys:String x:Key="BtnCopyEmail">Копировать e-mail</sys:String>
     <sys:String x:Key="SectionUi">Интерфейс</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Показывать подробности (версия браузера, путь, сведения о системе)</sys:String>
     <sys:String x:Key="SectionLanguage">Язык</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Открыть папку браузера</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">Настройки движка</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Движок браузера</sys:String>
     <sys:String x:Key="BtnRetry">Повторить</sys:String>
     <sys:String x:Key="BtnCopyError">Копировать ошибку</sys:String>
     <sys:String x:Key="BtnClearError">Очистить ошибку</sys:String>
 
     <!-- DownloadWindow -->
-    <sys:String x:Key="DownloadTitle">Настройки движка</sys:String>
-    <sys:String x:Key="DownloadPreparing">Настройки движка</sys:String>
+    <sys:String x:Key="DownloadTitle">Движок браузера</sys:String>
+    <sys:String x:Key="DownloadPreparing">Движок браузера</sys:String>
     <sys:String x:Key="DownloadPreparingStatus">Подготовка...</sys:String>
     <sys:String x:Key="BtnCancel">Отмена</sys:String>
     <sys:String x:Key="BtnClose">Закрыть</sys:String>
-    <sys:String x:Key="BtnUseInstalledChrome">Проверить Chrome снова</sys:String>
+    <sys:String x:Key="BtnUseInstalledChrome">Проверить снова</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">Установить официальный Chrome</sys:String>
     <sys:String x:Key="BtnOpenOfficialChromePage">Открыть официальную страницу Chrome</sys:String>
     <sys:String x:Key="BtnUseEdgeFallback">Временно использовать Edge (не рекомендуется)</sys:String>
     <sys:String x:Key="BtnRefreshDetection">Проверить снова</sys:String>
-    <sys:String x:Key="BtnStartUsing">Начать</sys:String>
+    <sys:String x:Key="BtnStartUsing">Запустить</sys:String>
     <sys:String x:Key="BrowserSetupReadyTitle">Chrome готов</sys:String>
     <sys:String x:Key="BrowserSetupNotice">ChromeIsolator использует только файл программы браузера. Все изолированные данные записываются в отдельные папки ChromeIsolator; существующие расширения Chrome, настройки, пользователи и обычный запуск не читаются и не изменяются.</sys:String>
     <sys:String x:Key="BrowserSetupChromeFoundNotice">Официальный Chrome найден. Изолированные среды всегда используют собственные папки данных ChromeIsolator; обычный Chrome на рабочем столе продолжает использовать ваши существующие данные.</sys:String>
@@ -78,23 +78,23 @@
 
 Временно использовать Edge?</sys:String>
     <!-- Tray Menu -->
-    <sys:String x:Key="TrayOpenPanel">Открыть панель управления</sys:String>
-    <sys:String x:Key="TrayStopAll">Остановить все</sys:String>
+    <sys:String x:Key="TrayOpenPanel">Открыть управление</sys:String>
+    <sys:String x:Key="TrayStopAll">Закрыть все</sys:String>
     <sys:String x:Key="TrayCheckUpdates">Проверить обновления</sys:String>
     <sys:String x:Key="TrayStopAllAndQuit">Выход</sys:String>
     <sys:String x:Key="TrayExit">Выход</sys:String>
     <sys:String x:Key="TrayStartProfile">Запустить {0}</sys:String>
-    <sys:String x:Key="TrayStopProfile">Остановить {0}</sys:String>
+    <sys:String x:Key="TrayStopProfile">Закрыть {0}</sys:String>
 
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
     <sys:String x:Key="MsgChromeNotFound">Подходящий движок браузера не обнаружен. Откройте настройки движка.</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">{0} окружение(й) ещё работает. Выход закроет все.\n\nПодтвердить выход?</sys:String>
-    <sys:String x:Key="MsgRunningEnvNoDelete">Невозможно удалить работающее окружение. Сначала остановите его.</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">Ещё работает сред: {0}. При выходе все они будут закрыты.\n\nВыйти сейчас?</sys:String>
+    <sys:String x:Key="MsgRunningEnvNoDelete">Невозможно удалить работающую среду. Сначала закройте её.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">Данные «{0}» будут перемещены в корзину. Текущий размер: {1}.&#x0a;Введите delete для подтверждения.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Подтвердить удаление</sys:String>
     <sys:String x:Key="MsgRenameTitle">Переименовать</sys:String>
-    <sys:String x:Key="MsgRenameMessage">Введите пользовательское имя для удобства идентификации</sys:String>
+    <sys:String x:Key="MsgRenameMessage">Введите понятное имя</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}\n\nПерейти к загрузке?</sys:String>
     <sys:String x:Key="MsgUpToDate">Уже актуальная версия ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Ошибка проверки обновлений: {0}</sys:String>
@@ -117,9 +117,9 @@
 
     <!-- Status -->
     <sys:String x:Key="StatusRunning">Работает</sys:String>
-    <sys:String x:Key="StatusStopped">Остановлен</sys:String>
+    <sys:String x:Key="StatusStopped">Не запущен</sys:String>
     <sys:String x:Key="StatusStarting">Запуск</sys:String>
-    <sys:String x:Key="StatusStopping">Остановка</sys:String>
+    <sys:String x:Key="StatusStopping">Закрытие</sys:String>
     <sys:String x:Key="StatusNotUsed">Не использовался</sys:String>
     <sys:String x:Key="StatusRecentUsed">Последнее использование {0}</sys:String>
     <sys:String x:Key="DateJustNow">Только что</sys:String>

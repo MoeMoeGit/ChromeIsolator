@@ -36,11 +36,39 @@ claude.md
 .cursor/
 .cursorignore
 .windsurf/
+.windsurfrules
 .continue/
 .aider*
 .codex/
 .roo/
 .kilocode/
+.copilot/
+.amazonq/
+.q/
+.cline/
+.cody/
+.opencode/
+.tabnine/
+.augment/
+.supermaven/
+.codeium/
+.coder/
+.gemini/
+CODEX.md
+codex.md
+.cursorrules
+
+# Vim / Neovim
+Session.vim
+.netrwhist
+nvim/
+
+# Zed
+.zed/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
 
 # Logs and temporary files
 *.log
