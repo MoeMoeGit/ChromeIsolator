@@ -4,6 +4,72 @@
 
 ---
 
+## 2026-05-23（V1.6.8 最终检查与发布触发）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求对项目代码再次全面检查，重点复查刚修改的语言下拉框以及之前的托盘、更新提示和安装器修改；确认无误后推进一个小版本号，提交 GitHub，打 tag 并触发构建。
+
+**修改内容**：
+
+1. `Directory.Build.props` — 版本号从 `1.6.7` 推进到 `1.6.8`，用于生成新的正式构建 tag。
+2. `project-log/05-current-status.md` — 同步当前版本、当前阶段和任务交接信息。
+3. 本轮复查范围包含 `SettingsWindow.xaml`、`TrayService.cs`、`Resources/Strings*.xaml`、安装器构建脚本、MSI UI 文件和 GitHub Actions 发布配置。
+
+**验证方式**：
+
+- `dotnet build ChromeIsolator.sln -c Release`
+- `dotnet test ChromeIsolator.sln -c Release --no-build`
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-msi.ps1`
+- `git diff --check`
+- 检查设置页下拉框绑定不再使用 `DisplayMemberPath`，而是显式绑定 `NativeName`
+- 多语言资源 key 完整性检查
+- 检查 `src/ChromeIsolator.App/Resources` 不再存在 `\n` 字面量
+- 检查 GitHub Actions 对 `main` push 和 `v*` tag 的触发配置
+
+**验证结果**：
+
+- 通过。Release 编译 0 警告，0 错误。
+- 通过。`dotnet test ChromeIsolator.sln -c Release --no-build` 返回成功；当前解决方案未输出独立测试项目结果。
+- 通过。MSI 成功生成于 `artifacts\installer\ChromeIsolator-Setup-x64-v1.6.8.msi`，发布 zip 成功生成于 `artifacts\publish\ChromeIsolator-win-x64-v1.6.8.zip`。
+- 通过。`ChromeIsolator.exe` ProductVersion 为 `1.6.8`，FileVersion 为 `1.6.8.0`。
+- 通过。`git diff --check` 无错误。
+- 通过。设置页语言下拉框不再使用 `DisplayMemberPath`，已显式绑定 `NativeName`。
+- 通过。7 个多语言资源文件均包含 116 个相同 key，且资源文件中不再存在 `\n` 字面量。
+- 通过。GitHub Actions workflow 已确认 push main 和 `v*` tag 都会触发构建，tag 构建会发布 GitHub Release。
+
+**本地产物清理**：
+
+- 本轮生成 `artifacts/`、`bin/`、`obj/` 构建产物，均为可再生内容并在忽略列表中，不进入提交。
+
+---
+
+## 2026-05-23（语言下拉框显示对象文本修复）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户反馈设置页语言下拉框显示 `LanguageOption { Code ... }`，而不是语言名称。排查确认 `ComboBox` 绑定的是 `LanguageOption` 对象，自定义 ComboBox 样式下 `DisplayMemberPath` 没有正确应用到显示内容。
+
+**修改内容**：
+
+1. `SettingsWindow.xaml` — 将语言下拉框从 `DisplayMemberPath` 改为显式 `ItemTemplate`，直接绑定 `NativeName`。
+2. `project-log/05-current-status.md` — 同步本轮修复项。
+
+**验证方式**：
+
+- `dotnet build ChromeIsolator.sln -c Release`
+
+**验证结果**：
+
+- 通过。Release 编译 0 警告，0 错误。
+- 通过。项目中只有设置页这一处 `ComboBox ItemsSource`，未发现其他同类下拉框。
+
+**本地产物清理**：
+
+- 本轮仅生成常规 `bin/` / `obj/` 构建产物，均为可再生内容。
+
+---
+
 ## 2026-05-23（V1.6.7 最终检查与发布触发）
 
 **状态：✅ 已完成**
