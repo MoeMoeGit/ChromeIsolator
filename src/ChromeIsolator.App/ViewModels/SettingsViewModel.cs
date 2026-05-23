@@ -30,9 +30,9 @@ public sealed class SettingsViewModel : ObservableObject
         OpenChromeFolderCommand = new RelayCommand(OpenChromeFolder);
         CopyDataPathCommand = new RelayCommand(() => ShellService.CopyText(AppPaths.SupportDir));
         CheckUpdatesCommand = new RelayCommand(CheckForUpdates, () => !IsCheckingForUpdates);
-        OpenReleasesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.ReleasesUrl));
+        OpenReleasesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.LatestReleaseUrl));
         OpenIssuesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.IssuesUrl));
-        CopyEmailCommand = new RelayCommand(() => ShellService.CopyText("lucas6.zju@vip.163.com"));
+        CopyEmailCommand = new RelayCommand(() => ShellService.CopyText(ContactEmail));
         ReinstallChromeCommand = new RelayCommand(() => { _reinstallChrome(); RefreshChromeStatus(); });
 
         RefreshChromeStatus();
@@ -70,6 +70,8 @@ public sealed class SettingsViewModel : ObservableObject
     public string DataPath => AppPaths.SupportDir;
     public string ProfilesPath => AppPaths.ProfilesDir;
     public string ChromePath => AppPaths.ChromeDir;
+    public string AuthorName => "Lucas";
+    public string ContactEmail => "lucas6.zju@vip.163.com";
     public string CurrentVersion => _updateService.CurrentVersion;
 
     public string ChromeStatusText
@@ -119,7 +121,7 @@ public sealed class SettingsViewModel : ObservableObject
             UpdateStatusText = result.Status switch
             {
                 UpdateCheckStatus.UpToDate => L10n.Format("MsgUpToDateShort", result.LatestVersion ?? CurrentVersion),
-                UpdateCheckStatus.UpdateAvailable => L10n.Format("MsgUpdateAvailable", result.LatestVersion ?? "-"),
+                UpdateCheckStatus.UpdateAvailable => L10n.Format("MsgUpdateAvailableShort", CurrentVersion, result.LatestVersion ?? "-"),
                 _ => L10n.Format("MsgUpdateFailedShort", result.ErrorMessage ?? "-")
             };
         }

@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-05-23（设置页帮助更新与语言控件优化）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户反馈设置页底部“帮助与更新”信息架构不清晰：缺少作者信息，“复制邮箱”意图不明，“查看发布页”对普通用户不友好，检查到更新后缺少版本信息和下载指引；随后继续反馈语言区域标题与下拉框视觉风格不够统一。
+
+**修改内容**：
+
+1. `SettingsWindow.xaml` — “帮助与更新”改为按“作者 / 联系邮箱 / 更新状态”展示信息，按钮保留统一 `SecondaryButton` 风格；语言区继续使用设置页卡片布局。
+2. `SettingsViewModel.cs` — 新增 `AuthorName` 和 `ContactEmail` 属性；“打开下载页”打开 GitHub 最新 Release 页面；复制邮箱命令复用展示邮箱，避免展示值和复制值分叉。
+3. `UpdateService.cs` / `MainViewModel.cs` — 新增 `LatestReleaseUrl`，设置页和托盘更新提示均跳转到 `/releases/latest`。
+4. `Resources/Strings*.xaml` — 全语言更新“打开下载页”“联系作者：复制邮箱”等文案；新增作者、联系邮箱、更新状态标签；更新可用时显示当前版本、最新版本和下载运行安装包的指引；非英语语言标题追加 `Language`。
+5. `Themes/Controls.xaml` — 为 `ComboBox` / `ComboBoxItem` 补齐自定义模板，使下拉框边框、圆角、hover、焦点和选中态与现有按钮、输入框和卡片风格一致。
+6. `Directory.Build.props` — 版本号从 `1.6.2` 推进到 `1.6.3`，用于触发 GitHub Actions 构建测试包。
+
+**验证方式**：
+
+- `dotnet build ChromeIsolator.sln -c Release`
+
+**验证结果**：
+
+- 构建通过，0 警告，0 错误。
+
+---
+
 ## 2026-05-23（环境卡片宽度问题根因修复 — 已验证）
 
 **状态：✅ 已解决**

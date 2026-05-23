@@ -43,12 +43,15 @@
     <sys:String x:Key="BtnCopyPath">Копировать путь</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Справка и обновления</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Проверить обновления</sys:String>
-    <sys:String x:Key="BtnViewReleases">Просмотреть релизы</sys:String>
+    <sys:String x:Key="BtnViewReleases">Открыть страницу загрузки</sys:String>
     <sys:String x:Key="BtnOpenIssues">Сообщить о проблеме</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Копировать e-mail</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Связаться с автором: копировать e-mail</sys:String>
+    <sys:String x:Key="LabelAuthor">Автор</sys:String>
+    <sys:String x:Key="LabelContact">Контактный e-mail</sys:String>
+    <sys:String x:Key="LabelUpdateStatus">Статус обновления</sys:String>
     <sys:String x:Key="SectionUi">Интерфейс</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Показывать подробности (версия браузера, путь, сведения о системе)</sys:String>
-    <sys:String x:Key="SectionLanguage">Язык</sys:String>
+    <sys:String x:Key="SectionLanguage">Язык / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Открыть папку браузера</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Движок браузера</sys:String>
     <sys:String x:Key="BtnRetry">Повторить</sys:String>
@@ -102,6 +105,7 @@
     <sys:String x:Key="MsgCurrentVersion">Текущая версия: {0}</sys:String>
     <sys:String x:Key="MsgCheckingUpdate">Проверка обновлений...</sys:String>
     <sys:String x:Key="MsgUpToDateShort">Уже актуальная версия ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateAvailableShort">Найдена новая версия: текущая {0}, последняя {1}. Нажмите "Открыть страницу загрузки", затем скачайте и запустите установщик со страницы последней версии.</sys:String>
     <sys:String x:Key="MsgUpdateFailedShort">Ошибка проверки обновлений: {0}</sys:String>
 
     <!-- ChromeManager -->

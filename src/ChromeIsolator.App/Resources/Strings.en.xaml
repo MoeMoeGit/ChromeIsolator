@@ -43,9 +43,12 @@
     <sys:String x:Key="BtnCopyPath">Copy path</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Help &amp; updates</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Check for updates</sys:String>
-    <sys:String x:Key="BtnViewReleases">View releases</sys:String>
+    <sys:String x:Key="BtnViewReleases">Open download page</sys:String>
     <sys:String x:Key="BtnOpenIssues">Report issue</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Copy email</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Contact author: copy email</sys:String>
+    <sys:String x:Key="LabelAuthor">Author</sys:String>
+    <sys:String x:Key="LabelContact">Contact email</sys:String>
+    <sys:String x:Key="LabelUpdateStatus">Update status</sys:String>
     <sys:String x:Key="SectionUi">Interface</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Show advanced details (browser version, path, system info)</sys:String>
     <sys:String x:Key="SectionLanguage">Language</sys:String>
@@ -102,6 +105,7 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgCurrentVersion">Current version: {0}</sys:String>
     <sys:String x:Key="MsgCheckingUpdate">Checking for updates...</sys:String>
     <sys:String x:Key="MsgUpToDateShort">Already up to date ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateAvailableShort">New version found: current {0}, latest {1}. Click "Open download page", then download and run the installer from the latest version page.</sys:String>
     <sys:String x:Key="MsgUpdateFailedShort">Update check failed: {0}</sys:String>
 
     <!-- ChromeManager -->

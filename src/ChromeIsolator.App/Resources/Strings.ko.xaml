@@ -43,12 +43,15 @@
     <sys:String x:Key="BtnCopyPath">경로 복사</sys:String>
     <sys:String x:Key="SectionHelpUpdate">도움말 및 업데이트</sys:String>
     <sys:String x:Key="BtnCheckUpdates">업데이트 확인</sys:String>
-    <sys:String x:Key="BtnViewReleases">릴리스 보기</sys:String>
+    <sys:String x:Key="BtnViewReleases">다운로드 페이지 열기</sys:String>
     <sys:String x:Key="BtnOpenIssues">문제 신고</sys:String>
-    <sys:String x:Key="BtnCopyEmail">이메일 복사</sys:String>
+    <sys:String x:Key="BtnCopyEmail">작성자에게 연락: 이메일 복사</sys:String>
+    <sys:String x:Key="LabelAuthor">작성자</sys:String>
+    <sys:String x:Key="LabelContact">연락처 이메일</sys:String>
+    <sys:String x:Key="LabelUpdateStatus">업데이트 상태</sys:String>
     <sys:String x:Key="SectionUi">인터페이스</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">고급 정보 표시(브라우저 버전, 경로, 시스템 정보)</sys:String>
-    <sys:String x:Key="SectionLanguage">언어</sys:String>
+    <sys:String x:Key="SectionLanguage">언어 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">브라우저 폴더 열기</sys:String>
     <sys:String x:Key="BtnReinstallChrome">브라우저 엔진</sys:String>
     <sys:String x:Key="BtnRetry">재시도</sys:String>
@@ -102,6 +105,7 @@ Edge를 임시로 사용할까요?</sys:String>
     <sys:String x:Key="MsgCurrentVersion">현재 버전: {0}</sys:String>
     <sys:String x:Key="MsgCheckingUpdate">업데이트 확인 중...</sys:String>
     <sys:String x:Key="MsgUpToDateShort">최신 버전입니다 ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateAvailableShort">새 버전이 있습니다: 현재 {0}, 최신 {1}. "다운로드 페이지 열기"를 클릭한 뒤 최신 버전 페이지에서 설치 파일을 다운로드해 실행하세요.</sys:String>
     <sys:String x:Key="MsgUpdateFailedShort">업데이트 확인 실패: {0}</sys:String>
 
     <!-- ChromeManager -->

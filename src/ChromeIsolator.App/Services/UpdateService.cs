@@ -9,6 +9,7 @@ namespace ChromeIsolator.Services;
 public sealed class UpdateService
 {
     public const string ReleasesUrl = "https://github.com/MoeMoeGit/ChromeIsolator/releases";
+    public const string LatestReleaseUrl = "https://github.com/MoeMoeGit/ChromeIsolator/releases/latest";
     public const string IssuesUrl = "https://github.com/MoeMoeGit/ChromeIsolator/issues";
     private const string LatestReleaseApi = "https://api.github.com/repos/MoeMoeGit/ChromeIsolator/releases/latest";
 
@@ -78,7 +79,7 @@ public sealed class UpdateService
     {
         try
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, $"{ReleasesUrl}/latest");
+            using var request = new HttpRequestMessage(HttpMethod.Get, LatestReleaseUrl);
             request.Headers.UserAgent.ParseAdd($"ChromeIsolator/{CurrentVersion}");
 
             using var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);

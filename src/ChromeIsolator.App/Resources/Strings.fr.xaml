@@ -43,12 +43,15 @@
     <sys:String x:Key="BtnCopyPath">Copier le chemin</sys:String>
     <sys:String x:Key="SectionHelpUpdate">Aide et mises à jour</sys:String>
     <sys:String x:Key="BtnCheckUpdates">Vérifier les mises à jour</sys:String>
-    <sys:String x:Key="BtnViewReleases">Voir les versions</sys:String>
+    <sys:String x:Key="BtnViewReleases">Ouvrir la page de téléchargement</sys:String>
     <sys:String x:Key="BtnOpenIssues">Signaler un problème</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Copier l'e-mail</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Contacter l'auteur : copier l'e-mail</sys:String>
+    <sys:String x:Key="LabelAuthor">Auteur</sys:String>
+    <sys:String x:Key="LabelContact">E-mail de contact</sys:String>
+    <sys:String x:Key="LabelUpdateStatus">État des mises à jour</sys:String>
     <sys:String x:Key="SectionUi">Interface</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Afficher les détails avancés (version du navigateur, chemin, infos système)</sys:String>
-    <sys:String x:Key="SectionLanguage">Langue</sys:String>
+    <sys:String x:Key="SectionLanguage">Langue / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Ouvrir le dossier du navigateur</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Moteur du navigateur</sys:String>
     <sys:String x:Key="BtnRetry">Réessayer</sys:String>
@@ -102,6 +105,7 @@ Utiliser Edge temporairement ?</sys:String>
     <sys:String x:Key="MsgCurrentVersion">Version actuelle : {0}</sys:String>
     <sys:String x:Key="MsgCheckingUpdate">Vérification des mises à jour...</sys:String>
     <sys:String x:Key="MsgUpToDateShort">Déjà à jour ({0})</sys:String>
+    <sys:String x:Key="MsgUpdateAvailableShort">Nouvelle version trouvée : actuelle {0}, dernière {1}. Cliquez sur "Ouvrir la page de téléchargement", puis téléchargez et lancez l'installateur depuis la page de la dernière version.</sys:String>
     <sys:String x:Key="MsgUpdateFailedShort">Échec de la vérification : {0}</sys:String>
 
     <!-- ChromeManager -->

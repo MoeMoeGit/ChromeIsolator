@@ -43,12 +43,15 @@
     <sys:String x:Key="BtnCopyPath">复制路径</sys:String>
     <sys:String x:Key="SectionHelpUpdate">帮助与更新</sys:String>
     <sys:String x:Key="BtnCheckUpdates">检查更新</sys:String>
-    <sys:String x:Key="BtnViewReleases">查看发布页</sys:String>
+    <sys:String x:Key="BtnViewReleases">打开下载页</sys:String>
     <sys:String x:Key="BtnOpenIssues">反馈问题</sys:String>
-    <sys:String x:Key="BtnCopyEmail">复制邮箱</sys:String>
+    <sys:String x:Key="BtnCopyEmail">联系作者：复制邮箱</sys:String>
+    <sys:String x:Key="LabelAuthor">作者</sys:String>
+    <sys:String x:Key="LabelContact">联系邮箱</sys:String>
+    <sys:String x:Key="LabelUpdateStatus">更新状态</sys:String>
     <sys:String x:Key="SectionUi">界面</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">显示高级详情（浏览器版本、路径、系统信息）</sys:String>
-    <sys:String x:Key="SectionLanguage">语言</sys:String>
+    <sys:String x:Key="SectionLanguage">语言 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">打开浏览器文件夹</sys:String>
     <sys:String x:Key="BtnReinstallChrome">浏览器引擎</sys:String>
     <sys:String x:Key="BtnRetry">重试</sys:String>
@@ -103,6 +106,7 @@
     <sys:String x:Key="MsgCurrentVersion">当前版本：{0}</sys:String>
     <sys:String x:Key="MsgCheckingUpdate">正在检查更新...</sys:String>
     <sys:String x:Key="MsgUpToDateShort">当前已是最新版本（{0}）</sys:String>
+    <sys:String x:Key="MsgUpdateAvailableShort">发现新版本：当前 {0}，最新 {1}。点击“打开下载页”，在最新版页面下载并运行安装包。</sys:String>
     <sys:String x:Key="MsgUpdateFailedShort">检查更新失败：{0}</sys:String>
 
     <!-- ChromeManager -->

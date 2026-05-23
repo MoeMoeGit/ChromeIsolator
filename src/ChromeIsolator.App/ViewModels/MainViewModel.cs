@@ -357,7 +357,7 @@ public sealed class MainViewModel : ObservableObject
                 var choice = WpfMessageBox.Show(message, L10n.GetString("AppTitle"), MessageBoxButton.YesNo, icon);
                 if (choice == MessageBoxResult.Yes)
                 {
-                    ShellService.OpenUrl(UpdateService.ReleasesUrl);
+                    ShellService.OpenUrl(UpdateService.LatestReleaseUrl);
                 }
             }
             else
