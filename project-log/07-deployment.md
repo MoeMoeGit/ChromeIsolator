@@ -48,6 +48,15 @@ dotnet publish -c Release
 | 环境数据 | `%LOCALAPPDATA%\ChromeIsolator\Profiles\` | 每个环境独立目录 |
 | Chrome 安装包缓存 | `%LOCALAPPDATA%\ChromeIsolator\Chrome\` | 仅保存用户确认下载的官方 Chrome 安装包，可删除 |
 
+### 安装 / 卸载用户反馈
+
+- MSI 使用自定义最小 UI：欢迎页、进度页、完成页。
+- 安装 / 卸载流程只保留必要反馈，避免许可页和目录页等额外交互。
+- 安装目录继续固定到 `%ProgramFiles%\ChromeIsolator`，不暴露给普通用户选择。
+- 欢迎页和维护页文案已本地化为中文，明确说明程序文件与环境数据的分离。
+- `util:CloseApplication` 在程序运行中时提示先从系统托盘退出，再点击重试继续安装、升级或卸载。
+- 安装完成后仍会创建开始菜单和桌面快捷方式；用户数据继续保留在 `%LOCALAPPDATA%\ChromeIsolator`。
+
 ### 版本管理规范
 
 项目版本使用单一来源：
@@ -156,5 +165,6 @@ dotnet test
 
 | 日期 | 变更内容 | 原因 |
 |------|----------|------|
+| 2026-05-23 | MSI 安装 / 卸载反馈收口为最小自定义 UI | 保留欢迎页、进度页和完成页，同时避免引入许可页和目录页 |
 | 2026-05-21 | 初始化 Windows 安装与发布规划 | 明确 MSI、Program Files 和 LocalAppData 的职责 |
 | 2026-05-21 | 增加代码签名策略 | 用户确认早期未签名提示可接受，签名不阻塞 MVP |

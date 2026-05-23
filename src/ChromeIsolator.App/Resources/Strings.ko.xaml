@@ -11,7 +11,7 @@
     <sys:String x:Key="BtnStopProfile">환경 닫기</sys:String>
     <sys:String x:Key="BtnStartProfile">환경 시작</sys:String>
     <sys:String x:Key="BtnStopAll">모두 닫기</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">브라우저 엔진</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">브라우저 엔진 설정</sys:String>
     <sys:String x:Key="BtnSettings">설정</sys:String>
     <sys:String x:Key="BtnRename">이름 변경</sys:String>
     <sys:String x:Key="BtnDelete">삭제</sys:String>
@@ -53,7 +53,7 @@
     <sys:String x:Key="ShowAdvancedDetails">고급 정보 표시(브라우저 버전, 경로, 시스템 정보)</sys:String>
     <sys:String x:Key="SectionLanguage">언어 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">브라우저 폴더 열기</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">브라우저 엔진</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">브라우저 엔진 설정</sys:String>
     <sys:String x:Key="BtnRetry">재시도</sys:String>
     <sys:String x:Key="BtnCopyError">오류 복사</sys:String>
     <sys:String x:Key="BtnClearError">오류 지우기</sys:String>

@@ -11,7 +11,7 @@
     <sys:String x:Key="BtnStopProfile">Umgebung schließen</sys:String>
     <sys:String x:Key="BtnStartProfile">Umgebung starten</sys:String>
     <sys:String x:Key="BtnStopAll">Alle schließen</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">Browser-Engine</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Browser-Engine einrichten</sys:String>
     <sys:String x:Key="BtnSettings">Einstellungen</sys:String>
     <sys:String x:Key="BtnRename">Umbenennen</sys:String>
     <sys:String x:Key="BtnDelete">Löschen</sys:String>
@@ -53,7 +53,7 @@
     <sys:String x:Key="ShowAdvancedDetails">Erweiterte Details anzeigen (Browser-Version, Pfad, Systeminfos)</sys:String>
     <sys:String x:Key="SectionLanguage">Sprache / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Browser-Ordner öffnen</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">Browser-Engine</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Browser-Engine einrichten</sys:String>
     <sys:String x:Key="BtnRetry">Erneut versuchen</sys:String>
     <sys:String x:Key="BtnCopyError">Fehlerdetails kopieren</sys:String>
     <sys:String x:Key="BtnClearError">Fehler löschen</sys:String>

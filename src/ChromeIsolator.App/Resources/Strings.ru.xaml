@@ -11,7 +11,7 @@
     <sys:String x:Key="BtnStopProfile">Закрыть среду</sys:String>
     <sys:String x:Key="BtnStartProfile">Запустить среду</sys:String>
     <sys:String x:Key="BtnStopAll">Закрыть все</sys:String>
-    <sys:String x:Key="BtnPrepareChrome">Движок браузера</sys:String>
+    <sys:String x:Key="BtnPrepareChrome">Настроить движок</sys:String>
     <sys:String x:Key="BtnSettings">Настройки</sys:String>
     <sys:String x:Key="BtnRename">Переименовать</sys:String>
     <sys:String x:Key="BtnDelete">Удалить</sys:String>
@@ -53,7 +53,7 @@
     <sys:String x:Key="ShowAdvancedDetails">Показывать подробности (версия браузера, путь, сведения о системе)</sys:String>
     <sys:String x:Key="SectionLanguage">Язык / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Открыть папку браузера</sys:String>
-    <sys:String x:Key="BtnReinstallChrome">Движок браузера</sys:String>
+    <sys:String x:Key="BtnReinstallChrome">Настроить движок</sys:String>
     <sys:String x:Key="BtnRetry">Повторить</sys:String>
     <sys:String x:Key="BtnCopyError">Копировать ошибку</sys:String>
     <sys:String x:Key="BtnClearError">Очистить ошибку</sys:String>

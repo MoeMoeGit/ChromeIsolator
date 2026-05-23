@@ -4,6 +4,165 @@
 
 ---
 
+## 2026-05-23（V1.6.6 最终检查与发布触发）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求对项目代码，尤其是本轮安装器和多语言修改进行全面复查；确认无误后推进一个小版本号，提交 GitHub，打 tag 并触发构建。
+
+**修改内容**：
+
+1. `Directory.Build.props` — 版本号从 `1.6.5` 推进到 `1.6.6`，用于生成新的正式构建 tag。
+2. `project-log/05-current-status.md` — 同步当前版本、当前阶段和任务交接信息。
+3. 本轮复查范围包含 `installer/Product.wxs`、`installer/Strings.zh-CN.wxl`、`scripts/build-msi.ps1`、多语言资源和版本发布配置。
+
+**验证方式**：
+
+- `dotnet build ChromeIsolator.sln -c Release`
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-msi.ps1`
+- `git diff --check`
+- 多语言资源 key 完整性检查
+
+**验证结果**：
+
+- 通过。Release 编译 0 警告，0 错误。
+- 通过。MSI 成功生成于 `artifacts\installer\ChromeIsolator-Setup-x64-v1.6.6.msi`，发布 zip 成功生成于 `artifacts\publish\ChromeIsolator-win-x64-v1.6.6.zip`。
+- 通过。`ChromeIsolator.exe` ProductVersion 为 `1.6.6`，FileVersion 为 `1.6.6.0`。
+- 通过。`git diff --check` 无错误。
+- 通过。7 个多语言资源文件均包含 116 个相同 key。
+- 通过。GitHub Actions workflow 已确认 push main 和 `v*` tag 都会触发构建，tag 构建会发布 GitHub Release。
+- `dotnet test ChromeIsolator.sln -c Release --no-build` 返回成功，但当前解决方案未输出独立测试项目结果。
+
+**本地产物清理**：
+
+- 本轮生成 `artifacts/`、`bin/`、`obj/` 构建产物，均为可再生内容并在忽略列表中，不进入提交。
+
+---
+
+## 2026-05-23（多语言文案审查与按钮语义修正）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求复查全部多语言文案，确认是否准确、精简、地道；审查中发现“浏览器引擎”按钮在多语言里仍偏名词化，不像动作按钮。
+
+**修改内容**：
+
+1. `src/ChromeIsolator.App/Resources/Strings*.xaml` — 将 `BtnPrepareChrome` / `BtnReinstallChrome` 统一改为动作式文案，中文改为“浏览器引擎设置”，英文改为 “Browser engine settings”，其余语言改为对应的动作表达。
+
+**验证方式**：
+
+- `dotnet build ChromeIsolator.sln -c Release`
+
+**验证结果**：
+
+- 通过。编译 0 警告，0 错误。
+
+**本地产物清理**：
+
+- 本轮仅生成常规 `bin/` / `obj/` 构建产物，均为可再生内容。
+
+---
+
+## 2026-05-23（安装器文案精简）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求安装器文案更精简，避免欢迎页和卸载页说明过长。
+
+**修改内容**：
+
+1. `installer/Strings.zh-CN.wxl` — 精简欢迎页、维护页、卸载页、进度页、完成页和运行中提示文案，保留关键信息：固定安装到 Program Files、环境数据保留、运行中需先退出后重试。
+
+**验证方式**：
+
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-msi.ps1`
+
+**验证结果**：
+
+- 通过。成功生成 `ChromeIsolator-Setup-x64-v1.6.5.msi`。
+
+**本地产物清理**：
+
+- 本轮生成的 `artifacts/`、`bin/`、`obj/` 属于可再生构建产物，按项目规则保留在忽略列表中。
+
+---
+
+## 2026-05-23（MSI 最小安装器 UI 与运行中重试）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求安装器保留欢迎页，但不要引入许可页或目录选择页；同时卸载页要更清楚，并在程序运行时给出关闭提示和重试按钮。
+
+**修改内容**：
+
+1. `installer/Product.wxs` — 从内置完整向导收敛为自定义最小 UI，仅保留欢迎页、进度页、完成页和维护流程；安装目录继续固定到 `%ProgramFiles%\ChromeIsolator`。
+2. `installer/Strings.zh-CN.wxl` — 新增中文本地化文案，覆盖欢迎页、维护页、卸载页、进度页和完成页，明确说明程序文件与用户环境数据分离。
+3. `scripts/build-msi.ps1` — 引入 `WixToolset.UI.wixext` 和中文本地化资源，增加失败时检查，避免旧 MSI 产物掩盖打包错误。
+4. `util:CloseApplication` — 更新运行中提示，明确安装、升级和卸载都需要先从系统托盘退出浏览器多开。
+5. `project-log/10-planning-log.md`、`05-current-status.md`、`07-deployment.md` — 同步更新规划、状态和部署说明。
+
+**遇到的问题**：
+
+- `WixLocalization` 使用 `Codepage="65001"` 时，WiX 报 summary information code page 无效。
+- `wix build` 失败后如果旧 MSI 文件还在，脚本会误以为构建成功。
+
+**解决方式**：
+
+- 将本地化文件 code page 改为 `936`。
+- 构建前删除旧 MSI，并检查 `$LASTEXITCODE`，让构建失败真正失败。
+
+**验证方式**：
+
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-msi.ps1`
+- `git diff --check`
+
+**验证结果**：
+
+- 通过。成功生成 `artifacts\installer\ChromeIsolator-Setup-x64-v1.6.5.msi`。
+- 通过。`git diff --check` 无错误。
+
+**本地产物清理**：
+
+- 本轮生成 `artifacts/`、`src/ChromeIsolator.App/bin/`、`src/ChromeIsolator.App/obj/`，属于可再生构建产物，保留在忽略列表中。
+
+---
+
+## 2026-05-23（MSI 安装和卸载完成反馈）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户反馈双击安装包后安装窗口跑完直接消失，普通用户没有明确的安装完成反馈；卸载流程也缺少清晰反馈，需要安装 / 卸载结束时停留在完成页。
+
+**修改内容**：
+
+1. `installer/Product.wxs` — 先引入 WiX UI 命名空间并启用 `WixUI_Minimal`，随后根据用户反馈收回到默认 MSI UI，避免增加许可页、目录页等额外交互；继续固定安装到 `%ProgramFiles%\ChromeIsolator`。
+2. `scripts/build-msi.ps1` — 先补充 `WixToolset.UI.wixext`，随后移除该依赖，回到更保守的默认 MSI 构建路径，只保留必要的 `WixToolset.Util.wixext`。
+3. `Directory.Build.props` — 版本号从 `1.6.3` 推进到 `1.6.5`，用于触发新一轮安装包构建。
+4. `installer/License.rtf` — 已删除，避免许可页带来额外页面与内容分歧。
+5. `07-deployment.md`、`05-current-status.md` — 同步记录 MSI 安装 / 卸载反馈行为。
+
+**遇到的问题**：
+
+- 当前 MSI 未接入 WiX UI 扩展，双击运行时只依赖 Windows Installer 默认行为，完成后不会停留在明确的完成页。
+
+**解决方式**：
+
+- 先前方案引入了额外页面，不符合“只要进度和完成提示”的要求；回退到默认 MSI UI，保持最少干预。
+
+**验证方式**：
+
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-msi.ps1`
+
+**验证结果**：
+
+- 后续被 ADR-010 的自定义最小 MSI UI 方案替代，并已在 V1.6.6 最终检查中通过 MSI 构建验证。
+
+**本地产物清理**：
+
+- 本轮未保留新的构建产物；待重新构建后再决定是否清理 `artifacts/`。
+
+---
+
 ## 2026-05-23（设置页帮助更新与语言控件优化）
 
 **状态：✅ 已完成**

@@ -10,6 +10,7 @@ $installerObjDir = Join-Path $repoRoot "artifacts\installer-obj"
 $installerOutDir = Join-Path $repoRoot "artifacts\installer"
 $generatedWxs = Join-Path $installerObjDir "PublishedFiles.wxs"
 $productWxs = Join-Path $repoRoot "installer\Product.wxs"
+$localizationWxl = Join-Path $repoRoot "installer\Strings.zh-CN.wxl"
 
 function Get-ProjectVersion {
     $propsPath = Join-Path $repoRoot "Directory.Build.props"
@@ -33,12 +34,17 @@ if (-not (wix extension list --acceptEula wix7 2>$null | Select-String -SimpleMa
     wix extension add --acceptEula wix7 WixToolset.Util.wixext
 }
 
+if (-not (wix extension list --acceptEula wix7 2>$null | Select-String -SimpleMatch "WixToolset.UI.wixext")) {
+    wix extension add --acceptEula wix7 WixToolset.UI.wixext
+}
+
 $msiPath = Join-Path $installerOutDir "ChromeIsolator-Setup-x64-v$Version.msi"
 
 & (Join-Path $PSScriptRoot "publish-win-x64.ps1") -Version $Version
 
 New-Item -ItemType Directory -Force -Path $installerObjDir | Out-Null
 New-Item -ItemType Directory -Force -Path $installerOutDir | Out-Null
+Remove-Item -LiteralPath $msiPath -Force -ErrorAction SilentlyContinue
 
 function Convert-To-WixId {
     param([string]$Value)
@@ -112,11 +118,18 @@ Set-Content -LiteralPath $generatedWxs -Value $content.ToString() -Encoding UTF8
 wix build --acceptEula wix7 `
     -arch x64 `
     -ext WixToolset.Util.wixext `
+    -ext WixToolset.UI.wixext `
+    -culture zh-CN `
+    -loc $localizationWxl `
     -d "ProjectRoot=$repoRoot" `
     -d "ProductVersion=$Version" `
     -out $msiPath `
     $productWxs `
     $generatedWxs
+
+if ($LASTEXITCODE -ne 0) {
+    throw "WiX build failed with exit code $LASTEXITCODE."
+}
 
 if (-not (Test-Path -LiteralPath $msiPath)) {
     throw "MSI was not created."
