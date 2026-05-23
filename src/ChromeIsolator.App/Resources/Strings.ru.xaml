@@ -92,13 +92,13 @@
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
     <sys:String x:Key="MsgChromeNotFound">Подходящий движок браузера не обнаружен. Откройте настройки движка.</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">Ещё работает сред: {0}. При выходе все они будут закрыты.\n\nВыйти сейчас?</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">Ещё работает сред: {0}. При выходе все они будут закрыты.&#x0A;&#x0A;Выйти сейчас?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Невозможно удалить работающую среду. Сначала закройте её.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">Данные «{0}» будут перемещены в корзину. Текущий размер: {1}.&#x0a;Введите delete для подтверждения.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Подтвердить удаление</sys:String>
     <sys:String x:Key="MsgRenameTitle">Переименовать</sys:String>
     <sys:String x:Key="MsgRenameMessage">Введите понятное имя</sys:String>
-    <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}\n\nПерейти к загрузке?</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}&#x0A;&#x0A;Перейти к загрузке?</sys:String>
     <sys:String x:Key="MsgUpToDate">Уже актуальная версия ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Ошибка проверки обновлений: {0}</sys:String>
     <sys:String x:Key="MsgUpdateError">Произошла ошибка при проверке обновлений.</sys:String>

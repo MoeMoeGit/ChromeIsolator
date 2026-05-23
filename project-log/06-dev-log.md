@@ -4,6 +4,73 @@
 
 ---
 
+## 2026-05-23（V1.6.7 最终检查与发布触发）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求对项目代码再次全面检查，重点复查刚修改的托盘交互和更新提示换行；确认无误后推进一个小版本号，提交 GitHub，打 tag 并触发构建。
+
+**修改内容**：
+
+1. `Directory.Build.props` — 版本号从 `1.6.6` 推进到 `1.6.7`，用于生成新的正式构建 tag。
+2. `project-log/05-current-status.md` — 同步当前版本、当前阶段和任务交接信息。
+3. 本轮复查范围包含 `TrayService.cs`、`Resources/Strings*.xaml`、安装器构建脚本、MSI UI 文件和 GitHub Actions 发布配置。
+
+**验证方式**：
+
+- `dotnet build ChromeIsolator.sln -c Release`
+- `dotnet test ChromeIsolator.sln -c Release --no-build`
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-msi.ps1`
+- `git diff --check`
+- 多语言资源 key 完整性检查
+- 检查 `src/ChromeIsolator.App/Resources` 不再存在 `\n` 字面量
+- 检查 GitHub Actions 对 `main` push 和 `v*` tag 的触发配置
+
+**验证结果**：
+
+- 通过。Release 编译 0 警告，0 错误。
+- 通过。`dotnet test ChromeIsolator.sln -c Release --no-build` 返回成功；当前解决方案未输出独立测试项目结果。
+- 通过。MSI 成功生成于 `artifacts\installer\ChromeIsolator-Setup-x64-v1.6.7.msi`，发布 zip 成功生成于 `artifacts\publish\ChromeIsolator-win-x64-v1.6.7.zip`。
+- 通过。`ChromeIsolator.exe` ProductVersion 为 `1.6.7`，FileVersion 为 `1.6.7.0`。
+- 通过。`git diff --check` 无错误。
+- 通过。7 个多语言资源文件均包含 116 个相同 key，且资源文件中不再存在 `\n` 字面量。
+- 通过。GitHub Actions workflow 已确认 push main 和 `v*` tag 都会触发构建，tag 构建会发布 GitHub Release。
+
+**本地产物清理**：
+
+- 本轮生成 `artifacts/`、`bin/`、`obj/` 构建产物，均为可再生内容并在忽略列表中，不进入提交。
+
+---
+
+## 2026-05-23（托盘图标左键单击唤醒主窗口）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户反馈托盘图标需要双击才显示主页面，容易误以为程序卡住；随后反馈托盘菜单“检查更新”弹窗把 `\n\n` 显示为字面文本。当前逻辑确实只处理双击打开，左键单击没有动作；多语言资源中也仍有部分弹窗字符串误用 `\n\n`。
+
+**修改内容**：
+
+1. `Services/TrayService.cs` — 将托盘图标左键单击改为直接唤醒主窗口，右键仍打开菜单，双击保留为兼容行为。
+2. `Resources/Strings*.xaml` — 将托盘更新提示和退出确认中的字面 `\n\n` 改为 XML 换行实体。
+3. `project-log/05-current-status.md` — 同步最近开发日志和当前修复项。
+
+**验证方式**：
+
+- `dotnet build ChromeIsolator.sln -c Release`
+- 检查多语言资源中不再存在弹窗文案用的字面 `\n\n`
+
+**验证结果**：
+
+- 通过。Release 编译 0 警告，0 错误。
+- 通过。`src/ChromeIsolator.App/Resources` 中不再存在 `\n` 字面量。
+- 通过。7 个多语言资源文件均包含 116 个相同 key。
+
+**本地产物清理**：
+
+- 本轮仅生成常规 `bin/` / `obj/` 构建产物，均为可再生内容。
+
+---
+
 ## 2026-05-23（V1.6.6 最终检查与发布触发）
 
 **状态：✅ 已完成**

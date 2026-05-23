@@ -44,14 +44,23 @@ public sealed class TrayService : IDisposable
 
     private void NotifyIcon_MouseUp(object? sender, MouseEventArgs e)
     {
-        if (e.Button != MouseButtons.Right || _notifyIcon is null)
+        if (_notifyIcon is null)
         {
             return;
         }
 
-        _notifyIcon.ContextMenuStrip?.Dispose();
-        _notifyIcon.ContextMenuStrip = BuildMenu();
-        _notifyIcon.ContextMenuStrip.Show(Cursor.Position);
+        if (e.Button == MouseButtons.Left)
+        {
+            _mainWindow.ShowFromTray();
+            return;
+        }
+
+        if (e.Button == MouseButtons.Right)
+        {
+            _notifyIcon.ContextMenuStrip?.Dispose();
+            _notifyIcon.ContextMenuStrip = BuildMenu();
+            _notifyIcon.ContextMenuStrip.Show(Cursor.Position);
+        }
     }
 
     private ContextMenuStrip BuildMenu()

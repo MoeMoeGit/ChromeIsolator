@@ -92,13 +92,13 @@ Use Edge temporarily?</sys:String>
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
     <sys:String x:Key="MsgChromeNotFound">No usable browser engine was detected. Open browser engine settings.</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">{0} environments are still running. Exiting will close them all.\n\nExit now?</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} environments are still running. Exiting will close them all.&#x0A;&#x0A;Exit now?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Cannot delete a running environment. Please close it first.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">"{0}" data will be moved to the Recycle Bin. Current data size: {1}.&#x0a;Type delete to confirm.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Confirm delete</sys:String>
     <sys:String x:Key="MsgRenameTitle">Rename</sys:String>
     <sys:String x:Key="MsgRenameMessage">Enter a name to help identify it</sys:String>
-    <sys:String x:Key="MsgUpdateAvailable">New version available: {0}\n\nGo to download?</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">New version available: {0}&#x0A;&#x0A;Go to download?</sys:String>
     <sys:String x:Key="MsgUpToDate">Already up to date ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Update check failed: {0}</sys:String>
     <sys:String x:Key="MsgUpdateError">An error occurred while checking for updates.</sys:String>

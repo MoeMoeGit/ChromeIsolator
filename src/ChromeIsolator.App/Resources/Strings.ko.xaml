@@ -92,13 +92,13 @@ Edge를 임시로 사용할까요?</sys:String>
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">확인</sys:String>
     <sys:String x:Key="MsgChromeNotFound">사용 가능한 브라우저 엔진을 감지하지 못했습니다. 브라우저 엔진 설정을 여세요.</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">{0}개의 환경이 실행 중입니다. 종료하면 모두 닫힙니다.\n\n종료하시겠습니까?</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0}개의 환경이 실행 중입니다. 종료하면 모두 닫힙니다.&#x0A;&#x0A;종료하시겠습니까?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">실행 중인 환경은 삭제할 수 없습니다. 먼저 닫아 주세요.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">"{0}"의 데이터를 휴지통으로 이동합니다. 현재 데이터 크기: {1}.&#x0a;delete를 입력하여 확인하세요.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">삭제 확인</sys:String>
     <sys:String x:Key="MsgRenameTitle">이름 변경</sys:String>
     <sys:String x:Key="MsgRenameMessage">식별하기 쉬운 이름 입력</sys:String>
-    <sys:String x:Key="MsgUpdateAvailable">새 버전이 있습니다: {0}\n\n다운로드 페이지로 이동하시겠습니까?</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">새 버전이 있습니다: {0}&#x0A;&#x0A;다운로드 페이지로 이동하시겠습니까?</sys:String>
     <sys:String x:Key="MsgUpToDate">최신 버전입니다 ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">업데이트 확인 실패: {0}</sys:String>
     <sys:String x:Key="MsgUpdateError">업데이트 확인 중 오류가 발생했습니다.</sys:String>

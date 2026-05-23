@@ -93,13 +93,13 @@
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">确定</sys:String>
     <sys:String x:Key="MsgChromeNotFound">未检测到可用的浏览器引擎。请打开浏览器引擎设置。</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">还有 {0} 个环境正在运行，退出将全部关闭。\n\n确定退出？</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">还有 {0} 个环境正在运行，退出将全部关闭。&#x0A;&#x0A;确定退出？</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">运行中的环境不能删除，请先关闭。</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">将把"{0}"的数据移到回收站。当前数据大小：{1}。&#x0a;请输入 delete 确认删除。</sys:String>
     <sys:String x:Key="MsgDeleteTitle">确认删除</sys:String>
     <sys:String x:Key="MsgRenameTitle">重命名</sys:String>
     <sys:String x:Key="MsgRenameMessage">输入便于识别的名称</sys:String>
-    <sys:String x:Key="MsgUpdateAvailable">发现新版本：{0}\n\n是否前往下载？</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">发现新版本：{0}&#x0A;&#x0A;是否前往下载？</sys:String>
     <sys:String x:Key="MsgUpToDate">当前已是最新版本（{0}）</sys:String>
     <sys:String x:Key="MsgUpdateFailed">检查更新失败：{0}</sys:String>
     <sys:String x:Key="MsgUpdateError">检查更新时发生错误。</sys:String>

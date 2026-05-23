@@ -92,13 +92,13 @@ Utiliser Edge temporairement ?</sys:String>
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
     <sys:String x:Key="MsgChromeNotFound">Aucun moteur de navigateur utilisable n’a été détecté. Ouvrez les paramètres du moteur.</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">{0} environnement(s) en cours d'exécution. Quitter les fermera tous.\n\nQuitter maintenant ?</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} environnement(s) en cours d'exécution. Quitter les fermera tous.&#x0A;&#x0A;Quitter maintenant ?</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">Impossible de supprimer un environnement en cours d'exécution. Fermez-le d'abord.</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">Les données de « {0} » seront déplacées vers la corbeille. Taille actuelle : {1}.&#x0a;Tapez delete pour confirmer.</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Confirmer la suppression</sys:String>
     <sys:String x:Key="MsgRenameTitle">Renommer</sys:String>
     <sys:String x:Key="MsgRenameMessage">Entrez un nom reconnaissable</sys:String>
-    <sys:String x:Key="MsgUpdateAvailable">Nouvelle version disponible : {0}\n\nAller à la page de téléchargement ?</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">Nouvelle version disponible : {0}&#x0A;&#x0A;Aller à la page de téléchargement ?</sys:String>
     <sys:String x:Key="MsgUpToDate">Déjà à jour ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Échec de la vérification : {0}</sys:String>
     <sys:String x:Key="MsgUpdateError">Une erreur s'est produite lors de la vérification des mises à jour.</sys:String>

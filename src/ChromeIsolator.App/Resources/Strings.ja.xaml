@@ -92,13 +92,13 @@
     <!-- Dialogs -->
     <sys:String x:Key="BtnOk">OK</sys:String>
     <sys:String x:Key="MsgChromeNotFound">利用可能なブラウザーエンジンが検出されませんでした。ブラウザーエンジン設定を開いてください。</sys:String>
-    <sys:String x:Key="MsgRunningEnvExit">{0} つの環境が実行中です。終了するとすべて閉じます。\n\n終了しますか？</sys:String>
+    <sys:String x:Key="MsgRunningEnvExit">{0} つの環境が実行中です。終了するとすべて閉じます。&#x0A;&#x0A;終了しますか？</sys:String>
     <sys:String x:Key="MsgRunningEnvNoDelete">実行中の環境は削除できません。先に閉じてください。</sys:String>
     <sys:String x:Key="MsgDeleteConfirm">「{0}」のデータをゴミ箱に移動します。現在のデータサイズ：{1}。&#x0a;delete と入力して確認してください。</sys:String>
     <sys:String x:Key="MsgDeleteTitle">削除の確認</sys:String>
     <sys:String x:Key="MsgRenameTitle">名前変更</sys:String>
     <sys:String x:Key="MsgRenameMessage">識別しやすい名前を入力</sys:String>
-    <sys:String x:Key="MsgUpdateAvailable">新しいバージョンがあります：{0}\n\nダウンロードページに移動しますか？</sys:String>
+    <sys:String x:Key="MsgUpdateAvailable">新しいバージョンがあります：{0}&#x0A;&#x0A;ダウンロードページに移動しますか？</sys:String>
     <sys:String x:Key="MsgUpToDate">最新バージョンです（{0}）</sys:String>
     <sys:String x:Key="MsgUpdateFailed">更新確認に失敗しました：{0}</sys:String>
     <sys:String x:Key="MsgUpdateError">更新確認中にエラーが発生しました。</sys:String>
