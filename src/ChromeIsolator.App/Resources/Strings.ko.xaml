@@ -51,6 +51,9 @@
     <sys:String x:Key="LabelUpdateStatus">업데이트 상태</sys:String>
     <sys:String x:Key="SectionUi">인터페이스</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">고급 정보 표시(브라우저 버전, 경로, 시스템 정보)</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">환경 차이 모드</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">기본값은 호환 모드입니다. 디버깅 포트와 navigator 재정의를 사용하지 않습니다. 선택한 환경은 다음 시작 시 작은 하드웨어 매개변수 차이를 주입합니다. 실행 중인 환경은 닫은 뒤 변경하세요.</sys:String>
+    <sys:String x:Key="EnvironmentModeRunningHint">실행 중. 닫은 뒤 변경</sys:String>
     <sys:String x:Key="SectionLanguage">언어 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">브라우저 폴더 열기</sys:String>
     <sys:String x:Key="BtnReinstallChrome">브라우저 엔진 설정</sys:String>

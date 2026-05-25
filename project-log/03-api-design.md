@@ -8,7 +8,7 @@
 |------|----------|------|
 | 对外 HTTP API | 否 | 不作为服务端对外提供接口 |
 | 后端业务 API | 否 | 无后端服务 |
-| 本地 Chrome DevTools Protocol | 是，作为外部依赖调用 | 仅连接 ChromeIsolator 启动的 Chrome 本机调试端口 |
+| 本地 Chrome DevTools Protocol | 是，作为外部依赖调用 | 仅在环境差异模式开启时连接 ChromeIsolator 启动的 Chrome 本机调试端口 |
 | GitHub Releases API | 是，作为外部依赖调用 | 用于检查应用更新 |
 
 ## 认证方式
@@ -29,7 +29,7 @@ ChromeIsolator 会调用以下外部 / 本机接口，详细信息见 `09-extern
 ## 设计决策
 
 - 不开放本地 HTTP 控制 API，避免额外攻击面。
-- CDP 调试端口只绑定本机回环地址，并且只用于应用自己启动的 Chrome 实例。
+- CDP 调试端口只在环境差异模式开启时启用，只绑定本机回环地址，并且只用于应用自己启动的 Chrome 实例。
 - 更新检查只读取公开 Release 信息，不上传本机数据。
 
 ## 变更记录

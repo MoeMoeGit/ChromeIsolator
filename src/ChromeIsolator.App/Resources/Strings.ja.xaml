@@ -51,6 +51,9 @@
     <sys:String x:Key="LabelUpdateStatus">更新状態</sys:String>
     <sys:String x:Key="SectionUi">インターフェース</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">詳細情報を表示（ブラウザー バージョン、パス、システム情報）</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">環境差分モード</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">既定は互換モードです。デバッグ ポートも navigator の上書きも使いません。チェックした環境は次回起動時に少量のハードウェア パラメーター差分を注入します。実行中の環境は閉じてから切り替えてください。</sys:String>
+    <sys:String x:Key="EnvironmentModeRunningHint">実行中。閉じると変更できます。</sys:String>
     <sys:String x:Key="SectionLanguage">言語 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">ブラウザー フォルダーを開く</sys:String>
     <sys:String x:Key="BtnReinstallChrome">ブラウザーエンジン設定</sys:String>

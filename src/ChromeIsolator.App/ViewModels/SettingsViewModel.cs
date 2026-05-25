@@ -1,3 +1,4 @@
+using ChromeIsolator.Models;
 using ChromeIsolator.Services;
 
 namespace ChromeIsolator.ViewModels;
@@ -23,6 +24,9 @@ public sealed class SettingsViewModel : ObservableObject
         _showAdvancedDetails = profileManager.Config.ShowAdvancedDetails;
 
         Languages = L10n.SupportedLanguages;
+        ProfileModes = _profileManager.Config.Profiles
+            .Select(profile => new SettingsProfileModeViewModel(profile, _profileManager, _chromeManager))
+            .ToList();
         _selectedLanguage = Languages.FirstOrDefault(l => l.Code == L10n.CurrentLanguage) ?? Languages[0];
 
         OpenDataFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.SupportDir));
@@ -40,6 +44,7 @@ public sealed class SettingsViewModel : ObservableObject
     }
 
     public IReadOnlyList<L10n.LanguageOption> Languages { get; }
+    public IReadOnlyList<SettingsProfileModeViewModel> ProfileModes { get; }
 
     public L10n.LanguageOption SelectedLanguage
     {
@@ -53,6 +58,10 @@ public sealed class SettingsViewModel : ObservableObject
                 _profileManager.Save();
                 RefreshChromeStatus();
                 UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
+                foreach (var profileMode in ProfileModes)
+                {
+                    profileMode.RefreshLocalizedProperties();
+                }
             }
         }
     }
@@ -111,6 +120,14 @@ public sealed class SettingsViewModel : ObservableObject
         }
     }
 
+    public void RefreshProfileModeStates()
+    {
+        foreach (var profileMode in ProfileModes)
+        {
+            profileMode.RefreshModeState();
+        }
+    }
+
     private async void CheckForUpdates()
     {
         try
@@ -149,5 +166,60 @@ public sealed class SettingsViewModel : ObservableObject
         }
 
         ShellService.OpenFolder(AppPaths.SupportDir);
+    }
+}
+
+public sealed class SettingsProfileModeViewModel : ObservableObject
+{
+    private readonly Profile _profile;
+    private readonly ProfileManager _profileManager;
+    private readonly ChromeManager _chromeManager;
+
+    public SettingsProfileModeViewModel(Profile profile, ProfileManager profileManager, ChromeManager chromeManager)
+    {
+        _profile = profile;
+        _profileManager = profileManager;
+        _chromeManager = chromeManager;
+    }
+
+    public string Title
+    {
+        get
+        {
+            var defaultName = string.Format(L10n.GetString("LabelFolder") == "Folder" ? "Profile {0}" : "环境{0}", _profile.InstanceNumber);
+            return string.IsNullOrWhiteSpace(_profile.DisplayName)
+                ? defaultName
+                : $"{defaultName} - {_profile.DisplayName}";
+        }
+    }
+
+    public bool IsRunning => _chromeManager.IsRunning(_profile);
+    public bool CanChangeMode => !IsRunning;
+
+    public bool EnableEnvironmentVariation
+    {
+        get => _profile.EnableEnvironmentVariation;
+        set
+        {
+            if (IsRunning || _profile.EnableEnvironmentVariation == value)
+            {
+                return;
+            }
+
+            _profile.EnableEnvironmentVariation = value;
+            _profileManager.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public void RefreshLocalizedProperties()
+    {
+        OnPropertyChanged(nameof(Title));
+    }
+
+    public void RefreshModeState()
+    {
+        OnPropertyChanged(nameof(IsRunning));
+        OnPropertyChanged(nameof(CanChangeMode));
     }
 }

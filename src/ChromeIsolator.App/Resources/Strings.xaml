@@ -51,6 +51,9 @@
     <sys:String x:Key="LabelUpdateStatus">更新状态</sys:String>
     <sys:String x:Key="SectionUi">界面</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">显示高级详情（浏览器版本、路径、系统信息）</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">环境差异模式</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">默认使用兼容模式：不启用调试端口，也不注入 navigator 参数。勾选后，该环境下次启动会启用环境差异模式，注入少量硬件参数差异。运行中的环境需先关闭后再切换。</sys:String>
+    <sys:String x:Key="EnvironmentModeRunningHint">运行中，关闭后可切换</sys:String>
     <sys:String x:Key="SectionLanguage">语言 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">打开浏览器文件夹</sys:String>
     <sys:String x:Key="BtnReinstallChrome">浏览器引擎设置</sys:String>

@@ -100,7 +100,10 @@ public sealed class ChromeManager
                 existing.Dispose();
             }
 
-            var port = PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1));
+            var enableEnvironmentVariation = profile.EnableEnvironmentVariation;
+            var port = enableEnvironmentVariation
+                ? PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1))
+                : (int?)null;
             var runningCount = _processes.Count;
             var offsetX = 50 + runningCount * 30;
             var offsetY = 50 + runningCount * 30;
@@ -111,7 +114,10 @@ public sealed class ChromeManager
             };
             startInfo.ArgumentList.Add($"--user-data-dir={profileDir}");
             startInfo.ArgumentList.Add("--no-first-run");
-            startInfo.ArgumentList.Add($"--remote-debugging-port={port}");
+            if (port is not null)
+            {
+                startInfo.ArgumentList.Add($"--remote-debugging-port={port.Value}");
+            }
             startInfo.ArgumentList.Add($"--window-position={offsetX},{offsetY}");
 
             var process = new Process
@@ -154,12 +160,15 @@ public sealed class ChromeManager
                 throw;
             }
 
-            var injector = new FingerprintInjector(port, profile.InstanceNumber);
             _processes[profile.Folder] = process;
-            _debugPorts[profile.Folder] = port;
-            _fingerprintInjectors[profile.Folder] = injector;
+            if (port is not null)
+            {
+                var injector = new FingerprintInjector(port.Value, profile.InstanceNumber);
+                _debugPorts[profile.Folder] = port.Value;
+                _fingerprintInjectors[profile.Folder] = injector;
 
-            _ = injector.StartAsync();
+                _ = injector.StartAsync();
+            }
         }
     }
 

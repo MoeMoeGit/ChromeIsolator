@@ -4,6 +4,7 @@ public sealed class Profile
 {
     public string Folder { get; set; } = "";
     public string DisplayName { get; set; } = "";
+    public bool EnableEnvironmentVariation { get; set; }
 
     public int InstanceNumber
     {

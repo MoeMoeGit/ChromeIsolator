@@ -51,6 +51,9 @@
     <sys:String x:Key="LabelUpdateStatus">Update status</sys:String>
     <sys:String x:Key="SectionUi">Interface</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Show advanced details (browser version, path, system info)</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">Environment variation mode</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">Compatibility mode is the default: no debugging port and no navigator overrides. Checked environments will use environment variation mode on next launch, with small hardware parameter differences injected. Close a running environment before changing it.</sys:String>
+    <sys:String x:Key="EnvironmentModeRunningHint">Running. Close it to change.</sys:String>
     <sys:String x:Key="SectionLanguage">Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Open browser folder</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Browser engine settings</sys:String>

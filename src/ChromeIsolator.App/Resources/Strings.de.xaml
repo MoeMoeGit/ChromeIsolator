@@ -51,6 +51,9 @@
     <sys:String x:Key="LabelUpdateStatus">Update-Status</sys:String>
     <sys:String x:Key="SectionUi">Oberfläche</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Erweiterte Details anzeigen (Browser-Version, Pfad, Systeminfos)</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">Umgebungsvariation</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">Kompatibilitätsmodus ist Standard: kein Debugging-Port und keine navigator-Überschreibungen. Markierte Umgebungen verwenden beim nächsten Start kleine Hardware-Parameter-Unterschiede. Laufende Umgebungen müssen zuerst geschlossen werden.</sys:String>
+    <sys:String x:Key="EnvironmentModeRunningHint">Läuft. Erst schließen.</sys:String>
     <sys:String x:Key="SectionLanguage">Sprache / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Browser-Ordner öffnen</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Browser-Engine einrichten</sys:String>

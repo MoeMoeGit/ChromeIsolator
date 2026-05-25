@@ -51,6 +51,9 @@
     <sys:String x:Key="LabelUpdateStatus">État des mises à jour</sys:String>
     <sys:String x:Key="SectionUi">Interface</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Afficher les détails avancés (version du navigateur, chemin, infos système)</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">Mode variations d'environnement</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">Le mode compatible est utilisé par défaut : pas de port de débogage ni de remplacement navigator. Les environnements cochés utiliseront au prochain lancement de petites différences de paramètres matériels. Fermez un environnement en cours avant de le modifier.</sys:String>
+    <sys:String x:Key="EnvironmentModeRunningHint">En cours. Fermez-le.</sys:String>
     <sys:String x:Key="SectionLanguage">Langue / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Ouvrir le dossier du navigateur</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Configurer le moteur</sys:String>

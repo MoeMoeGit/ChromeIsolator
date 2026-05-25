@@ -34,6 +34,54 @@
                     BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
                     CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
                 <StackPanel>
+                    <TextBlock Text="{DynamicResource SectionEnvironmentMode}" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                    <TextBlock Text="{DynamicResource EnvironmentModeDescription}"
+                               Foreground="{StaticResource TextTertiaryBrush}"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0" />
+                    <ItemsControl ItemsSource="{Binding ProfileModes}" Margin="0,10,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0"
+                                              IsChecked="{Binding EnableEnvironmentVariation}"
+                                              IsEnabled="{Binding CanChangeMode}">
+                                        <TextBlock Text="{Binding Title}"
+                                                   TextWrapping="Wrap" />
+                                    </CheckBox>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{DynamicResource EnvironmentModeRunningHint}"
+                                               Foreground="{StaticResource TextTertiaryBrush}"
+                                               FontSize="12"
+                                               Margin="12,0,0,0"
+                                               VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
+                <StackPanel>
                     <TextBlock Text="{DynamicResource SectionData}" FontWeight="SemiBold"
                                Foreground="{StaticResource TextSecondaryBrush}" />
                     <TextBlock Text="{DynamicResource LabelDataPath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />

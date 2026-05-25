@@ -26,7 +26,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本复刻。BrowserIsolator �
 2. 启动、关闭、全部关闭、新增、重命名、删除环境。
 3. 主窗口提供环境列表和环境详情；系统托盘提供快速启动 / 关闭入口。
 4. 首次运行说明隔离策略；优先使用已安装的官方 Stable Chrome，缺失时用户确认安装官方 Chrome，或用户明确选择 Edge Stable 备用。
-5. 使用 Chrome DevTools Protocol 注入轻量环境差异：
+5. 默认使用兼容模式，仅隔离 profile 数据目录；可在设置中为已关闭的指定环境启用 Chrome DevTools Protocol 轻量环境差异：
    - `navigator.hardwareConcurrency`
    - `navigator.deviceMemory`
 6. 设置面板提供浏览器引擎状态、版本、数据目录、路径复制、安装官方 Chrome、语言切换、更新检查等能力。
@@ -39,7 +39,8 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本复刻。BrowserIsolator �
 - **独立数据目录**：启动浏览器时通过 `--user-data-dir` 指向环境目录，隔离 Cookie、LocalStorage、登录状态、密码、缓存、扩展配置等数据。
 - **浏览器引擎**：优先使用官方 Stable Chrome 程序文件；Chrome 缺失且用户确认时可安装官方 Chrome；Edge Stable 只作为用户明确选择的备用引擎。
 - **托盘驻留**：关闭主窗口不退出应用；应用继续驻留系统托盘，便于快速启动和关闭环境。
-- **轻量环境差异**：通过 CDP 在页面中覆盖少量 navigator 属性，让不同环境有稳定但不同的 CPU 核心数和内存值。
+- **兼容模式**：默认不启用调试端口、不注入页面脚本，优先保证特定网站兼容性。
+- **轻量环境差异**：可按环境启用；通过 CDP 在页面中覆盖少量 navigator 属性，让不同环境有稳定但不同的 CPU 核心数和内存值。
 
 ## 技术栈
 
@@ -48,7 +49,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本复刻。BrowserIsolator �
 | 桌面应用 | C# / WPF / .NET | Windows 10/11 x86-64 桌面应用 |
 | UI 架构 | MVVM-ish | 使用清晰 ViewModel / Service 分层，不过度引入框架 |
 | 浏览器控制 | `System.Diagnostics.Process` | 启动、关闭和跟踪浏览器进程 |
-| CDP 通信 | HTTP + WebSocket | 访问 `/json/version`、`/json`，通过 browser-level WebSocket 注入脚本 |
+| CDP 通信 | HTTP + WebSocket | 仅在环境差异模式开启时访问 `/json/version`、`/json`，通过 browser-level WebSocket 注入脚本 |
 | 配置存储 | JSON 文件 | `%LOCALAPPDATA%\ChromeIsolator\config.json` |
 | 数据存储 | 文件系统 | `%LOCALAPPDATA%\ChromeIsolator\Profiles\` |
 | 安装包 | WiX MSI（优先） | 安装主程序到 `%ProgramFiles%\ChromeIsolator` |

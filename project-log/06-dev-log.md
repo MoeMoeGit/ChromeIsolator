@@ -4,6 +4,32 @@
 
 ---
 
+## 2026-05-25（默认兼容模式与按环境启用环境差异）
+
+**状态：进行中，待 Windows 实机验证**
+
+**触发原因**：用户反馈特定网站在系统 Chrome 下正常，但在 ChromeIsolator 环境中访问异常。初步判断风险点不是隔离 profile 本身，而是启动时无条件开启 `--remote-debugging-port` 并通过 CDP 注入 navigator 参数。
+
+**修改内容**：
+
+1. `Models/Profile.cs` — 新增 `EnableEnvironmentVariation`，默认 `false`，老环境升级后默认进入兼容模式。
+2. `Services/ChromeManager.cs` — 仅在环境启用差异模式时分配调试端口、传入 `--remote-debugging-port` 并启动 `FingerprintInjector`；默认模式只使用独立 `--user-data-dir`。
+3. `SettingsWindow.xaml` / `SettingsViewModel.cs` — 设置页新增“环境差异模式”区域，按环境勾选；运行中的环境不可切换，需关闭后再改。
+4. `Resources/Strings*.xaml`、`README.md`、项目文档 — 同步默认兼容模式和可选环境差异模式文案。
+
+**验证方式**：
+
+- `xmllint --noout` 校验设置页和 7 个资源文件。
+- `git diff --check`
+
+**验证结果**：
+
+- 通过。XAML / 资源 XML 结构有效。
+- 通过。无空白错误。
+- 未执行。当前 macOS 环境没有 `dotnet` 命令，WPF 编译和实机行为待 Windows 设备验证。
+
+---
+
 ## 2026-05-23（V1.6.8 最终检查与发布触发）
 
 **状态：✅ 已完成**

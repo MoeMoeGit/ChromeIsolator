@@ -51,6 +51,9 @@
     <sys:String x:Key="LabelUpdateStatus">Статус обновления</sys:String>
     <sys:String x:Key="SectionUi">Интерфейс</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Показывать подробности (версия браузера, путь, сведения о системе)</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">Режим различий среды</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">По умолчанию используется режим совместимости: без порта отладки и без переопределений navigator. Отмеченные среды при следующем запуске получат небольшие различия аппаратных параметров. Запущенную среду сначала нужно закрыть.</sys:String>
+    <sys:String x:Key="EnvironmentModeRunningHint">Запущено. Закройте.</sys:String>
     <sys:String x:Key="SectionLanguage">Язык / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Открыть папку браузера</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Настроить движок</sys:String>

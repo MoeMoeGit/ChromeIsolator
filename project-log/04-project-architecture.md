@@ -2,7 +2,7 @@
 
 ## 系统架构
 
-ChromeIsolator 是本地优先的 Windows 桌面应用。应用本身负责管理配置、profile 目录、Chrome 进程和 CDP 注入，不依赖后端服务。
+ChromeIsolator 是本地优先的 Windows 桌面应用。应用本身负责管理配置、profile 目录、Chrome 进程和可选 CDP 注入，不依赖后端服务。
 
 ```text
 ┌──────────────────────────────┐
@@ -22,7 +22,7 @@ ChromeIsolator 是本地优先的 Windows 桌面应用。应用本身负责管�
                 │
 ┌───────────────▼────────────────────────────────────┐
 │                  本地系统资源                       │
-│ config.json / Profiles / Browser Process / CDP       │
+│ config.json / Profiles / Browser Process / optional CDP │
 └────────────────────────────────────────────────────┘
 ```
 
@@ -31,7 +31,7 @@ ChromeIsolator 是本地优先的 Windows 桌面应用。应用本身负责管�
 ```text
 用户操作
 → ViewModel 更新命令状态
-→ Service 执行文件系统 / 进程 / 网络 / CDP 操作
+→ Service 执行文件系统 / 进程 / 网络 / 可选 CDP 操作
 → Observable 状态回写 UI
 → 配置和 profile 数据落盘到 %LOCALAPPDATA%\ChromeIsolator
 ```
@@ -102,9 +102,9 @@ ChromeIsolator/
 - **原因**：目标使用场景包含 Douyin 等多账号登录，用户明确担心 Testing 版本触发风控；第三方浏览器来源和媒体能力不可控；私有提取官方 Chrome 在 Windows 上授权和稳定性不清晰；默认读取用户 Chrome profile 会串插件、设置和登录态。
 - **参考**：详见 `12-design-decisions.md` 的决策 2 和决策 5。
 
-### 决策 4：CDP 只注入轻量 navigator 差异
+### 决策 4：默认兼容模式，CDP 只作为可选轻量 navigator 差异
 
-- **选择**：仅覆盖 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory`。
+- **选择**：默认不启用调试端口、不注入页面脚本；用户可按已关闭环境启用环境差异模式，启用后仅覆盖 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory`。
 - **备选方案**：完整指纹模拟、代理 / 设备画像 / Canvas / WebGL 等反检测能力。
 - **原因**：复刻 BrowserIsolator 的现有功能和产品边界，不把项目扩展为反检测平台。
 - **参考**：详见 `10-planning-log.md` 的 ADR-004。
@@ -118,7 +118,7 @@ ChromeIsolator/
 | WiX Toolset | 待定 | 构建 MSI 安装包 |
 | Google Chrome Stable | 最新官方 Stable | 浏览器运行时 |
 | GitHub Releases API | v3 REST | 检查 ChromeIsolator 新版本 |
-| Chrome DevTools Protocol | 随 Chrome | 注入轻量环境差异 |
+| Chrome DevTools Protocol | 随 Chrome | 仅在环境差异模式开启时注入轻量环境差异 |
 
 ## 变更记录
 
