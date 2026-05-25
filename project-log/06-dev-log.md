@@ -4,11 +4,64 @@
 
 ---
 
+## 2026-05-25（V1.6.10 发布触发）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求提交 GitHub、推进一个版本号、打新 tag 并触发构建。
+
+**修改内容**：
+
+1. `Directory.Build.props` — 版本号从 `1.6.9` 推进到 `1.6.10`。
+2. `project-log/05-current-status.md` — 同步当前版本与任务状态，标记为 V1.6.10 待发布。
+
+**验证方式**：
+
+- `git diff --check`
+- `xmllint --noout src/ChromeIsolator.App/MainWindow.xaml src/ChromeIsolator.App/SettingsWindow.xaml src/ChromeIsolator.App/Resources/Strings*.xaml`
+- 多语言资源 key 对齐检查
+
+**验证结果**：
+
+- 通过。XAML / 资源 XML 结构有效。
+- 通过。7 个资源文件 key 完全一致。
+- 通过。无空白错误。
+- 未执行 Windows 编译。当前 macOS 环境没有 `dotnet` / `msbuild`，Release 编译由 GitHub Actions Windows runner 执行。
+
+## 2026-05-25（环境备注与外部链接）
+
+**状态：进行中，待 Windows 实机验证**
+
+**触发原因**：用户提出两个轻量多环境管理需求：环境备注用于辅助识别环境；外部链接用于让 ChromeIsolator 作为系统默认浏览器接收其他 App 打开的 http / https 链接，并固定转发到一个默认环境。
+
+**修改内容**：
+
+1. `Models/Profile.cs` / `ProfileManager.cs` / `ProfileViewModel.cs` — 新增环境备注字段、保存逻辑和详情展示状态。
+2. `MainWindow.xaml` / `SimpleInputDialog.cs` — 右侧详情动作和左侧右键菜单新增“编辑备注”，复用统一小弹窗，备注最多 120 个字符，空备注不显示。
+3. `Models/AppConfig.cs` / `SettingsWindow.xaml` / `SettingsViewModel.cs` — 新增外部链接默认目标环境配置和“设为默认浏览器”入口。
+4. `App.xaml.cs` / `MainViewModel.cs` / `ChromeManager.cs` / `ShellService.cs` — 新增启动参数 URL 解析、单实例管道转发、外部链接目标选择、启动中队列、运行中追加 URL、浏览器未就绪复制链接提示和当前用户级默认浏览器注册请求。
+5. `Resources/Strings*.xaml`、`README.md`、`project-log/*.md` — 同步环境备注、外部链接、基础模式 / 差异模式文案。
+
+**验证方式**：
+
+- 静态检查 XAML / 资源 XML 结构。
+- 多语言资源 key 对齐检查。
+- `git diff --check`。
+- 代码路径自查：无环境、无浏览器、目标未运行、目标启动中、目标已运行、冷启动外部链接、第二实例外部链接。
+
+**验证结果**：
+
+- 通过。`MainWindow.xaml`、`SettingsWindow.xaml` 和 7 个资源文件 XML 结构有效。
+- 通过。7 个资源文件 key 完全一致。
+- 通过。`git diff --check` 无空白错误。
+- 通过。未发现残留“兼容模式 / 环境差异模式”等旧入口命名；中文界面使用“基础模式 / 差异模式”。
+- 未执行 Windows 编译。当前 macOS 环境没有 `dotnet` / `msbuild`，WPF 编译和系统默认浏览器注册需 Windows 设备验证。
+
 ## 2026-05-25（V1.6.9 发布触发）
 
 **状态：✅ 已完成**
 
-**触发原因**：默认兼容模式与按环境启用环境差异功能已完成代码和文档自查，用户要求直接推进新版本、发布、打 tag 并触发 GitHub Actions 构建。
+**触发原因**：默认基础模式与按环境启用差异功能已完成代码和文档自查，用户要求直接推进新版本、发布、打 tag 并触发 GitHub Actions 构建。
 
 **修改内容**：
 
@@ -30,7 +83,7 @@
 
 ---
 
-## 2026-05-25（默认兼容模式与按环境启用环境差异）
+## 2026-05-25（默认基础模式与按环境启用差异模式）
 
 **状态：进行中，待 Windows 实机验证**
 
@@ -38,10 +91,10 @@
 
 **修改内容**：
 
-1. `Models/Profile.cs` — 新增 `EnableEnvironmentVariation`，默认 `false`，老环境升级后默认进入兼容模式。
+1. `Models/Profile.cs` — 新增 `EnableEnvironmentVariation`，默认 `false`，老环境升级后默认进入基础模式。
 2. `Services/ChromeManager.cs` — 仅在环境启用差异模式时分配调试端口、传入 `--remote-debugging-port` 并启动 `FingerprintInjector`；默认模式只使用独立 `--user-data-dir`。
-3. `SettingsWindow.xaml` / `SettingsViewModel.cs` — 设置页新增“环境差异模式”区域，按环境勾选；运行中的环境不可切换，需关闭后再改。
-4. `Resources/Strings*.xaml`、`README.md`、项目文档 — 同步默认兼容模式和可选环境差异模式文案。
+3. `SettingsWindow.xaml` / `SettingsViewModel.cs` — 设置页新增“差异模式”区域，按环境勾选；运行中的环境不可切换，需关闭后再改。
+4. `Resources/Strings*.xaml`、`README.md`、项目文档 — 同步默认基础模式和可选差异模式文案。
 
 **验证方式**：
 

@@ -16,8 +16,8 @@ ChromeIsolator 是本地优先的 Windows 桌面应用。应用本身负责管�
                 │
 ┌───────────────▼────────────────────────────────────┐
 │                    Services                         │
-│ ProfileManager / ChromeManager / PortAllocator      │
-│ FingerprintInjector / TrayService / Localization    │
+│ ProfileManager / ChromeManager / ShellService       │
+│ PortAllocator / FingerprintInjector / TrayService   │
 └───────────────┬────────────────────────────────────┘
                 │
 ┌───────────────▼────────────────────────────────────┐
@@ -34,6 +34,16 @@ ChromeIsolator 是本地优先的 Windows 桌面应用。应用本身负责管�
 → Service 执行文件系统 / 进程 / 网络 / 可选 CDP 操作
 → Observable 状态回写 UI
 → 配置和 profile 数据落盘到 %LOCALAPPDATA%\ChromeIsolator
+```
+
+外部链接数据流：
+
+```text
+系统 http / https 链接
+→ ChromeIsolator.exe "%1"
+→ 单实例管道转发到已运行实例
+→ MainViewModel 选择外部链接目标环境
+→ ChromeManager 启动环境或向同 profile Chrome 进程传入 URL
 ```
 
 ## 目录结构
@@ -102,12 +112,18 @@ ChromeIsolator/
 - **原因**：目标使用场景包含 Douyin 等多账号登录，用户明确担心 Testing 版本触发风控；第三方浏览器来源和媒体能力不可控；私有提取官方 Chrome 在 Windows 上授权和稳定性不清晰；默认读取用户 Chrome profile 会串插件、设置和登录态。
 - **参考**：详见 `12-design-decisions.md` 的决策 2 和决策 5。
 
-### 决策 4：默认兼容模式，CDP 只作为可选轻量 navigator 差异
+### 决策 4：默认基础模式，CDP 只作为可选轻量 navigator 差异
 
-- **选择**：默认不启用调试端口、不注入页面脚本；用户可按已关闭环境启用环境差异模式，启用后仅覆盖 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory`。
+- **选择**：默认不启用调试端口、不注入页面脚本；用户可按已关闭环境启用差异模式，启用后仅覆盖 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory`。
 - **备选方案**：完整指纹模拟、代理 / 设备画像 / Canvas / WebGL 等反检测能力。
 - **原因**：复刻 BrowserIsolator 的现有功能和产品边界，不把项目扩展为反检测平台。
 - **参考**：详见 `10-planning-log.md` 的 ADR-004。
+
+### 决策 5：环境备注保持轻量，外部链接固定进入一个默认环境
+
+- **选择**：环境备注只是一条可选纯文本；外部链接只处理 http / https，并固定进入设置页选择的一个环境。
+- **备选方案**：账号资料管理、标签系统、每次打开链接弹窗询问、复杂缓存重试。
+- **原因**：这两个功能都服务于多环境管理效率，不改变核心隔离模型；固定默认环境比每次询问更稳定，备注比拉长环境名称更适合辅助识别。
 
 ## 依赖关系
 
@@ -118,7 +134,8 @@ ChromeIsolator/
 | WiX Toolset | 待定 | 构建 MSI 安装包 |
 | Google Chrome Stable | 最新官方 Stable | 浏览器运行时 |
 | GitHub Releases API | v3 REST | 检查 ChromeIsolator 新版本 |
-| Chrome DevTools Protocol | 随 Chrome | 仅在环境差异模式开启时注入轻量环境差异 |
+| Chrome DevTools Protocol | 随 Chrome | 仅在差异模式开启时注入轻量环境差异 |
+| Windows 默认应用 / URL Protocol | Windows Shell | 接收系统外部 http / https 链接 |
 
 ## 变更记录
 

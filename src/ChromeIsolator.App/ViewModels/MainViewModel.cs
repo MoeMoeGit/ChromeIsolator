@@ -19,6 +19,7 @@ public sealed class MainViewModel : ObservableObject
     private bool _showAdvancedDetails;
     private bool _isShuttingDown;
     private bool _isBulkStopping;
+    private readonly Dictionary<string, List<string>> _pendingExternalUrls = [];
 
     public MainViewModel(ProfileManager profileManager, ChromeManager chromeManager, UpdateService updateService)
     {
@@ -38,6 +39,7 @@ public sealed class MainViewModel : ObservableObject
         PrepareChromeCommand = new RelayCommand(PrepareChrome);
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         RenameSelectedCommand = new RelayCommand(RenameSelected, () => SelectedProfile is not null);
+        EditNoteCommand = new RelayCommand(EditSelectedNote, () => SelectedProfile is not null);
         DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null);
         ClearErrorCommand = new RelayCommand(ClearError, () => SelectedProfile is not null && !string.IsNullOrEmpty(SelectedProfile?.Error));
         RetrySelectedCommand = new RelayCommand(RetrySelected, () => SelectedProfile is not null && !SelectedProfile!.IsRunning && !string.IsNullOrEmpty(SelectedProfile?.Error));
@@ -78,6 +80,7 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand PrepareChromeCommand { get; }
     public RelayCommand OpenSettingsCommand { get; }
     public RelayCommand RenameSelectedCommand { get; }
+    public RelayCommand EditNoteCommand { get; }
     public RelayCommand DeleteSelectedCommand { get; }
     public RelayCommand ClearErrorCommand { get; }
     public RelayCommand RetrySelectedCommand { get; }
@@ -432,6 +435,28 @@ public sealed class MainViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedProfileTitle));
     }
 
+    private void EditSelectedNote()
+    {
+        if (SelectedProfile is null)
+        {
+            return;
+        }
+
+        var input = SimpleInputDialog.Show(
+            L10n.GetString("MsgEditNoteTitle"),
+            L10n.GetString("MsgEditNoteMessage"),
+            SelectedProfile.Model.Note,
+            maxLength: 120,
+            multiline: true);
+        if (input is null)
+        {
+            return;
+        }
+
+        _profileManager.UpdateProfileNote(SelectedProfile.Model, input);
+        SelectedProfile.RefreshNote();
+    }
+
     private void DeleteSelected()
     {
         if (SelectedProfile is null)
@@ -494,7 +519,7 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    public void StartProfile(ProfileViewModel profile)
+    public void StartProfile(ProfileViewModel profile, string? initialUrl = null)
     {
         if (_isBulkStopping)
         {
@@ -506,11 +531,12 @@ public sealed class MainViewModel : ObservableObject
             profile.Error = null;
             profile.IsStarting = true;
             RaiseCommandState();
-            _chromeManager.Start(profile.Model);
+            _chromeManager.Start(profile.Model, initialUrl);
             profile.IsStarting = false;
             profile.IsRunning = true;
             profile.DebugPort = _chromeManager.DebugPort(profile.Model);
             profile.LastUsed = DateTime.Now;
+            OpenPendingExternalUrls(profile);
             RaiseCommandState();
             SortProfiles();
         }
@@ -518,8 +544,57 @@ public sealed class MainViewModel : ObservableObject
         {
             profile.IsStarting = false;
             profile.Error = ex.Message;
+            if (!string.IsNullOrWhiteSpace(initialUrl))
+            {
+                ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), initialUrl);
+            }
             RefreshChromeStatus();
             RaiseCommandState();
+        }
+    }
+
+    public void HandleExternalLink(string url)
+    {
+        if (!IsHttpUrl(url))
+        {
+            ShowExternalLinkError(L10n.GetString("MsgExternalLinkInvalid"), url);
+            return;
+        }
+
+        var target = ResolveExternalLinkProfile();
+        if (target is null)
+        {
+            ShowExternalLinkError(L10n.GetString("MsgExternalLinkNoProfiles"), url);
+            return;
+        }
+
+        if (_chromeManager.CurrentChrome is null)
+        {
+            ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), url);
+            return;
+        }
+
+        try
+        {
+            if (target.IsStarting)
+            {
+                QueueExternalUrl(target.Folder, url);
+                return;
+            }
+
+            if (target.IsRunning)
+            {
+                _chromeManager.OpenUrl(target.Model, url);
+                target.LastUsed = DateTime.Now;
+                SortProfiles();
+                return;
+            }
+
+            StartProfile(target, url);
+        }
+        catch
+        {
+            ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), url);
         }
     }
 
@@ -560,6 +635,72 @@ public sealed class MainViewModel : ObservableObject
         });
     }
 
+    private ProfileViewModel? ResolveExternalLinkProfile()
+    {
+        if (Profiles.Count == 0)
+        {
+            return null;
+        }
+
+        var configuredFolder = _profileManager.Config.ExternalLinkProfileFolder;
+        if (!string.IsNullOrWhiteSpace(configuredFolder))
+        {
+            var configured = Profiles.FirstOrDefault(profile =>
+                string.Equals(profile.Folder, configuredFolder, StringComparison.OrdinalIgnoreCase));
+            if (configured is not null)
+            {
+                return configured;
+            }
+        }
+
+        return Profiles
+            .OrderBy(profile => profile.Model.InstanceNumber == 0 ? int.MaxValue : profile.Model.InstanceNumber)
+            .ThenBy(profile => profile.Folder, StringComparer.OrdinalIgnoreCase)
+            .FirstOrDefault();
+    }
+
+    private void QueueExternalUrl(string folder, string url)
+    {
+        if (!_pendingExternalUrls.TryGetValue(folder, out var urls))
+        {
+            urls = [];
+            _pendingExternalUrls[folder] = urls;
+        }
+
+        urls.Add(url);
+    }
+
+    private void OpenPendingExternalUrls(ProfileViewModel profile)
+    {
+        if (!_pendingExternalUrls.Remove(profile.Folder, out var urls))
+        {
+            return;
+        }
+
+        foreach (var url in urls)
+        {
+            try
+            {
+                _chromeManager.OpenUrl(profile.Model, url);
+            }
+            catch
+            {
+                ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), url);
+            }
+        }
+    }
+
+    private static bool IsHttpUrl(string url)
+    {
+        return Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
+            uri.Scheme is "http" or "https";
+    }
+
+    private static void ShowExternalLinkError(string message, string url)
+    {
+        SimpleInputDialog.ShowCopyMessage(L10n.GetString("ExternalLinkTitle"), message, url);
+    }
+
     private void OnLanguageChanged()
     {
         RefreshChromeStatus();
@@ -577,6 +718,7 @@ public sealed class MainViewModel : ObservableObject
         StartSelectedCommand.RaiseCanExecuteChanged();
         StopSelectedCommand.RaiseCanExecuteChanged();
         RenameSelectedCommand.RaiseCanExecuteChanged();
+        EditNoteCommand.RaiseCanExecuteChanged();
         DeleteSelectedCommand.RaiseCanExecuteChanged();
         ClearErrorCommand.RaiseCanExecuteChanged();
         RetrySelectedCommand.RaiseCanExecuteChanged();

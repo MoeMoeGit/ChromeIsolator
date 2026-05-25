@@ -158,10 +158,12 @@ public sealed class ProfileViewModel : ObservableObject
 
     public string DebugPortText => DebugPort?.ToString(CultureInfo.InvariantCulture) ?? "-";
     public string ErrorText => string.IsNullOrWhiteSpace(Error) ? "-" : Error;
+    public string NoteText => Model.Note;
 
     public bool HasError => !string.IsNullOrWhiteSpace(Error);
     public bool HasMeta => LastUsedText != "-" || DiskSizeText != "-";
     public bool HasDiskSize => DiskSizeText != "-";
+    public bool HasNote => !string.IsNullOrWhiteSpace(Model.Note);
 
     public string LastUsedText
     {
@@ -208,6 +210,12 @@ public sealed class ProfileViewModel : ObservableObject
     public void RefreshTitle()
     {
         OnPropertyChanged(nameof(Title));
+    }
+
+    public void RefreshNote()
+    {
+        OnPropertyChanged(nameof(NoteText));
+        OnPropertyChanged(nameof(HasNote));
     }
 
     public void RefreshDiskSize()

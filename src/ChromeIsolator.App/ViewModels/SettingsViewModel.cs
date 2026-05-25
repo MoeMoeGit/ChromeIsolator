@@ -14,6 +14,7 @@ public sealed class SettingsViewModel : ObservableObject
     private bool _isCheckingForUpdates;
     private bool _showAdvancedDetails;
     private L10n.LanguageOption _selectedLanguage;
+    private SettingsProfileOptionViewModel? _selectedExternalLinkProfile;
 
     public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService, ProfileManager profileManager, Action reinstallChrome)
     {
@@ -27,6 +28,12 @@ public sealed class SettingsViewModel : ObservableObject
         ProfileModes = _profileManager.Config.Profiles
             .Select(profile => new SettingsProfileModeViewModel(profile, _profileManager, _chromeManager))
             .ToList();
+        ExternalLinkProfiles = _profileManager.Config.Profiles
+            .OrderBy(profile => profile.InstanceNumber == 0 ? int.MaxValue : profile.InstanceNumber)
+            .ThenBy(profile => profile.Folder, StringComparer.OrdinalIgnoreCase)
+            .Select(profile => new SettingsProfileOptionViewModel(profile))
+            .ToList();
+        _selectedExternalLinkProfile = ResolveSelectedExternalLinkProfile();
         _selectedLanguage = Languages.FirstOrDefault(l => l.Code == L10n.CurrentLanguage) ?? Languages[0];
 
         OpenDataFolderCommand = new RelayCommand(() => ShellService.OpenFolder(AppPaths.SupportDir));
@@ -38,6 +45,7 @@ public sealed class SettingsViewModel : ObservableObject
         OpenIssuesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.IssuesUrl));
         CopyEmailCommand = new RelayCommand(() => ShellService.CopyText(ContactEmail));
         ReinstallChromeCommand = new RelayCommand(() => { _reinstallChrome(); RefreshChromeStatus(); });
+        SetDefaultBrowserCommand = new RelayCommand(ShellService.RequestDefaultBrowser);
 
         RefreshChromeStatus();
         UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
@@ -45,6 +53,7 @@ public sealed class SettingsViewModel : ObservableObject
 
     public IReadOnlyList<L10n.LanguageOption> Languages { get; }
     public IReadOnlyList<SettingsProfileModeViewModel> ProfileModes { get; }
+    public IReadOnlyList<SettingsProfileOptionViewModel> ExternalLinkProfiles { get; }
 
     public L10n.LanguageOption SelectedLanguage
     {
@@ -62,6 +71,22 @@ public sealed class SettingsViewModel : ObservableObject
                 {
                     profileMode.RefreshLocalizedProperties();
                 }
+                foreach (var profile in ExternalLinkProfiles)
+                {
+                    profile.RefreshLocalizedProperties();
+                }
+            }
+        }
+    }
+
+    public SettingsProfileOptionViewModel? SelectedExternalLinkProfile
+    {
+        get => _selectedExternalLinkProfile;
+        set
+        {
+            if (SetProperty(ref _selectedExternalLinkProfile, value))
+            {
+                _profileManager.SetExternalLinkProfile(value?.Model);
             }
         }
     }
@@ -75,6 +100,7 @@ public sealed class SettingsViewModel : ObservableObject
     public RelayCommand OpenIssuesCommand { get; }
     public RelayCommand CopyEmailCommand { get; }
     public RelayCommand ReinstallChromeCommand { get; }
+    public RelayCommand SetDefaultBrowserCommand { get; }
 
     public string DataPath => AppPaths.SupportDir;
     public string ProfilesPath => AppPaths.ProfilesDir;
@@ -166,6 +192,56 @@ public sealed class SettingsViewModel : ObservableObject
         }
 
         ShellService.OpenFolder(AppPaths.SupportDir);
+    }
+
+    private SettingsProfileOptionViewModel? ResolveSelectedExternalLinkProfile()
+    {
+        if (ExternalLinkProfiles.Count == 0)
+        {
+            return null;
+        }
+
+        var configuredFolder = _profileManager.Config.ExternalLinkProfileFolder;
+        if (!string.IsNullOrWhiteSpace(configuredFolder))
+        {
+            var configured = ExternalLinkProfiles.FirstOrDefault(profile =>
+                string.Equals(profile.Folder, configuredFolder, StringComparison.OrdinalIgnoreCase));
+            if (configured is not null)
+            {
+                return configured;
+            }
+        }
+
+        var fallback = ExternalLinkProfiles[0];
+        _profileManager.SetExternalLinkProfile(fallback.Model);
+        return fallback;
+    }
+}
+
+public sealed class SettingsProfileOptionViewModel : ObservableObject
+{
+    public SettingsProfileOptionViewModel(Profile model)
+    {
+        Model = model;
+    }
+
+    public Profile Model { get; }
+    public string Folder => Model.Folder;
+
+    public string Title
+    {
+        get
+        {
+            var defaultName = string.Format(L10n.GetString("LabelFolder") == "Folder" ? "Profile {0}" : "环境{0}", Model.InstanceNumber);
+            return string.IsNullOrWhiteSpace(Model.DisplayName)
+                ? defaultName
+                : $"{defaultName} - {Model.DisplayName}";
+        }
+    }
+
+    public void RefreshLocalizedProperties()
+    {
+        OnPropertyChanged(nameof(Title));
     }
 }
 

@@ -14,6 +14,7 @@
     <sys:String x:Key="BtnPrepareChrome">Настроить движок</sys:String>
     <sys:String x:Key="BtnSettings">Настройки</sys:String>
     <sys:String x:Key="BtnRename">Переименовать</sys:String>
+    <sys:String x:Key="BtnEditNote">Изменить заметку</sys:String>
     <sys:String x:Key="BtnDelete">Удалить</sys:String>
     <sys:String x:Key="SectionProfiles">Среды</sys:String>
     <sys:String x:Key="SelectProfile">Выберите среду</sys:String>
@@ -25,6 +26,7 @@
     <sys:String x:Key="LabelLastUsed">Последнее использование</sys:String>
     <sys:String x:Key="LabelDiskSize">Дисковое пространство</sys:String>
     <sys:String x:Key="LabelError">Ошибка</sys:String>
+    <sys:String x:Key="LabelNote">Заметка</sys:String>
     <sys:String x:Key="SectionAdvancedInfo">Расширенная информация</sys:String>
     <sys:String x:Key="LabelChromeVersion">Версия браузера</sys:String>
     <sys:String x:Key="LabelChromePath">Путь браузера</sys:String>
@@ -51,9 +53,13 @@
     <sys:String x:Key="LabelUpdateStatus">Статус обновления</sys:String>
     <sys:String x:Key="SectionUi">Интерфейс</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Показывать подробности (версия браузера, путь, сведения о системе)</sys:String>
-    <sys:String x:Key="SectionEnvironmentMode">Режим различий среды</sys:String>
-    <sys:String x:Key="EnvironmentModeDescription">По умолчанию используется режим совместимости: без порта отладки и без переопределений navigator. Отмеченные среды при следующем запуске получат небольшие различия аппаратных параметров. Запущенную среду сначала нужно закрыть.</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">Режим различий</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">По умолчанию используется базовый режим: без порта отладки и без переопределений navigator. Отмеченные среды при следующем запуске используют режим различий с небольшими изменениями аппаратных параметров. Запущенную среду сначала нужно закрыть.</sys:String>
     <sys:String x:Key="EnvironmentModeRunningHint">Запущено. Закройте.</sys:String>
+    <sys:String x:Key="SectionExternalLinks">Внешние ссылки</sys:String>
+    <sys:String x:Key="ExternalLinkDescription">Когда другие приложения открывают ссылки http / https, они отправляются в выбранную среду.</sys:String>
+    <sys:String x:Key="LabelExternalLinkTarget">Открывать в</sys:String>
+    <sys:String x:Key="BtnSetDefaultBrowser">Сделать браузером по умолчанию</sys:String>
     <sys:String x:Key="SectionLanguage">Язык / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Открыть папку браузера</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Настроить движок</sys:String>
@@ -67,6 +73,7 @@
     <sys:String x:Key="DownloadPreparingStatus">Подготовка...</sys:String>
     <sys:String x:Key="BtnCancel">Отмена</sys:String>
     <sys:String x:Key="BtnClose">Закрыть</sys:String>
+    <sys:String x:Key="BtnCopyLink">Копировать ссылку</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Проверить снова</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">Установить официальный Chrome</sys:String>
     <sys:String x:Key="BtnOpenOfficialChromePage">Открыть официальную страницу Chrome</sys:String>
@@ -101,6 +108,12 @@
     <sys:String x:Key="MsgDeleteTitle">Подтвердить удаление</sys:String>
     <sys:String x:Key="MsgRenameTitle">Переименовать</sys:String>
     <sys:String x:Key="MsgRenameMessage">Введите понятное имя</sys:String>
+    <sys:String x:Key="MsgEditNoteTitle">Изменить заметку</sys:String>
+    <sys:String x:Key="MsgEditNoteMessage">Введите аккаунт, клиента, назначение или заметки для этой среды. До 120 символов.</sys:String>
+    <sys:String x:Key="ExternalLinkTitle">Внешняя ссылка</sys:String>
+    <sys:String x:Key="MsgExternalLinkNoProfiles">Нет доступных сред. Сначала создайте среду.</sys:String>
+    <sys:String x:Key="MsgExternalLinkBrowserNotReady">Движок браузера не готов, поэтому ссылка не может быть открыта. Можно сначала скопировать ссылку.</sys:String>
+    <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator обрабатывает только ссылки http и https. При необходимости скопируйте эту ссылку вручную.</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}&#x0A;&#x0A;Перейти к загрузке?</sys:String>
     <sys:String x:Key="MsgUpToDate">Уже актуальная версия ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Ошибка проверки обновлений: {0}</sys:String>

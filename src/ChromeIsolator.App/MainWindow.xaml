@@ -188,6 +188,7 @@
                             <ListBox.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="{DynamicResource BtnRename}" Command="{Binding PlacementTarget.DataContext.RenameSelectedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                    <MenuItem Header="{DynamicResource BtnEditNote}" Command="{Binding PlacementTarget.DataContext.EditNoteCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                     <MenuItem Header="{DynamicResource BtnDelete}" Command="{Binding PlacementTarget.DataContext.DeleteSelectedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                 </ContextMenu>
                             </ListBox.ContextMenu>
@@ -327,6 +328,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Text="{DynamicResource LabelLastUsed}" Foreground="{StaticResource TextTertiaryBrush}" />
@@ -343,6 +345,11 @@
 
                                 <TextBlock Grid.Row="4" Text="{DynamicResource LabelDebugPort}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
                                 <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProfile.DebugPortText}" Margin="0,10,0,0" />
+
+                                <TextBlock Grid.Row="5" Text="{DynamicResource LabelNote}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0"
+                                           Visibility="{Binding SelectedProfile.HasNote, Converter={StaticResource BoolToVis}}" />
+                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedProfile.NoteText}" TextWrapping="Wrap" Margin="0,10,0,0"
+                                           Visibility="{Binding SelectedProfile.HasNote, Converter={StaticResource BoolToVis}}" />
                             </Grid>
                         </StackPanel>
 
@@ -351,6 +358,15 @@
                             <TextBlock Text="{DynamicResource SectionActions}" FontWeight="SemiBold"
                                        Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
                             <WrapPanel Margin="0,10,0,0">
+                                <Button Style="{StaticResource SecondaryButton}"
+                                        Command="{Binding EditNoteCommand}"
+                                        Padding="10,5" FontSize="12" Margin="0,0,6,6">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE70F;" FontFamily="Segoe Fluent Icons" FontSize="12"
+                                                   VerticalAlignment="Center" Margin="0,0,5,0" />
+                                        <TextBlock Text="{DynamicResource BtnEditNote}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
                                 <Button Style="{StaticResource SecondaryButton}"
                                         Command="{Binding OpenProfileFolderCommand}"
                                         Padding="10,5" FontSize="12" Margin="0,0,6,6">

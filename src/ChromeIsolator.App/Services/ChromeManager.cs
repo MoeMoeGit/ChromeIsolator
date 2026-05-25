@@ -73,7 +73,7 @@ public sealed class ChromeManager
         SetForegroundWindow(handle);
     }
 
-    public void Start(Profile profile)
+    public void Start(Profile profile, string? initialUrl = null)
     {
         var chromePath = CurrentChrome?.ExecutablePath
             ?? throw new InvalidOperationException(L10n.GetString("ChromeNotFound"));
@@ -119,6 +119,10 @@ public sealed class ChromeManager
                 startInfo.ArgumentList.Add($"--remote-debugging-port={port.Value}");
             }
             startInfo.ArgumentList.Add($"--window-position={offsetX},{offsetY}");
+            if (!string.IsNullOrWhiteSpace(initialUrl))
+            {
+                startInfo.ArgumentList.Add(initialUrl);
+            }
 
             var process = new Process
             {
@@ -170,6 +174,26 @@ public sealed class ChromeManager
                 _ = injector.StartAsync();
             }
         }
+    }
+
+    public void OpenUrl(Profile profile, string url)
+    {
+        var chromePath = CurrentChrome?.ExecutablePath
+            ?? throw new InvalidOperationException(L10n.GetString("ChromeNotFound"));
+
+        var profileDir = AppPaths.ProfileDir(profile.Folder);
+        Directory.CreateDirectory(profileDir);
+
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = chromePath,
+            UseShellExecute = false
+        };
+        startInfo.ArgumentList.Add($"--user-data-dir={profileDir}");
+        startInfo.ArgumentList.Add("--no-first-run");
+        startInfo.ArgumentList.Add(url);
+
+        Process.Start(startInfo);
     }
 
     public void Stop(Profile profile)

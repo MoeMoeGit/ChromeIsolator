@@ -34,6 +34,18 @@ public sealed class ProfileManager
         Save();
     }
 
+    public void UpdateProfileNote(Profile profile, string note)
+    {
+        profile.Note = TrimNote(note);
+        Save();
+    }
+
+    public void SetExternalLinkProfile(Profile? profile)
+    {
+        Config.ExternalLinkProfileFolder = profile?.Folder;
+        Save();
+    }
+
     public void MoveProfileToRecycleBin(Profile profile)
     {
         var folder = profile.Folder;
@@ -44,6 +56,10 @@ public sealed class ProfileManager
         }
 
         Config.Profiles.RemoveAll(item => string.Equals(item.Folder, folder, StringComparison.OrdinalIgnoreCase));
+        if (string.Equals(Config.ExternalLinkProfileFolder, folder, StringComparison.OrdinalIgnoreCase))
+        {
+            Config.ExternalLinkProfileFolder = null;
+        }
         Save();
     }
 
@@ -144,5 +160,12 @@ public sealed class ProfileManager
         }
 
         return nextNumber;
+    }
+
+    private static string TrimNote(string note)
+    {
+        const int maxLength = 120;
+        var trimmed = note.Trim();
+        return trimmed.Length <= maxLength ? trimmed : trimmed[..maxLength];
     }
 }

@@ -8,7 +8,8 @@
 |------|----------|------|
 | 对外 HTTP API | 否 | 不作为服务端对外提供接口 |
 | 后端业务 API | 否 | 无后端服务 |
-| 本地 Chrome DevTools Protocol | 是，作为外部依赖调用 | 仅在环境差异模式开启时连接 ChromeIsolator 启动的 Chrome 本机调试端口 |
+| 本地 Chrome DevTools Protocol | 是，作为外部依赖调用 | 仅在差异模式开启时连接 ChromeIsolator 启动的 Chrome 本机调试端口 |
+| Windows URL Protocol / 默认应用 | 是，作为系统集成调用 | 用于接收其他 App 打开的 http / https 链接，并转发到选定环境 |
 | GitHub Releases API | 是，作为外部依赖调用 | 用于检查应用更新 |
 
 ## 认证方式
@@ -25,11 +26,15 @@ ChromeIsolator 会调用以下外部 / 本机接口，详细信息见 `09-extern
   - browser-level WebSocket
 - GitHub Releases API：
   - `https://api.github.com/repos/{owner}/ChromeIsolator/releases/latest`
+- Windows 默认应用 / URL Protocol：
+  - 写入当前用户级浏览器能力注册表项
+  - 打开 `ms-settings:defaultapps` 让用户完成默认浏览器选择
 
 ## 设计决策
 
 - 不开放本地 HTTP 控制 API，避免额外攻击面。
-- CDP 调试端口只在环境差异模式开启时启用，只绑定本机回环地址，并且只用于应用自己启动的 Chrome 实例。
+- CDP 调试端口只在差异模式开启时启用，只绑定本机回环地址，并且只用于应用自己启动的 Chrome 实例。
+- 外部链接只处理 `http` 和 `https`，不扩展为通用协议路由器；设置默认浏览器只发起系统请求，不检测或强制修改成功状态。
 - 更新检查只读取公开 Release 信息，不上传本机数据。
 
 ## 变更记录

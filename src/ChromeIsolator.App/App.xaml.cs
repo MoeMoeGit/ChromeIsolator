@@ -1,6 +1,7 @@
 using System.Windows;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
+using System.Text;
 using ChromeIsolator.Services;
 using ChromeIsolator.ViewModels;
 using WpfApplication = System.Windows.Application;
@@ -34,9 +35,10 @@ public partial class App : WpfApplication
         try
         {
             _singleInstanceMutex = new Mutex(true, SingleInstanceMutexName, out var isFirstInstance);
+            var externalUrl = ExtractExternalUrl(e.Args);
             if (!isFirstInstance)
             {
-                NotifyExistingInstance();
+                NotifyExistingInstance(externalUrl);
                 Shutdown();
                 return;
             }
@@ -57,9 +59,16 @@ public partial class App : WpfApplication
             _trayService = new TrayService(_mainWindow, mainViewModel);
             _trayService.Initialize();
 
-            _mainWindow.Show();
-            StartSingleInstanceListener();
-            mainViewModel.ShowDownloadIfNeeded();
+            StartSingleInstanceListener(mainViewModel);
+            if (externalUrl is not null)
+            {
+                mainViewModel.HandleExternalLink(externalUrl);
+            }
+            else
+            {
+                _mainWindow.Show();
+                mainViewModel.ShowDownloadIfNeeded();
+            }
         }
         catch (Exception ex)
         {
@@ -122,7 +131,7 @@ public partial class App : WpfApplication
         }
     }
 
-    private void StartSingleInstanceListener()
+    private void StartSingleInstanceListener(MainViewModel mainViewModel)
     {
         _singleInstanceCts = new CancellationTokenSource();
         var token = _singleInstanceCts.Token;
@@ -142,9 +151,15 @@ public partial class App : WpfApplication
 
                     await server.WaitForConnectionAsync(token).ConfigureAwait(false);
                     using var reader = new StreamReader(server);
-                    _ = await reader.ReadLineAsync(token).ConfigureAwait(false);
-
-                    await Dispatcher.InvokeAsync(() => _mainWindow?.ShowFromTray()).Task.ConfigureAwait(false);
+                    var message = await reader.ReadLineAsync(token).ConfigureAwait(false);
+                    if (TryParseExternalUrlMessage(message, out var url))
+                    {
+                        await Dispatcher.InvokeAsync(() => mainViewModel.HandleExternalLink(url)).Task.ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await Dispatcher.InvokeAsync(() => _mainWindow?.ShowFromTray()).Task.ConfigureAwait(false);
+                    }
                 }
                 catch (OperationCanceledException)
                 {
@@ -158,7 +173,7 @@ public partial class App : WpfApplication
         }, token);
     }
 
-    private static void NotifyExistingInstance()
+    private static void NotifyExistingInstance(string? externalUrl)
     {
         AllowSetForegroundWindow(ASFW_ANY);
 
@@ -169,7 +184,7 @@ public partial class App : WpfApplication
                 using var client = new NamedPipeClientStream(".", SingleInstancePipeName, PipeDirection.Out);
                 client.Connect(250);
                 using var writer = new StreamWriter(client) { AutoFlush = true };
-                writer.WriteLine("show");
+                writer.WriteLine(CreateSingleInstanceMessage(externalUrl));
                 return;
             }
             catch
@@ -181,4 +196,42 @@ public partial class App : WpfApplication
 
     [DllImport("user32.dll")]
     private static extern bool AllowSetForegroundWindow(int dwProcessId);
+
+    private static string? ExtractExternalUrl(IEnumerable<string> args)
+    {
+        return args.FirstOrDefault(arg =>
+            Uri.TryCreate(arg, UriKind.Absolute, out var uri) &&
+            uri.Scheme is "http" or "https");
+    }
+
+    private static string CreateSingleInstanceMessage(string? externalUrl)
+    {
+        if (string.IsNullOrWhiteSpace(externalUrl))
+        {
+            return "show";
+        }
+
+        return "open-url " + Convert.ToBase64String(Encoding.UTF8.GetBytes(externalUrl));
+    }
+
+    private static bool TryParseExternalUrlMessage(string? message, out string url)
+    {
+        url = "";
+        const string prefix = "open-url ";
+        if (string.IsNullOrWhiteSpace(message) || !message.StartsWith(prefix, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        try
+        {
+            url = Encoding.UTF8.GetString(Convert.FromBase64String(message[prefix.Length..]));
+            return Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https";
+        }
+        catch
+        {
+            url = "";
+            return false;
+        }
+    }
 }

@@ -14,6 +14,7 @@
     <sys:String x:Key="BtnPrepareChrome">Browser engine settings</sys:String>
     <sys:String x:Key="BtnSettings">Settings</sys:String>
     <sys:String x:Key="BtnRename">Rename</sys:String>
+    <sys:String x:Key="BtnEditNote">Edit note</sys:String>
     <sys:String x:Key="BtnDelete">Delete</sys:String>
     <sys:String x:Key="SectionProfiles">Environments</sys:String>
     <sys:String x:Key="SelectProfile">Select an environment</sys:String>
@@ -25,6 +26,7 @@
     <sys:String x:Key="LabelLastUsed">Last used</sys:String>
     <sys:String x:Key="LabelDiskSize">Storage used</sys:String>
     <sys:String x:Key="LabelError">Error</sys:String>
+    <sys:String x:Key="LabelNote">Note</sys:String>
     <sys:String x:Key="SectionAdvancedInfo">Advanced info</sys:String>
     <sys:String x:Key="LabelChromeVersion">Browser version</sys:String>
     <sys:String x:Key="LabelChromePath">Browser path</sys:String>
@@ -51,9 +53,13 @@
     <sys:String x:Key="LabelUpdateStatus">Update status</sys:String>
     <sys:String x:Key="SectionUi">Interface</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Show advanced details (browser version, path, system info)</sys:String>
-    <sys:String x:Key="SectionEnvironmentMode">Environment variation mode</sys:String>
-    <sys:String x:Key="EnvironmentModeDescription">Compatibility mode is the default: no debugging port and no navigator overrides. Checked environments will use environment variation mode on next launch, with small hardware parameter differences injected. Close a running environment before changing it.</sys:String>
+    <sys:String x:Key="SectionEnvironmentMode">Variation mode</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">Base mode is the default: no debugging port and no navigator overrides. Checked environments will use variation mode on next launch, with small hardware parameter differences injected. Close a running environment before changing it.</sys:String>
     <sys:String x:Key="EnvironmentModeRunningHint">Running. Close it to change.</sys:String>
+    <sys:String x:Key="SectionExternalLinks">External links</sys:String>
+    <sys:String x:Key="ExternalLinkDescription">When other apps open http / https links, send them to the selected environment by default.</sys:String>
+    <sys:String x:Key="LabelExternalLinkTarget">Open to</sys:String>
+    <sys:String x:Key="BtnSetDefaultBrowser">Set as default browser</sys:String>
     <sys:String x:Key="SectionLanguage">Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Open browser folder</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Browser engine settings</sys:String>
@@ -67,6 +73,7 @@
     <sys:String x:Key="DownloadPreparingStatus">Preparing...</sys:String>
     <sys:String x:Key="BtnCancel">Cancel</sys:String>
     <sys:String x:Key="BtnClose">Close</sys:String>
+    <sys:String x:Key="BtnCopyLink">Copy link</sys:String>
     <sys:String x:Key="BtnUseInstalledChrome">Check again</sys:String>
     <sys:String x:Key="BtnInstallOfficialChrome">Install official Chrome</sys:String>
     <sys:String x:Key="BtnOpenOfficialChromePage">Open Chrome download page</sys:String>
@@ -101,6 +108,12 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgDeleteTitle">Confirm delete</sys:String>
     <sys:String x:Key="MsgRenameTitle">Rename</sys:String>
     <sys:String x:Key="MsgRenameMessage">Enter a name to help identify it</sys:String>
+    <sys:String x:Key="MsgEditNoteTitle">Edit note</sys:String>
+    <sys:String x:Key="MsgEditNoteMessage">Enter the account, customer, purpose, or notes for this environment. Up to 120 characters.</sys:String>
+    <sys:String x:Key="ExternalLinkTitle">External link</sys:String>
+    <sys:String x:Key="MsgExternalLinkNoProfiles">No environment is available yet. Create an environment before opening external links.</sys:String>
+    <sys:String x:Key="MsgExternalLinkBrowserNotReady">The browser engine is not ready, so this link cannot be opened. You can copy the link first.</sys:String>
+    <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator only handles http and https links. You can copy this link and handle it manually.</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">New version available: {0}&#x0A;&#x0A;Go to download?</sys:String>
     <sys:String x:Key="MsgUpToDate">Already up to date ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Update check failed: {0}</sys:String>
