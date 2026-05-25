@@ -23,6 +23,9 @@
     <sys:String x:Key="LabelFolder">Folder</sys:String>
     <sys:String x:Key="LabelProfilePath">Data path</sys:String>
     <sys:String x:Key="LabelDebugPort">Debug port</sys:String>
+    <sys:String x:Key="DebugPortBaseMode">Base mode</sys:String>
+    <sys:String x:Key="DebugPortVariationMode">Variation mode</sys:String>
+    <sys:String x:Key="DebugPortVariationModeWithPort">Variation mode {0}</sys:String>
     <sys:String x:Key="LabelLastUsed">Last used</sys:String>
     <sys:String x:Key="LabelDiskSize">Storage used</sys:String>
     <sys:String x:Key="LabelError">Error</sys:String>
@@ -55,6 +58,12 @@
     <sys:String x:Key="ShowAdvancedDetails">Show advanced details (browser version, path, system info)</sys:String>
     <sys:String x:Key="SectionEnvironmentMode">Variation mode</sys:String>
     <sys:String x:Key="EnvironmentModeDescription">Base mode is the default: no debugging port and no navigator overrides. Checked environments will use variation mode on next launch, with small hardware parameter differences injected. Close a running environment before changing it.</sys:String>
+    <sys:String x:Key="EnvironmentModeSummary">{0} / {1} environments enabled</sys:String>
+    <sys:String x:Key="BtnManageEnvironmentModes">Manage environments</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerTitle">Manage variation mode</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">Select the environments that should use variation mode. Close running environments before changing them.</sys:String>
+    <sys:String x:Key="LabelSearchEnvironment">Search environments</sys:String>
+    <sys:String x:Key="ShowOnlyEditableModes">Show editable only</sys:String>
     <sys:String x:Key="EnvironmentModeRunningHint">Running. Close it to change.</sys:String>
     <sys:String x:Key="SectionExternalLinks">External links</sys:String>
     <sys:String x:Key="ExternalLinkDescription">When other apps open http / https links, send them to the selected environment by default.</sys:String>
@@ -109,7 +118,7 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgRenameTitle">Rename</sys:String>
     <sys:String x:Key="MsgRenameMessage">Enter a name to help identify it</sys:String>
     <sys:String x:Key="MsgEditNoteTitle">Edit note</sys:String>
-    <sys:String x:Key="MsgEditNoteMessage">Enter the account, customer, purpose, or notes for this environment. Up to 120 characters.</sys:String>
+    <sys:String x:Key="MsgEditNoteMessage">Enter a note for this environment, such as the account, purpose, or things to watch. Up to 120 characters.</sys:String>
     <sys:String x:Key="ExternalLinkTitle">External link</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">No environment is available yet. Create an environment before opening external links.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">The browser engine is not ready, so this link cannot be opened. You can copy the link first.</sys:String>

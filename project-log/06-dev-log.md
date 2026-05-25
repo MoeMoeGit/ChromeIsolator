@@ -4,6 +4,88 @@
 
 ---
 
+## 2026-05-25（V1.7.0 发布触发）
+
+**状态：进行中，待 GitHub 推送与 tag 构建**
+
+**触发原因**：用户要求将版本统一推进到 1.7.0，提交 GitHub，打新 tag，并触发 1.7.0 版本构建。
+
+**修改内容**：
+
+1. `Directory.Build.props` — 版本号从 `1.6.11` 推进到 `1.7.0`，同步 Assembly / File / Informational 版本。
+2. `README.md` — 当前版本、发布产物文件名和版本 tag 示例统一改为 `1.7.0`。
+3. `project-log/05-current-status.md` — 当前版本更新为 `V1.7.0 待发布`，同步当前阶段说明。
+
+**遇到的问题**：
+
+- 项目里保留了历史版本日志，不能把过去的 1.6.x 记录一并改成 1.7.0。
+
+**解决方式**：
+
+- 只更新当前版本展示、发布元数据和当前状态，历史日志保留原始版本轨迹。
+
+**验证方式**：
+
+- 版本字符串全局检索。
+- 后续执行 `dotnet build ChromeIsolator.sln`
+- 后续执行 Git 提交、tag 和 push
+
+**验证结果**：
+
+- 待执行。
+
+**本地产物清理**：
+
+- 无。
+
+---
+
+## 2026-05-25（详情面板与差异模式管理优化）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户要求优化主界面右侧详情备注展示顺序、备注编辑文案、调试端口模式展示，并解决设置页差异模式直接列出大量环境会撑爆页面的问题。
+
+**修改内容**：
+
+1. `MainWindow.xaml` / `ProfileViewModel.cs` / `MainViewModel.cs` — 备注在右侧基础信息中改为有内容时显示第一项；空备注完全不占位；调试端口字段在基础模式显示“基础模式”，差异模式运行时显示“差异模式 端口号”。
+2. `SettingsWindow.xaml` / `SettingsWindow.xaml.cs` / `EnvironmentModeWindow.xaml(.cs)` / `SettingsViewModel.cs` — 设置页差异模式改为启用数量概览和“管理环境”入口；二级窗口支持搜索、仅显示可切换环境，并保持运行中环境不可切换；环境退出事件刷新回到 UI 线程，避免列表视图跨线程刷新。
+3. `Resources/Strings*.xaml` — 更新备注编辑提示语，并补齐基础 / 差异模式端口文案、差异模式管理窗口文案的 7 语言资源。
+4. `README.md`、`project-log/01-function-design.md`、`10-planning-log.md`、`12-design-decisions.md`、`05-current-status.md` — 同步记录功能描述、ADR、长期设计决策和当前状态。
+
+**遇到的问题**：
+
+- 设置页原本直接渲染全部环境勾选项，环境数量大时会挤压其他设置项。
+- 详情面板备注如果只是调换 Grid 行号，空备注隐藏后仍可能留下视觉间距，需要让备注独立成可折叠行。
+- 进程退出事件不保证在 UI 线程触发，差异模式列表视图刷新需要调度回 WPF Dispatcher。
+
+**解决方式**：
+
+- 将差异模式环境选择拆到独立二级窗口，设置页只保留概览和入口。
+- 将备注行拆成独立可见性控制的 Grid，备注为空时整块折叠；最近使用仍作为无备注时的第一行。
+- 设置页收到环境退出事件时检查 Dispatcher 访问权，必要时用 `BeginInvoke` 回到 UI 线程再刷新模式状态。
+
+**验证方式**：
+
+- 多语言资源 key 对齐检查。
+- `dotnet build ChromeIsolator.sln`
+- `git diff --check`
+- `dotnet clean ChromeIsolator.sln`
+- 删除本轮生成的 `src/ChromeIsolator.App/bin/` 和 `src/ChromeIsolator.App/obj/`
+
+**验证结果**：
+
+- 通过。7 个资源文件 key 完全一致。
+- 通过。编译 0 警告、0 错误。
+- 通过。无空白错误。
+- 通过。已清理本轮 Debug 构建输出。
+
+**本地产物清理**：
+
+- 已通过 `dotnet clean ChromeIsolator.sln` 清理本轮 Debug 构建输出，并删除剩余的 `src/ChromeIsolator.App/bin/`、`src/ChromeIsolator.App/obj/` 可再生成目录。
+
+---
+
 ## 2026-05-25（评审复核与持久化修复）
 
 **状态：✅ 已完成**

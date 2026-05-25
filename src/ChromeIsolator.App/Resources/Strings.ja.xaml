@@ -23,6 +23,9 @@
     <sys:String x:Key="LabelFolder">フォルダ</sys:String>
     <sys:String x:Key="LabelProfilePath">データパス</sys:String>
     <sys:String x:Key="LabelDebugPort">デバッグポート</sys:String>
+    <sys:String x:Key="DebugPortBaseMode">基本モード</sys:String>
+    <sys:String x:Key="DebugPortVariationMode">差分モード</sys:String>
+    <sys:String x:Key="DebugPortVariationModeWithPort">差分モード {0}</sys:String>
     <sys:String x:Key="LabelLastUsed">最終使用</sys:String>
     <sys:String x:Key="LabelDiskSize">ディスク容量</sys:String>
     <sys:String x:Key="LabelError">エラー</sys:String>
@@ -55,6 +58,12 @@
     <sys:String x:Key="ShowAdvancedDetails">詳細情報を表示（ブラウザー バージョン、パス、システム情報）</sys:String>
     <sys:String x:Key="SectionEnvironmentMode">差分モード</sys:String>
     <sys:String x:Key="EnvironmentModeDescription">既定は基本モードです。デバッグ ポートも navigator の上書きも使いません。チェックした環境は次回起動時に差分モードを使い、少量のハードウェア パラメーター差分を注入します。実行中の環境は閉じてから切り替えてください。</sys:String>
+    <sys:String x:Key="EnvironmentModeSummary">{0} / {1} 個の環境で有効</sys:String>
+    <sys:String x:Key="BtnManageEnvironmentModes">環境を管理</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerTitle">差分モードを管理</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">差分モードを有効にする環境を選択します。実行中の環境は閉じてから変更してください。</sys:String>
+    <sys:String x:Key="LabelSearchEnvironment">環境を検索</sys:String>
+    <sys:String x:Key="ShowOnlyEditableModes">変更可能な環境のみ表示</sys:String>
     <sys:String x:Key="EnvironmentModeRunningHint">実行中。閉じると変更できます。</sys:String>
     <sys:String x:Key="SectionExternalLinks">外部リンク</sys:String>
     <sys:String x:Key="ExternalLinkDescription">他のアプリが http / https リンクを開くと、選択した環境へ送ります。</sys:String>
@@ -109,7 +118,7 @@
     <sys:String x:Key="MsgRenameTitle">名前変更</sys:String>
     <sys:String x:Key="MsgRenameMessage">識別しやすい名前を入力</sys:String>
     <sys:String x:Key="MsgEditNoteTitle">メモを編集</sys:String>
-    <sys:String x:Key="MsgEditNoteMessage">この環境のアカウント、顧客、用途、注意事項を入力します。最大 120 文字です。</sys:String>
+    <sys:String x:Key="MsgEditNoteMessage">この環境のメモを入力します。アカウント、用途、注意事項などを最大 120 文字で記録できます。</sys:String>
     <sys:String x:Key="ExternalLinkTitle">外部リンク</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">利用できる環境がありません。先に環境を作成してください。</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">ブラウザーエンジンの準備ができていないため、このリンクを開けません。先にリンクをコピーできます。</sys:String>

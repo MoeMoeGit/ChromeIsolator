@@ -23,6 +23,9 @@
     <sys:String x:Key="LabelFolder">Папка</sys:String>
     <sys:String x:Key="LabelProfilePath">Путь к данным</sys:String>
     <sys:String x:Key="LabelDebugPort">Порт отладки</sys:String>
+    <sys:String x:Key="DebugPortBaseMode">Базовый режим</sys:String>
+    <sys:String x:Key="DebugPortVariationMode">Режим различий</sys:String>
+    <sys:String x:Key="DebugPortVariationModeWithPort">Режим различий {0}</sys:String>
     <sys:String x:Key="LabelLastUsed">Последнее использование</sys:String>
     <sys:String x:Key="LabelDiskSize">Дисковое пространство</sys:String>
     <sys:String x:Key="LabelError">Ошибка</sys:String>
@@ -55,6 +58,12 @@
     <sys:String x:Key="ShowAdvancedDetails">Показывать подробности (версия браузера, путь, сведения о системе)</sys:String>
     <sys:String x:Key="SectionEnvironmentMode">Режим различий</sys:String>
     <sys:String x:Key="EnvironmentModeDescription">По умолчанию используется базовый режим: без порта отладки и без переопределений navigator. Отмеченные среды при следующем запуске используют режим различий с небольшими изменениями аппаратных параметров. Запущенную среду сначала нужно закрыть.</sys:String>
+    <sys:String x:Key="EnvironmentModeSummary">Включено {0} / {1} сред</sys:String>
+    <sys:String x:Key="BtnManageEnvironmentModes">Управлять средами</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerTitle">Управление режимом различий</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">Выберите среды, которые должны использовать режим различий. Запущенные среды сначала нужно закрыть.</sys:String>
+    <sys:String x:Key="LabelSearchEnvironment">Поиск сред</sys:String>
+    <sys:String x:Key="ShowOnlyEditableModes">Только доступные для изменения</sys:String>
     <sys:String x:Key="EnvironmentModeRunningHint">Запущено. Закройте.</sys:String>
     <sys:String x:Key="SectionExternalLinks">Внешние ссылки</sys:String>
     <sys:String x:Key="ExternalLinkDescription">Когда другие приложения открывают ссылки http / https, они отправляются в выбранную среду.</sys:String>
@@ -109,7 +118,7 @@
     <sys:String x:Key="MsgRenameTitle">Переименовать</sys:String>
     <sys:String x:Key="MsgRenameMessage">Введите понятное имя</sys:String>
     <sys:String x:Key="MsgEditNoteTitle">Изменить заметку</sys:String>
-    <sys:String x:Key="MsgEditNoteMessage">Введите аккаунт, клиента, назначение или заметки для этой среды. До 120 символов.</sys:String>
+    <sys:String x:Key="MsgEditNoteMessage">Введите заметку для этой среды, например аккаунт, назначение или важные замечания. До 120 символов.</sys:String>
     <sys:String x:Key="ExternalLinkTitle">Внешняя ссылка</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">Нет доступных сред. Сначала создайте среду.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Движок браузера не готов, поэтому ссылка не может быть открыта. Можно сначала скопировать ссылку.</sys:String>

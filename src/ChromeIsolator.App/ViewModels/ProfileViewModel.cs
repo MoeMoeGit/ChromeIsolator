@@ -158,7 +158,20 @@ public sealed class ProfileViewModel : ObservableObject
         }
     }
 
-    public string DebugPortText => DebugPort?.ToString(CultureInfo.InvariantCulture) ?? "-";
+    public string DebugPortText
+    {
+        get
+        {
+            if (!Model.EnableEnvironmentVariation)
+            {
+                return L10n.GetString("DebugPortBaseMode");
+            }
+
+            return DebugPort is null
+                ? L10n.GetString("DebugPortVariationMode")
+                : L10n.Format("DebugPortVariationModeWithPort", DebugPort.Value.ToString(CultureInfo.InvariantCulture));
+        }
+    }
     public string ErrorText => string.IsNullOrWhiteSpace(Error) ? "-" : Error;
     public string NoteText => Model.Note;
 
@@ -220,6 +233,11 @@ public sealed class ProfileViewModel : ObservableObject
         OnPropertyChanged(nameof(HasNote));
     }
 
+    public void RefreshModeInfo()
+    {
+        OnPropertyChanged(nameof(DebugPortText));
+    }
+
     public void RefreshDiskSize()
     {
         var dir = AppPaths.ProfileDir(Model.Folder);
@@ -256,6 +274,7 @@ public sealed class ProfileViewModel : ObservableObject
         OnPropertyChanged(nameof(Subtitle));
         OnPropertyChanged(nameof(StatusText));
         OnPropertyChanged(nameof(LastUsedText));
+        OnPropertyChanged(nameof(DebugPortText));
     }
 
     private static long GetDirectorySize(string path)

@@ -394,6 +394,10 @@ public sealed class MainViewModel : ObservableObject
         window.ShowDialog();
         _showAdvancedDetails = _profileManager.Config.ShowAdvancedDetails;
         OnPropertyChanged(nameof(ShowAdvancedDetails));
+        foreach (var profile in Profiles)
+        {
+            profile.RefreshModeInfo();
+        }
         RefreshChromeStatus();
     }
 

@@ -1,5 +1,8 @@
+using System.ComponentModel;
+using System.Windows.Data;
 using ChromeIsolator.Models;
 using ChromeIsolator.Services;
+using WpfApplication = System.Windows.Application;
 
 namespace ChromeIsolator.ViewModels;
 
@@ -15,6 +18,8 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
     private bool _showAdvancedDetails;
     private L10n.LanguageOption _selectedLanguage;
     private SettingsProfileOptionViewModel? _selectedExternalLinkProfile;
+    private string _profileModeSearchText = "";
+    private bool _showOnlyEditableModes;
     private bool _disposed;
 
     public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService, ProfileManager profileManager, Action reinstallChrome)
@@ -30,6 +35,12 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         ProfileModes = _profileManager.Config.Profiles
             .Select(profile => new SettingsProfileModeViewModel(profile, _profileManager, _chromeManager))
             .ToList();
+        foreach (var profileMode in ProfileModes)
+        {
+            profileMode.PropertyChanged += OnProfileModeChanged;
+        }
+        ProfileModeView = CollectionViewSource.GetDefaultView(ProfileModes);
+        ProfileModeView.Filter = FilterProfileMode;
         ExternalLinkProfiles = _profileManager.Config.Profiles
             .OrderBy(profile => profile.InstanceNumber == 0 ? int.MaxValue : profile.InstanceNumber)
             .ThenBy(profile => profile.Folder, StringComparer.OrdinalIgnoreCase)
@@ -55,6 +66,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
 
     public IReadOnlyList<L10n.LanguageOption> Languages { get; }
     public IReadOnlyList<SettingsProfileModeViewModel> ProfileModes { get; }
+    public ICollectionView ProfileModeView { get; }
     public IReadOnlyList<SettingsProfileOptionViewModel> ExternalLinkProfiles { get; }
 
     public L10n.LanguageOption SelectedLanguage
@@ -73,6 +85,8 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
                 {
                     profileMode.RefreshLocalizedProperties();
                 }
+                OnPropertyChanged(nameof(EnvironmentModeSummary));
+                ProfileModeView.Refresh();
                 foreach (var profile in ExternalLinkProfiles)
                 {
                     profile.RefreshLocalizedProperties();
@@ -148,12 +162,44 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         }
     }
 
+    public string EnvironmentModeSummary =>
+        L10n.Format(
+            "EnvironmentModeSummary",
+            ProfileModes.Count(profile => profile.EnableEnvironmentVariation),
+            ProfileModes.Count);
+
+    public string ProfileModeSearchText
+    {
+        get => _profileModeSearchText;
+        set
+        {
+            if (SetProperty(ref _profileModeSearchText, value))
+            {
+                ProfileModeView.Refresh();
+            }
+        }
+    }
+
+    public bool ShowOnlyEditableModes
+    {
+        get => _showOnlyEditableModes;
+        set
+        {
+            if (SetProperty(ref _showOnlyEditableModes, value))
+            {
+                ProfileModeView.Refresh();
+            }
+        }
+    }
+
     public void RefreshProfileModeStates()
     {
         foreach (var profileMode in ProfileModes)
         {
             profileMode.RefreshModeState();
         }
+        ProfileModeView.Refresh();
+        OnPropertyChanged(nameof(EnvironmentModeSummary));
     }
 
     public void Dispose()
@@ -165,11 +211,56 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
 
         _disposed = true;
         _chromeManager.ProfileExited -= OnProfileExited;
+        foreach (var profileMode in ProfileModes)
+        {
+            profileMode.PropertyChanged -= OnProfileModeChanged;
+        }
     }
 
     private void OnProfileExited(string _)
     {
+        var dispatcher = WpfApplication.Current?.Dispatcher;
+        if (dispatcher is not null && !dispatcher.CheckAccess())
+        {
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (!_disposed)
+                {
+                    RefreshProfileModeStates();
+                }
+            }));
+            return;
+        }
+
         RefreshProfileModeStates();
+    }
+
+    private void OnProfileModeChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SettingsProfileModeViewModel.EnableEnvironmentVariation))
+        {
+            OnPropertyChanged(nameof(EnvironmentModeSummary));
+        }
+    }
+
+    private bool FilterProfileMode(object item)
+    {
+        if (item is not SettingsProfileModeViewModel profileMode)
+        {
+            return false;
+        }
+
+        if (ShowOnlyEditableModes && !profileMode.CanChangeMode)
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(ProfileModeSearchText))
+        {
+            return true;
+        }
+
+        return profileMode.Title.Contains(ProfileModeSearchText.Trim(), StringComparison.CurrentCultureIgnoreCase);
     }
 
     private async void CheckForUpdates()

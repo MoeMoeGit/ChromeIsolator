@@ -23,6 +23,9 @@
     <sys:String x:Key="LabelFolder">Ordner</sys:String>
     <sys:String x:Key="LabelProfilePath">Datenpfad</sys:String>
     <sys:String x:Key="LabelDebugPort">Debug-Port</sys:String>
+    <sys:String x:Key="DebugPortBaseMode">Basismodus</sys:String>
+    <sys:String x:Key="DebugPortVariationMode">Variationsmodus</sys:String>
+    <sys:String x:Key="DebugPortVariationModeWithPort">Variationsmodus {0}</sys:String>
     <sys:String x:Key="LabelLastUsed">Zuletzt verwendet</sys:String>
     <sys:String x:Key="LabelDiskSize">Festplattenspeicher</sys:String>
     <sys:String x:Key="LabelError">Fehler</sys:String>
@@ -55,6 +58,12 @@
     <sys:String x:Key="ShowAdvancedDetails">Erweiterte Details anzeigen (Browser-Version, Pfad, Systeminfos)</sys:String>
     <sys:String x:Key="SectionEnvironmentMode">Variationsmodus</sys:String>
     <sys:String x:Key="EnvironmentModeDescription">Basismodus ist Standard: kein Debugging-Port und keine navigator-Überschreibungen. Markierte Umgebungen verwenden beim nächsten Start den Variationsmodus mit kleinen Hardware-Parameter-Unterschieden. Laufende Umgebungen müssen zuerst geschlossen werden.</sys:String>
+    <sys:String x:Key="EnvironmentModeSummary">{0} / {1} Umgebungen aktiviert</sys:String>
+    <sys:String x:Key="BtnManageEnvironmentModes">Umgebungen verwalten</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerTitle">Variationsmodus verwalten</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">Wählen Sie die Umgebungen aus, die den Variationsmodus verwenden sollen. Laufende Umgebungen müssen zuerst geschlossen werden.</sys:String>
+    <sys:String x:Key="LabelSearchEnvironment">Umgebungen suchen</sys:String>
+    <sys:String x:Key="ShowOnlyEditableModes">Nur änderbare anzeigen</sys:String>
     <sys:String x:Key="EnvironmentModeRunningHint">Läuft. Erst schließen.</sys:String>
     <sys:String x:Key="SectionExternalLinks">Externe Links</sys:String>
     <sys:String x:Key="ExternalLinkDescription">Wenn andere Apps http-/https-Links öffnen, werden sie standardmäßig an die ausgewählte Umgebung gesendet.</sys:String>
@@ -109,7 +118,7 @@ Edge vorübergehend verwenden?</sys:String>
     <sys:String x:Key="MsgRenameTitle">Umbenennen</sys:String>
     <sys:String x:Key="MsgRenameMessage">Geben Sie einen Namen ein</sys:String>
     <sys:String x:Key="MsgEditNoteTitle">Notiz bearbeiten</sys:String>
-    <sys:String x:Key="MsgEditNoteMessage">Konto, Kunde, Zweck oder Hinweise für diese Umgebung eingeben. Maximal 120 Zeichen.</sys:String>
+    <sys:String x:Key="MsgEditNoteMessage">Geben Sie eine Notiz zu dieser Umgebung ein, z. B. Konto, Zweck oder Hinweise. Maximal 120 Zeichen.</sys:String>
     <sys:String x:Key="ExternalLinkTitle">Externer Link</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">Es ist noch keine Umgebung verfügbar. Erstellen Sie zuerst eine Umgebung.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Die Browser-Engine ist noch nicht bereit. Der Link kann zuerst kopiert werden.</sys:String>

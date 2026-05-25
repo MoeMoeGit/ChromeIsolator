@@ -4,11 +4,11 @@ using ChromeIsolator.ViewModels;
 
 namespace ChromeIsolator;
 
-public partial class SettingsWindow : Window
+public partial class EnvironmentModeWindow : Window
 {
     private readonly SettingsViewModel _viewModel;
 
-    public SettingsWindow(SettingsViewModel viewModel)
+    public EnvironmentModeWindow(SettingsViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
@@ -22,18 +22,8 @@ public partial class SettingsWindow : Window
         _viewModel.RefreshProfileModeStates();
     }
 
-    protected override void OnClosed(EventArgs e)
+    private void Close_Click(object sender, RoutedEventArgs e)
     {
-        (_viewModel as IDisposable)?.Dispose();
-        base.OnClosed(e);
-    }
-
-    private void ManageEnvironmentModes_Click(object sender, RoutedEventArgs e)
-    {
-        var window = new EnvironmentModeWindow(_viewModel)
-        {
-            Owner = this
-        };
-        window.ShowDialog();
+        Close();
     }
 }

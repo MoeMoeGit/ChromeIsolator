@@ -23,6 +23,9 @@
     <sys:String x:Key="LabelFolder">Dossier</sys:String>
     <sys:String x:Key="LabelProfilePath">Chemin des données</sys:String>
     <sys:String x:Key="LabelDebugPort">Port de débogage</sys:String>
+    <sys:String x:Key="DebugPortBaseMode">Mode de base</sys:String>
+    <sys:String x:Key="DebugPortVariationMode">Mode variation</sys:String>
+    <sys:String x:Key="DebugPortVariationModeWithPort">Mode variation {0}</sys:String>
     <sys:String x:Key="LabelLastUsed">Dernière utilisation</sys:String>
     <sys:String x:Key="LabelDiskSize">Espace disque</sys:String>
     <sys:String x:Key="LabelError">Erreur</sys:String>
@@ -55,6 +58,12 @@
     <sys:String x:Key="ShowAdvancedDetails">Afficher les détails avancés (version du navigateur, chemin, infos système)</sys:String>
     <sys:String x:Key="SectionEnvironmentMode">Mode variation</sys:String>
     <sys:String x:Key="EnvironmentModeDescription">Le mode de base est utilisé par défaut : pas de port de débogage ni de remplacement navigator. Les environnements cochés utiliseront au prochain lancement le mode variation avec de petites différences de paramètres matériels. Fermez un environnement en cours avant de le modifier.</sys:String>
+    <sys:String x:Key="EnvironmentModeSummary">{0} / {1} environnements activés</sys:String>
+    <sys:String x:Key="BtnManageEnvironmentModes">Gérer les environnements</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerTitle">Gérer le mode variation</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">Sélectionnez les environnements qui doivent utiliser le mode variation. Fermez les environnements en cours avant de les modifier.</sys:String>
+    <sys:String x:Key="LabelSearchEnvironment">Rechercher des environnements</sys:String>
+    <sys:String x:Key="ShowOnlyEditableModes">Afficher seulement les modifiables</sys:String>
     <sys:String x:Key="EnvironmentModeRunningHint">En cours. Fermez-le.</sys:String>
     <sys:String x:Key="SectionExternalLinks">Liens externes</sys:String>
     <sys:String x:Key="ExternalLinkDescription">Quand d&apos;autres apps ouvrent des liens http / https, ils sont envoyés par défaut à l&apos;environnement choisi.</sys:String>
@@ -109,7 +118,7 @@ Utiliser Edge temporairement ?</sys:String>
     <sys:String x:Key="MsgRenameTitle">Renommer</sys:String>
     <sys:String x:Key="MsgRenameMessage">Entrez un nom reconnaissable</sys:String>
     <sys:String x:Key="MsgEditNoteTitle">Modifier la note</sys:String>
-    <sys:String x:Key="MsgEditNoteMessage">Saisissez le compte, le client, l&apos;usage ou les remarques de cet environnement. 120 caractères maximum.</sys:String>
+    <sys:String x:Key="MsgEditNoteMessage">Saisissez une note pour cet environnement, par exemple le compte, l&apos;usage ou les points d&apos;attention. 120 caractères maximum.</sys:String>
     <sys:String x:Key="ExternalLinkTitle">Lien externe</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">Aucun environnement disponible. Créez d&apos;abord un environnement.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Le moteur du navigateur n&apos;est pas prêt. Vous pouvez d&apos;abord copier le lien.</sys:String>

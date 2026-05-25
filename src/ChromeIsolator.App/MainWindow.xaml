@@ -317,40 +317,45 @@
                         <StackPanel Margin="0,20,0,0">
                             <TextBlock Text="{DynamicResource SectionBasicInfo}" FontWeight="SemiBold"
                                        Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
-                            <Grid Margin="0,10,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="90" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                            <StackPanel>
+                                <Grid Margin="0,10,0,0"
+                                      Visibility="{Binding SelectedProfile.HasNote, Converter={StaticResource BoolToVis}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{DynamicResource LabelNote}" Foreground="{StaticResource TextTertiaryBrush}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding SelectedProfile.NoteText}" TextWrapping="Wrap" />
+                                </Grid>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                <TextBlock Text="{DynamicResource LabelLastUsed}" Foreground="{StaticResource TextTertiaryBrush}" />
-                                <TextBlock Grid.Column="1" Text="{Binding SelectedProfile.LastUsedText}" />
+                                    <TextBlock Text="{DynamicResource LabelLastUsed}" Foreground="{StaticResource TextTertiaryBrush}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding SelectedProfile.LastUsedText}" />
 
-                                <TextBlock Grid.Row="1" Text="{DynamicResource LabelFolder}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedProfile.Folder}" Margin="0,10,0,0" />
+                                    <TextBlock Grid.Row="1" Text="{DynamicResource LabelFolder}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedProfile.Folder}" Margin="0,10,0,0" />
 
-                                <TextBlock Grid.Row="2" Text="{DynamicResource LabelProfilePath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
-                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedProfile.ProfilePath}" TextWrapping="Wrap" Margin="0,10,0,0" />
+                                    <TextBlock Grid.Row="2" Text="{DynamicResource LabelProfilePath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedProfile.ProfilePath}" TextWrapping="Wrap" Margin="0,10,0,0" />
 
-                                <TextBlock Grid.Row="3" Text="{DynamicResource LabelDiskSize}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
-                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedProfile.DiskSizeText}" Margin="0,10,0,0" />
+                                    <TextBlock Grid.Row="3" Text="{DynamicResource LabelDiskSize}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedProfile.DiskSizeText}" Margin="0,10,0,0" />
 
-                                <TextBlock Grid.Row="4" Text="{DynamicResource LabelDebugPort}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
-                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProfile.DebugPortText}" Margin="0,10,0,0" />
-
-                                <TextBlock Grid.Row="5" Text="{DynamicResource LabelNote}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0"
-                                           Visibility="{Binding SelectedProfile.HasNote, Converter={StaticResource BoolToVis}}" />
-                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedProfile.NoteText}" TextWrapping="Wrap" Margin="0,10,0,0"
-                                           Visibility="{Binding SelectedProfile.HasNote, Converter={StaticResource BoolToVis}}" />
-                            </Grid>
+                                    <TextBlock Grid.Row="4" Text="{DynamicResource LabelDebugPort}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProfile.DebugPortText}" Margin="0,10,0,0" />
+                                </Grid>
+                            </StackPanel>
                         </StackPanel>
 
                         <!-- Actions section -->
