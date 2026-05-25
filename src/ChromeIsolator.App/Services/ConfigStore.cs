@@ -12,26 +12,67 @@ public sealed class ConfigStore
 
     public AppConfig Load()
     {
-        try
-        {
-            if (!File.Exists(AppPaths.ConfigFile))
-            {
-                return new AppConfig();
-            }
+        AppPaths.EnsureDirectories();
 
-            var json = File.ReadAllText(AppPaths.ConfigFile);
-            return JsonSerializer.Deserialize<AppConfig>(json, JsonOptions) ?? new AppConfig();
-        }
-        catch
+        if (TryLoad(AppPaths.ConfigFile, out var config))
         {
-            return new AppConfig();
+            return config;
         }
+
+        if (TryLoad(AppPaths.ConfigBackupFile, out config))
+        {
+            return config;
+        }
+
+        return new AppConfig();
     }
 
     public void Save(AppConfig config)
     {
         AppPaths.EnsureDirectories();
         var json = JsonSerializer.Serialize(config, JsonOptions);
-        File.WriteAllText(AppPaths.ConfigFile, json);
+        var tempFile = Path.Combine(AppPaths.SupportDir, $"config-{Guid.NewGuid():N}.tmp");
+
+        try
+        {
+            File.WriteAllText(tempFile, json);
+
+            if (File.Exists(AppPaths.ConfigFile))
+            {
+                File.Replace(tempFile, AppPaths.ConfigFile, AppPaths.ConfigBackupFile, ignoreMetadataErrors: true);
+            }
+            else
+            {
+                File.Move(tempFile, AppPaths.ConfigFile);
+            }
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
+    }
+
+    private static bool TryLoad(string path, out AppConfig config)
+    {
+        try
+        {
+            if (!File.Exists(path))
+            {
+                config = new AppConfig();
+                return false;
+            }
+
+            var json = File.ReadAllText(path);
+            config = JsonSerializer.Deserialize<AppConfig>(json, JsonOptions) ?? new AppConfig();
+            return true;
+        }
+        catch
+        {
+            config = new AppConfig();
+            return false;
+        }
     }
 }

@@ -21,4 +21,10 @@ public partial class SettingsWindow : Window
         base.OnActivated(e);
         _viewModel.RefreshProfileModeStates();
     }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        (_viewModel as IDisposable)?.Dispose();
+        base.OnClosed(e);
+    }
 }

@@ -3,7 +3,7 @@ using ChromeIsolator.Services;
 
 namespace ChromeIsolator.ViewModels;
 
-public sealed class SettingsViewModel : ObservableObject
+public sealed class SettingsViewModel : ObservableObject, IDisposable
 {
     private readonly ChromeManager _chromeManager;
     private readonly UpdateService _updateService;
@@ -15,6 +15,7 @@ public sealed class SettingsViewModel : ObservableObject
     private bool _showAdvancedDetails;
     private L10n.LanguageOption _selectedLanguage;
     private SettingsProfileOptionViewModel? _selectedExternalLinkProfile;
+    private bool _disposed;
 
     public SettingsViewModel(ChromeManager chromeManager, UpdateService updateService, ProfileManager profileManager, Action reinstallChrome)
     {
@@ -23,6 +24,7 @@ public sealed class SettingsViewModel : ObservableObject
         _profileManager = profileManager;
         _reinstallChrome = reinstallChrome;
         _showAdvancedDetails = profileManager.Config.ShowAdvancedDetails;
+        _chromeManager.ProfileExited += OnProfileExited;
 
         Languages = L10n.SupportedLanguages;
         ProfileModes = _profileManager.Config.Profiles
@@ -152,6 +154,22 @@ public sealed class SettingsViewModel : ObservableObject
         {
             profileMode.RefreshModeState();
         }
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+        _chromeManager.ProfileExited -= OnProfileExited;
+    }
+
+    private void OnProfileExited(string _)
+    {
+        RefreshProfileModeStates();
     }
 
     private async void CheckForUpdates()

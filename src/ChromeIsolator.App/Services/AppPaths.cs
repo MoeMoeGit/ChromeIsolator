@@ -7,6 +7,7 @@ public static class AppPaths
         "ChromeIsolator");
 
     public static string ConfigFile => Path.Combine(SupportDir, "config.json");
+    public static string ConfigBackupFile => Path.Combine(SupportDir, "config.json.bak");
     public static string ProfilesDir => Path.Combine(SupportDir, "Profiles");
     public static string ChromeDir => Path.Combine(SupportDir, "Chrome");
 

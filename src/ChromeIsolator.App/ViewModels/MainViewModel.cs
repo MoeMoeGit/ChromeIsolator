@@ -213,10 +213,11 @@ public sealed class MainViewModel : ObservableObject
                 profile.IsStarting = false;
                 profile.IsStopping = false;
                 profile.DebugPort = null;
-                profile.LastUsed = DateTime.Now;
+                MarkProfileUsed(profile);
             }
             _ = RefreshDiskSizesAsync();
             SortProfiles();
+            _profileManager.Save();
         }
         catch
         {
@@ -535,8 +536,9 @@ public sealed class MainViewModel : ObservableObject
             profile.IsStarting = false;
             profile.IsRunning = true;
             profile.DebugPort = _chromeManager.DebugPort(profile.Model);
-            profile.LastUsed = DateTime.Now;
+            MarkProfileUsed(profile);
             OpenPendingExternalUrls(profile);
+            _profileManager.Save();
             RaiseCommandState();
             SortProfiles();
         }
@@ -546,6 +548,7 @@ public sealed class MainViewModel : ObservableObject
             profile.Error = ex.Message;
             if (!string.IsNullOrWhiteSpace(initialUrl))
             {
+                ShowMainWindowForExternalLinkIssue();
                 ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), initialUrl);
             }
             RefreshChromeStatus();
@@ -564,13 +567,14 @@ public sealed class MainViewModel : ObservableObject
         var target = ResolveExternalLinkProfile();
         if (target is null)
         {
+            ShowMainWindowForExternalLinkIssue();
             ShowExternalLinkError(L10n.GetString("MsgExternalLinkNoProfiles"), url);
             return;
         }
 
         if (_chromeManager.CurrentChrome is null)
         {
-            ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), url);
+            HandleBrowserNotReadyExternalLink(url);
             return;
         }
 
@@ -585,7 +589,8 @@ public sealed class MainViewModel : ObservableObject
             if (target.IsRunning)
             {
                 _chromeManager.OpenUrl(target.Model, url);
-                target.LastUsed = DateTime.Now;
+                MarkProfileUsed(target);
+                _profileManager.Save();
                 SortProfiles();
                 return;
             }
@@ -594,6 +599,7 @@ public sealed class MainViewModel : ObservableObject
         }
         catch
         {
+            ShowMainWindowForExternalLinkIssue();
             ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), url);
         }
     }
@@ -603,15 +609,28 @@ public sealed class MainViewModel : ObservableObject
         profile.IsStopping = true;
         RaiseCommandState();
 
-        await Task.Run(() => _chromeManager.Stop(profile.Model)).ConfigureAwait(true);
+        try
+        {
+            await Task.Run(() => _chromeManager.Stop(profile.Model)).ConfigureAwait(true);
 
-        profile.IsRunning = false;
-        profile.IsStopping = false;
-        profile.DebugPort = null;
-        profile.LastUsed = DateTime.Now;
-        RaiseCommandState();
-        _ = profile.RefreshDiskSizeAsync();
-        SortProfiles();
+            profile.IsRunning = false;
+            profile.DebugPort = null;
+            MarkProfileUsed(profile);
+            _profileManager.Save();
+            _ = profile.RefreshDiskSizeAsync();
+            SortProfiles();
+        }
+        catch
+        {
+            profile.IsRunning = _chromeManager.IsRunning(profile.Model);
+            profile.DebugPort = _chromeManager.DebugPort(profile.Model);
+            throw;
+        }
+        finally
+        {
+            profile.IsStopping = false;
+            RaiseCommandState();
+        }
     }
 
     private void OnProfileExited(string folder)
@@ -628,10 +647,11 @@ public sealed class MainViewModel : ObservableObject
             profile.IsStarting = false;
             profile.IsStopping = false;
             profile.DebugPort = null;
-            profile.LastUsed = DateTime.Now;
+            MarkProfileUsed(profile);
             _ = profile.RefreshDiskSizeAsync();
             RaiseCommandState();
             SortProfiles();
+            _profileManager.Save();
         });
     }
 
@@ -701,6 +721,31 @@ public sealed class MainViewModel : ObservableObject
         SimpleInputDialog.ShowCopyMessage(L10n.GetString("ExternalLinkTitle"), message, url);
     }
 
+    private void HandleBrowserNotReadyExternalLink(string url)
+    {
+        ShowMainWindowForExternalLinkIssue();
+        ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), url);
+        ShowDownloadIfNeeded();
+
+        if (_chromeManager.CurrentChrome is not null)
+        {
+            HandleExternalLink(url);
+        }
+    }
+
+    private static void ShowMainWindowForExternalLinkIssue()
+    {
+        var mainWindow = WpfApplication.Current.MainWindow;
+        if (mainWindow is null)
+        {
+            return;
+        }
+
+        mainWindow.Show();
+        mainWindow.WindowState = WindowState.Normal;
+        mainWindow.Activate();
+    }
+
     private void OnLanguageChanged()
     {
         RefreshChromeStatus();
@@ -711,6 +756,11 @@ public sealed class MainViewModel : ObservableObject
         OnPropertyChanged(nameof(ChromeVersionText));
         OnPropertyChanged(nameof(ChromePathText));
         OnPropertyChanged(nameof(SelectedProfileTitle));
+    }
+
+    private void MarkProfileUsed(ProfileViewModel profile)
+    {
+        profile.LastUsed = DateTime.Now;
     }
 
     private void RaiseCommandState()

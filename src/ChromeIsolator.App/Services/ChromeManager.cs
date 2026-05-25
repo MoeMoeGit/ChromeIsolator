@@ -193,7 +193,7 @@ public sealed class ChromeManager
         startInfo.ArgumentList.Add("--no-first-run");
         startInfo.ArgumentList.Add(url);
 
-        Process.Start(startInfo);
+        using var process = Process.Start(startInfo);
     }
 
     public void Stop(Profile profile)

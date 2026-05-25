@@ -19,6 +19,7 @@ public sealed class ProfileViewModel : ObservableObject
     public ProfileViewModel(Profile model)
     {
         Model = model;
+        _lastUsed = model.LastUsed;
     }
 
     public Profile Model { get; }
@@ -118,6 +119,7 @@ public sealed class ProfileViewModel : ObservableObject
         {
             if (SetProperty(ref _lastUsed, value))
             {
+                Model.LastUsed = value;
                 OnPropertyChanged(nameof(LastUsedText));
                 OnPropertyChanged(nameof(Subtitle));
             }
