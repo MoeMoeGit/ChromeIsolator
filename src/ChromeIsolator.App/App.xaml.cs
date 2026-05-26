@@ -55,6 +55,7 @@ public partial class App : WpfApplication
 
             _mainWindow = new MainWindow(mainViewModel);
             MainWindow = _mainWindow;
+            _mainWindow.ApplySavedPlacement();
 
             _trayService = new TrayService(_mainWindow, mainViewModel);
             _trayService.Initialize();

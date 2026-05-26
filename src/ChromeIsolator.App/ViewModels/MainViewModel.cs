@@ -141,6 +141,13 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
+    public double? MainWindowLeft => _profileManager.Config.MainWindowLeft;
+    public double? MainWindowTop => _profileManager.Config.MainWindowTop;
+    public double? MainWindowWidth => _profileManager.Config.MainWindowWidth;
+    public double? MainWindowHeight => _profileManager.Config.MainWindowHeight;
+    public bool MainWindowIsMaximized => _profileManager.Config.MainWindowIsMaximized;
+    public double? MainWindowLeftPaneWidth => _profileManager.Config.MainWindowLeftPaneWidth;
+
     public void ToggleProfile(ProfileViewModel? profile)
     {
         if (profile is null) return;
@@ -560,6 +567,37 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
+    public void SaveMainWindowPlacement(Window window, double leftPaneWidth)
+    {
+        if (window.WindowState == WindowState.Minimized)
+        {
+            return;
+        }
+
+        var bounds = window.WindowState == WindowState.Maximized
+            ? window.RestoreBounds
+            : new Rect(window.Left, window.Top, window.Width, window.Height);
+
+        if (!double.IsFinite(bounds.Left) || !double.IsFinite(bounds.Top) ||
+            !double.IsFinite(bounds.Width) || !double.IsFinite(bounds.Height))
+        {
+            return;
+        }
+
+        var config = _profileManager.Config;
+        config.MainWindowLeft = bounds.Left;
+        config.MainWindowTop = bounds.Top;
+        config.MainWindowWidth = Math.Max(window.MinWidth, bounds.Width);
+        config.MainWindowHeight = Math.Max(window.MinHeight, bounds.Height);
+        config.MainWindowIsMaximized = window.WindowState == WindowState.Maximized;
+        if (double.IsFinite(leftPaneWidth) && leftPaneWidth > 0)
+        {
+            config.MainWindowLeftPaneWidth = leftPaneWidth;
+        }
+
+        _profileManager.Save();
+    }
+
     public void HandleExternalLink(string url)
     {
         if (!IsHttpUrl(url))
@@ -746,7 +784,10 @@ public sealed class MainViewModel : ObservableObject
         }
 
         mainWindow.Show();
-        mainWindow.WindowState = WindowState.Normal;
+        if (mainWindow.WindowState == WindowState.Minimized)
+        {
+            mainWindow.WindowState = WindowState.Normal;
+        }
         mainWindow.Activate();
     }
 
