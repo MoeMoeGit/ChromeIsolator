@@ -39,6 +39,76 @@
 
 ---
 
+## 2026-05-26（V1.7.2 发布触发）
+
+**状态：进行中，待 GitHub 推送与 tag 构建**
+
+**触发原因**：用户要求将版本统一推进到 1.7.2，提交 GitHub，打新 tag，并触发 1.7.2 版本构建。
+
+**修改内容**：
+
+1. `Directory.Build.props` — 版本号从 `1.7.1` 推进到 `1.7.2`，同步 Assembly / File / Informational 版本。
+2. `README.md` — 当前版本、发布产物文件名和版本 tag 示例统一改为 `1.7.2`。
+3. `project-log/05-current-status.md` — 当前版本更新为 `V1.7.2 待发布`，同步当前阶段说明。
+
+**遇到的问题**：
+
+- 本轮主要是版本和文档收口，没有新增功能风险。
+
+**解决方式**：
+
+- 只更新版本元数据、发布产物命名和当前状态说明，保留历史日志和既有设计记录。
+
+**验证方式**：
+
+- 后续执行 `dotnet build ChromeIsolator.sln`
+- 后续执行 Git 提交、tag 和 push
+
+**验证结果**：
+
+- 待执行。
+
+**本地产物清理**：
+
+- 无。
+
+---
+
+## 2026-05-26（托盘 DPI 与设置页文案收口）
+
+**状态：✅ 已完成**
+
+**触发原因**：用户反馈混合 DPI 双显示器环境下托盘右键菜单悬空且尺寸异常，希望顺手复查这次设置页“帮助与更新”区域的按钮文案是否更合理。
+
+**修改内容**：
+
+1. `Services/TrayService.cs` — 改为给 `NotifyIcon` 直接挂载 `ContextMenuStrip`，菜单内容在 `Opening` 时刷新，不再手动用 `Cursor.Position` 弹出。
+2. `ChromeIsolator.App.csproj` — 增加 `ApplicationHighDpiMode=PerMonitorV2`，让进程按每显示器 DPI 感知运行。
+3. `Resources/Strings*.xaml` — 将“复制邮箱”按钮文案统一收短为“复制邮箱” / 各语言对应短文案，避免按钮前缀冗余。
+4. `project-log/05-current-status.md` — 补充本次托盘 DPI 与设置页文案收口结果。
+
+**遇到的问题**：
+
+- `dotnet build` 初次提示不应在 manifest 中重复声明高 DPI 设置。
+
+**解决方式**：
+
+- 移除手写 manifest，保留项目属性里的 `ApplicationHighDpiMode=PerMonitorV2` 单一配置来源。
+
+**验证方式**：
+
+- `dotnet build src\ChromeIsolator.App\ChromeIsolator.App.csproj -c Debug`
+
+**验证结果**：
+
+- 通过，0 警告、0 错误。
+
+**本地产物清理**：
+
+- 无。
+
+---
+
 ## 2026-05-26（窗口位置与左右栏持久化）
 
 **状态：✅ 已完成**

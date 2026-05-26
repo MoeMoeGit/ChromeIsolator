@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <ApplicationIcon>..\..\assets\icons\AppIcon.ico</ApplicationIcon>
     <AssemblyName>ChromeIsolator</AssemblyName>
     <RootNamespace>ChromeIsolator</RootNamespace>

@@ -50,7 +50,7 @@
     <sys:String x:Key="BtnCheckUpdates">Vérifier les mises à jour</sys:String>
     <sys:String x:Key="BtnViewReleases">Ouvrir la page de téléchargement</sys:String>
     <sys:String x:Key="BtnOpenIssues">Signaler un problème</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Contacter l'auteur : copier l'e-mail</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Copier l'e-mail</sys:String>
     <sys:String x:Key="LabelAuthor">Auteur</sys:String>
     <sys:String x:Key="LabelContact">E-mail de contact</sys:String>
     <sys:String x:Key="LabelUpdateStatus">État des mises à jour</sys:String>

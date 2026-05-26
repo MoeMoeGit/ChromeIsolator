@@ -50,7 +50,7 @@
     <sys:String x:Key="BtnCheckUpdates">更新を確認</sys:String>
     <sys:String x:Key="BtnViewReleases">ダウンロードページを開く</sys:String>
     <sys:String x:Key="BtnOpenIssues">問題を報告</sys:String>
-    <sys:String x:Key="BtnCopyEmail">作者に連絡：メールをコピー</sys:String>
+    <sys:String x:Key="BtnCopyEmail">メールをコピー</sys:String>
     <sys:String x:Key="LabelAuthor">作者</sys:String>
     <sys:String x:Key="LabelContact">連絡先メール</sys:String>
     <sys:String x:Key="LabelUpdateStatus">更新状態</sys:String>

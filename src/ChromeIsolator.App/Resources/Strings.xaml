@@ -50,7 +50,7 @@
     <sys:String x:Key="BtnCheckUpdates">检查更新</sys:String>
     <sys:String x:Key="BtnViewReleases">打开下载页</sys:String>
     <sys:String x:Key="BtnOpenIssues">反馈问题</sys:String>
-    <sys:String x:Key="BtnCopyEmail">联系作者：复制邮箱</sys:String>
+    <sys:String x:Key="BtnCopyEmail">复制邮箱</sys:String>
     <sys:String x:Key="LabelAuthor">作者</sys:String>
     <sys:String x:Key="LabelContact">联系邮箱</sys:String>
     <sys:String x:Key="LabelUpdateStatus">更新状态</sys:String>

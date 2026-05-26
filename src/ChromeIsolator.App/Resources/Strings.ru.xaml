@@ -50,7 +50,7 @@
     <sys:String x:Key="BtnCheckUpdates">Проверить обновления</sys:String>
     <sys:String x:Key="BtnViewReleases">Открыть страницу загрузки</sys:String>
     <sys:String x:Key="BtnOpenIssues">Сообщить о проблеме</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Связаться с автором: копировать e-mail</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Копировать e-mail</sys:String>
     <sys:String x:Key="LabelAuthor">Автор</sys:String>
     <sys:String x:Key="LabelContact">Контактный e-mail</sys:String>
     <sys:String x:Key="LabelUpdateStatus">Статус обновления</sys:String>

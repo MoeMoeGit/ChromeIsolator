@@ -50,7 +50,7 @@
     <sys:String x:Key="BtnCheckUpdates">Check for updates</sys:String>
     <sys:String x:Key="BtnViewReleases">Open download page</sys:String>
     <sys:String x:Key="BtnOpenIssues">Report issue</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Contact author: copy email</sys:String>
+    <sys:String x:Key="BtnCopyEmail">Copy email</sys:String>
     <sys:String x:Key="LabelAuthor">Author</sys:String>
     <sys:String x:Key="LabelContact">Contact email</sys:String>
     <sys:String x:Key="LabelUpdateStatus">Update status</sys:String>

@@ -1,8 +1,8 @@
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
 using ChromeIsolator.ViewModels;
-using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ChromeIsolator.Services;
@@ -12,6 +12,7 @@ public sealed class TrayService : IDisposable
     private readonly MainWindow _mainWindow;
     private readonly MainViewModel _viewModel;
     private NotifyIcon? _notifyIcon;
+    private ContextMenuStrip? _contextMenuStrip;
 
     public TrayService(MainWindow mainWindow, MainViewModel viewModel)
     {
@@ -27,19 +28,20 @@ public sealed class TrayService : IDisposable
             Text = L10n.GetString("AppTitle"),
             Visible = true
         };
+        _contextMenuStrip = CreateMenu();
+        _notifyIcon.ContextMenuStrip = _contextMenuStrip;
         _notifyIcon.DoubleClick += (_, _) => _mainWindow.ShowFromTray();
         _notifyIcon.MouseUp += NotifyIcon_MouseUp;
     }
 
     public void Dispose()
     {
-        if (_notifyIcon is null)
+        _contextMenuStrip?.Dispose();
+        if (_notifyIcon is not null)
         {
-            return;
+            _notifyIcon.Visible = false;
+            _notifyIcon.Dispose();
         }
-
-        _notifyIcon.Visible = false;
-        _notifyIcon.Dispose();
     }
 
     private void NotifyIcon_MouseUp(object? sender, MouseEventArgs e)
@@ -52,20 +54,27 @@ public sealed class TrayService : IDisposable
         if (e.Button == MouseButtons.Left)
         {
             _mainWindow.ShowFromTray();
-            return;
-        }
-
-        if (e.Button == MouseButtons.Right)
-        {
-            _notifyIcon.ContextMenuStrip?.Dispose();
-            _notifyIcon.ContextMenuStrip = BuildMenu();
-            _notifyIcon.ContextMenuStrip.Show(Cursor.Position);
         }
     }
 
-    private ContextMenuStrip BuildMenu()
+    private ContextMenuStrip CreateMenu()
     {
         var menu = new ContextMenuStrip();
+        menu.Opening += TrayMenu_Opening;
+        RefreshMenu(menu);
+        return menu;
+    }
+
+    private void TrayMenu_Opening(object? sender, CancelEventArgs e)
+    {
+        if (sender is ContextMenuStrip menu)
+        {
+            RefreshMenu(menu);
+        }
+    }
+
+    private void RefreshMenu(ContextMenuStrip menu)
+    {
         menu.Items.Clear();
 
         menu.Items.Add(L10n.GetString("TrayOpenPanel"), null, (_, _) => _mainWindow.ShowFromTray());
@@ -117,8 +126,6 @@ public sealed class TrayService : IDisposable
 
             _mainWindow.ExitFromTray();
         });
-
-        return menu;
     }
 
     private static Icon LoadIcon()

@@ -50,7 +50,7 @@
     <sys:String x:Key="BtnCheckUpdates">Nach Updates suchen</sys:String>
     <sys:String x:Key="BtnViewReleases">Downloadseite öffnen</sys:String>
     <sys:String x:Key="BtnOpenIssues">Probleme melden</sys:String>
-    <sys:String x:Key="BtnCopyEmail">Autor kontaktieren: E-Mail kopieren</sys:String>
+    <sys:String x:Key="BtnCopyEmail">E-Mail kopieren</sys:String>
     <sys:String x:Key="LabelAuthor">Autor</sys:String>
     <sys:String x:Key="LabelContact">Kontakt-E-Mail</sys:String>
     <sys:String x:Key="LabelUpdateStatus">Update-Status</sys:String>

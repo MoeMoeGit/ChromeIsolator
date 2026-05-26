@@ -50,7 +50,7 @@
     <sys:String x:Key="BtnCheckUpdates">업데이트 확인</sys:String>
     <sys:String x:Key="BtnViewReleases">다운로드 페이지 열기</sys:String>
     <sys:String x:Key="BtnOpenIssues">문제 신고</sys:String>
-    <sys:String x:Key="BtnCopyEmail">작성자에게 연락: 이메일 복사</sys:String>
+    <sys:String x:Key="BtnCopyEmail">이메일 복사</sys:String>
     <sys:String x:Key="LabelAuthor">작성자</sys:String>
     <sys:String x:Key="LabelContact">연락처 이메일</sys:String>
     <sys:String x:Key="LabelUpdateStatus">업데이트 상태</sys:String>
