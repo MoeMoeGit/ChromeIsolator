@@ -1,8 +1,10 @@
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 using ChromeIsolator.Models;
 using ChromeIsolator.Services;
 using WpfApplication = System.Windows.Application;
+using WpfMessageBox = System.Windows.MessageBox;
 
 namespace ChromeIsolator.ViewModels;
 
@@ -58,7 +60,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         OpenIssuesCommand = new RelayCommand(() => ShellService.OpenUrl(UpdateService.IssuesUrl));
         CopyEmailCommand = new RelayCommand(() => ShellService.CopyText(ContactEmail));
         ReinstallChromeCommand = new RelayCommand(() => { _reinstallChrome(); RefreshChromeStatus(); });
-        SetDefaultBrowserCommand = new RelayCommand(ShellService.RequestDefaultBrowser);
+        SetDefaultBrowserCommand = new RelayCommand(RequestDefaultBrowser);
 
         RefreshChromeStatus();
         UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
@@ -301,6 +303,27 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         }
 
         ShellService.OpenFolder(AppPaths.SupportDir);
+    }
+
+    private void RequestDefaultBrowser()
+    {
+        try
+        {
+            ShellService.RequestDefaultBrowser();
+            WpfMessageBox.Show(
+                L10n.GetString("MsgDefaultBrowserRequestOpened"),
+                L10n.GetString("AppTitle"),
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            WpfMessageBox.Show(
+                L10n.Format("MsgDefaultBrowserRequestFailed", ex.Message),
+                L10n.GetString("AppTitle"),
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private SettingsProfileOptionViewModel? ResolveSelectedExternalLinkProfile()

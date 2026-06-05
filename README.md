@@ -8,7 +8,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 
 - **独立环境**：每个环境使用单独的 Chrome 数据目录，登录状态、Cookie、缓存、密码和扩展配置互不影响
 - **快速启动和关闭**：在主窗口或系统托盘启动、关闭单个环境，也可以一次关闭全部环境；退出时会先关闭运行中的 Chrome 再退出
-- **双击启动**：双击环境列表项直接启动或关闭环境
+- **双击启动 / 唤起**：双击未运行环境直接启动；双击运行中环境会将对应浏览器窗口带到前台
 - **右键菜单**：右键环境列表可快速重命名、编辑备注或删除环境
 - **智能排序**：运行中的环境自动置顶，最近使用的排在前面；最近使用时间会写入本地配置，重启后仍然保留；显示启动中/关闭中状态
 - **专业管理界面**：左侧环境列表用于快速扫描，右侧详情栏展示备注、路径、基础 / 差异模式调试端口、磁盘占用、错误和高级信息；支持打开环境目录和复制路径
@@ -35,7 +35,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 
 ## 当前状态
 
-核心功能已完成，包括环境管理、环境备注、外部链接接收、浏览器引擎设置、可选差异模式、多语言、设置面板、系统托盘和 MSI 安装包构建。当前版本为 V1.7.2，项目继续验证默认浏览器注册和真实外部链接行为。
+核心功能已完成，包括环境管理、环境备注、外部链接接收、浏览器引擎设置、可选差异模式、多语言、设置面板、系统托盘和 MSI 安装包构建。当前版本为 V1.7.3，项目继续验证默认浏览器注册和真实外部链接行为。
 
 安装包使用 self-contained 发布，普通用户无需预先安装 .NET Runtime。
 
@@ -118,7 +118,7 @@ dotnet run --project .\src\ChromeIsolator.App\ChromeIsolator.App.csproj
 
 ```text
 artifacts\publish\win-x64\
-artifacts\publish\ChromeIsolator-win-x64-v1.7.2.zip
+artifacts\publish\ChromeIsolator-win-x64-v1.7.3.zip
 ```
 
 ### 构建 MSI 安装包
@@ -132,12 +132,12 @@ artifacts\publish\ChromeIsolator-win-x64-v1.7.2.zip
 安装包产物位于：
 
 ```text
-artifacts\installer\ChromeIsolator-Setup-x64-v1.7.2.msi
+artifacts\installer\ChromeIsolator-Setup-x64-v1.7.3.msi
 ```
 
 ## 版本管理
 
-项目版本统一写在根目录 `Directory.Build.props`。发布新版本时只修改其中的 `Version`、`AssemblyVersion`、`FileVersion` 和 `InformationalVersion`，然后创建同版本 tag，例如 `v1.7.2`。
+项目版本统一写在根目录 `Directory.Build.props`。发布新版本时只修改其中的 `Version`、`AssemblyVersion`、`FileVersion` 和 `InformationalVersion`，然后创建同版本 tag，例如 `v1.7.3`。
 
 GitHub Actions 会在 tag 推送时自动构建，并创建 GitHub Release，上传带版本号的 win-x64 zip 和 MSI 安装包。
 

@@ -700,10 +700,87 @@ A 评审（发现） → B 验证 + 修复确认项 + 评审（发现）
 
 ---
 
+## I — 第九轮复核（差异模式、默认浏览器和外部链接兜底）
+
+**评审人**：Codex
+**日期**：2026-06-05
+**范围**：对 2026-06-05 初步评审中提出的 bug / 风险 / 优化项逐条二次自检，并修复确认项
+
+### 复核结论
+
+本轮对每一条候选问题重新读代码、对照项目设计和用户路径后，确认 6 项需要落地：4 项已确认问题、2 项待确认风险的防御性优化。未保留“外部链接默认目标自动写入配置”为问题，因为项目历史记录已确认这是有意设计。
+
+#### 已确认并修复 1：差异模式注入失败会静默降级
+
+- **类型**：功能可靠性 / 状态反馈
+- **状态**：已修复
+- **位置**：`src/ChromeIsolator.App/Services/FingerprintInjector.cs`、`src/ChromeIsolator.App/Services/ChromeManager.cs`、`src/ChromeIsolator.App/ViewModels/MainViewModel.cs`
+- **自检结论**：`ChromeManager.Start()` 使用 `_ = injector.StartAsync()` 后台启动注入器；`FingerprintInjector.RunAsync()` 重试耗尽后直接退出，没有把失败回写 UI。用户会看到差异模式和端口，但实际可能未注入 navigator 差异，是真问题。
+- **修复结果**：`FingerprintInjector` 增加失败事件，`ChromeManager` 转发到 profile 级警告，`MainViewModel` 在 UI 线程写入环境错误提示，说明浏览器可继续使用但本次可能按基础模式运行，并提示关闭后重新启动可重试。
+
+#### 已确认并修复 2：“设为默认浏览器”异常会走全局未处理异常路径
+
+- **类型**：稳定性 / 设置流程
+- **状态**：已修复
+- **位置**：`src/ChromeIsolator.App/Services/ShellService.cs`、`src/ChromeIsolator.App/ViewModels/SettingsViewModel.cs`
+- **自检结论**：设置页命令直接执行注册表写入和 `ms-settings:defaultapps`，异常未局部捕获；Shell 或注册表失败时可能进入全局 fatal handler。该操作依赖 Windows 系统状态，必须局部处理。
+- **修复结果**：设置页改为包装方法，成功时提示用户在 Windows 默认应用设置中选择 ChromeIsolator，失败时用普通错误弹窗展示原因，不退出应用。
+
+#### 已确认并修复 3：默认浏览器注册信息偏薄，真实识别仍需实机验证
+
+- **类型**：兼容性风险 / Windows 注册
+- **状态**：已加固，仍需实机验证
+- **位置**：`src/ChromeIsolator.App/Services/ShellService.cs`
+- **自检结论**：原实现写了 `RegisteredApplications`、Capabilities 和 ProgId；这可能足够，但默认浏览器路径在 Windows 10/11 上存在版本差异。补齐 StartMenuInternet 客户端入口、图标和 open command 可以降低默认应用设置页识别风险。
+- **修复结果**：在 HKCU 下补充 `Software\Clients\StartMenuInternet\ChromeIsolator` 的默认名称、图标和启动命令。真实默认应用 UI 选择与 http / https 转发仍需 Windows 实机验证。
+
+#### 已确认并修复 4：高级信息里的内存值语义不准确
+
+- **类型**：用户信息准确性
+- **状态**：已修复
+- **位置**：`src/ChromeIsolator.App/ViewModels/MainViewModel.cs`、`src/ChromeIsolator.App/Resources/Strings*.xaml`
+- **自检结论**：原先用 `GC.GetGCMemoryInfo().TotalAvailableMemoryBytes` 展示“内存”，这不是系统物理可用内存，用户容易误读。
+- **修复结果**：改用 Windows `GlobalMemoryStatusEx` 获取可用物理内存；7 语言标签同步改为“可用物理内存”语义；高级信息标签列加宽并允许换行，避免多语言长标签截断。
+
+#### 已确认并修复 5：README 双击行为与实际设计不一致
+
+- **类型**：文档准确性 / 用户预期
+- **状态**：已修复
+- **位置**：`README.md`
+- **自检结论**：代码和历史日志确认双击已运行环境的设计是带到前台，不是关闭；README 仍写“启动或关闭环境”，属于过期文档。
+- **修复结果**：README 改为“双击未运行环境启动；双击运行中环境带到前台”。
+
+#### 已确认并修复 6：第二实例管道转发失败时请求会静默丢失
+
+- **类型**：稳定性 / 外部链接兜底
+- **状态**：已修复
+- **位置**：`src/ChromeIsolator.App/App.xaml.cs`
+- **自检结论**：第二实例连接已有实例管道失败后直接退出。虽然正常情况下概率不高，但如果已有实例卡住或监听异常，桌面双击唤醒或外部链接会无反馈消失。
+- **修复结果**：`NotifyExistingInstance` 返回成功/失败；失败时第二实例弹窗说明已有实例无法唤醒或链接无法发送；外部链接转发失败时会自动复制链接，避免静默吞掉用户操作。
+
+### 验证内容
+
+- 7 个多语言资源 XAML 文件 XML 解析。
+- 7 个多语言资源 key 完整性检查。
+- `git diff --check`。
+- 本地产物检查。
+- `dotnet build ChromeIsolator.sln`：未运行成功，原因是当前机器没有 `dotnet` 命令。
+
+### 验证结果
+
+- 通过。7 个资源文件 XML 均可解析。
+- 通过。7 个资源文件均为 144 个 key，无缺失、无额外 key。
+- 通过。无空白错误。
+- 通过。本轮未生成 `bin/`、`obj/`、`artifacts/` 等产物。
+- 未通过构建验证。需要在安装 .NET 8 SDK / Windows WPF 构建环境后再执行 `dotnet build ChromeIsolator.sln`。
+
+---
+
 ## 变更记录
 
 | 日期 | 变更内容 | 原因 |
 |------|----------|------|
+| 2026-06-05 | 新增第九轮复核，确认并修复差异模式失败反馈、默认浏览器异常处理和注册加固、内存信息语义、README 双击描述、第二实例转发失败兜底 | 对用户要求的每条 bug / 优化项二次自检后落地确认项 |
 | 2026-05-25 | 新增第九轮复核，记录冷启动唤醒可靠性、高级浏览器信息刷新、Chrome 下载入口和多语言默认环境名后续待办 | 用户要求先全面复核确认问题性质，并只记录后续待办，不立即实现 |
 | 2026-05-25 | 新增第八轮复核，确认并修复最近使用时间持久化、单个关闭失败状态恢复和配置原子写入 | 对前一轮提出的问题再次自检后，确认需要全部落地 |
 | 2026-05-25 | 新增第七轮代码复审，确认外部链接链路 2 项问题并排除 2 项产品取舍 | 复核 V1.6.10 环境备注和外部链接改动，明确默认浏览器注册与默认目标写入的边界 |

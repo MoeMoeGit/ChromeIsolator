@@ -34,7 +34,7 @@
     <sys:String x:Key="LabelChromeVersion">브라우저 버전</sys:String>
     <sys:String x:Key="LabelChromePath">브라우저 경로</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU 코어</sys:String>
-    <sys:String x:Key="LabelMemory">메모리</sys:String>
+    <sys:String x:Key="LabelMemory">사용 가능한 물리 메모리</sys:String>
     <sys:String x:Key="EmptyProfiles">환경이 없습니다. 위의 「환경 추가」를 클릭하여 만드세요.</sys:String>
 
     <!-- SettingsWindow -->
@@ -123,6 +123,9 @@ Edge를 임시로 사용할까요?</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">사용 가능한 환경이 없습니다. 먼저 환경을 만들어 주세요.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">브라우저 엔진이 준비되지 않아 이 링크를 열 수 없습니다. 먼저 링크를 복사할 수 있습니다.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator는 http 및 https 링크만 처리합니다. 필요하면 이 링크를 복사하세요.</sys:String>
+    <sys:String x:Key="MsgEnvironmentVariationFailed">차이 모드 주입 실패: {0}. 브라우저는 계속 사용할 수 있지만 이번 실행은 기본 모드처럼 동작할 수 있습니다. 닫은 뒤 다시 시작하면 차이 모드를 재시도할 수 있습니다.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows 기본 앱 설정을 열었습니다. 브라우저 목록에서 ChromeIsolator를 선택하여 http / https 기본 설정을 완료하세요.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestFailed">기본 앱 설정을 열 수 없습니다: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">새 버전이 있습니다: {0}&#x0A;&#x0A;다운로드 페이지로 이동하시겠습니까?</sys:String>
     <sys:String x:Key="MsgUpToDate">최신 버전입니다 ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">업데이트 확인 실패: {0}</sys:String>

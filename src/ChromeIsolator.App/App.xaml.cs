@@ -38,7 +38,10 @@ public partial class App : WpfApplication
             var externalUrl = ExtractExternalUrl(e.Args);
             if (!isFirstInstance)
             {
-                NotifyExistingInstance(externalUrl);
+                if (!NotifyExistingInstance(externalUrl))
+                {
+                    ShowSingleInstanceNotifyFailed(externalUrl);
+                }
                 Shutdown();
                 return;
             }
@@ -174,7 +177,7 @@ public partial class App : WpfApplication
         }, token);
     }
 
-    private static void NotifyExistingInstance(string? externalUrl)
+    private static bool NotifyExistingInstance(string? externalUrl)
     {
         AllowSetForegroundWindow(ASFW_ANY);
 
@@ -186,12 +189,53 @@ public partial class App : WpfApplication
                 client.Connect(250);
                 using var writer = new StreamWriter(client) { AutoFlush = true };
                 writer.WriteLine(CreateSingleInstanceMessage(externalUrl));
-                return;
+                return true;
             }
             catch
             {
                 Thread.Sleep(150);
             }
+        }
+
+        return false;
+    }
+
+    private static void ShowSingleInstanceNotifyFailed(string? externalUrl)
+    {
+        try
+        {
+            string message;
+            if (string.IsNullOrWhiteSpace(externalUrl))
+            {
+                message = "ChromeIsolator is already running, but this instance could not wake it. Open ChromeIsolator from the system tray, or exit the existing process and try again.";
+            }
+            else
+            {
+                TryCopyText(externalUrl);
+                message = $"ChromeIsolator is already running, but this instance could not send the link to it. The link has been copied.\n\n{externalUrl}";
+            }
+
+            System.Windows.MessageBox.Show(
+                message,
+                "ChromeIsolator",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+        catch
+        {
+            // This process is only a wake-up forwarder; nothing else can be done here.
+        }
+    }
+
+    private static void TryCopyText(string text)
+    {
+        try
+        {
+            System.Windows.Clipboard.SetText(text);
+        }
+        catch
+        {
+            // Clipboard access can fail if another process owns it.
         }
     }
 

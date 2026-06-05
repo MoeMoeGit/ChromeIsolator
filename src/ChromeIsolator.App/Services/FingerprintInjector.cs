@@ -31,6 +31,8 @@ public sealed class FingerprintInjector : IAsyncDisposable
         _script = GenerateScript(instanceNumber);
     }
 
+    public event Action<Exception>? Failed;
+
     public Task StartAsync()
     {
         return _runTask ??= Task.Run(RunAsync);
@@ -73,6 +75,7 @@ public sealed class FingerprintInjector : IAsyncDisposable
     {
         const int maxRetries = 5;
         var retryCount = 0;
+        Exception? lastError = null;
 
         while (!_cts.IsCancellationRequested)
         {
@@ -83,6 +86,7 @@ public sealed class FingerprintInjector : IAsyncDisposable
                 await _webSocket.ConnectAsync(browserWebSocketUrl, _cts.Token);
 
                 retryCount = 0;
+                lastError = null;
 
                 var receiveTask = Task.Run(ReceiveLoopAsync);
 
@@ -109,9 +113,14 @@ public sealed class FingerprintInjector : IAsyncDisposable
             {
                 break;
             }
-            catch
+            catch (Exception ex)
             {
-                if (retryCount >= maxRetries) break;
+                lastError = ex;
+                if (retryCount >= maxRetries)
+                {
+                    Failed?.Invoke(lastError);
+                    break;
+                }
 
                 retryCount++;
                 var delay = TimeSpan.FromSeconds(Math.Pow(2, retryCount - 1));

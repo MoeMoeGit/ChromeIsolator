@@ -4,6 +4,95 @@
 
 ---
 
+## 2026-06-05（V1.7.3 发布触发）
+
+**状态：进行中，待 GitHub 推送与 tag 构建**
+
+**触发原因**：用户要求将本轮逐项复核修复推进为新版本，提交到 GitHub 并触发新版本构建；推送前发现远端已推进到 `v1.7.2`，因此本轮改为发布 `v1.7.3`。
+
+**修改内容**：
+
+1. `Directory.Build.props` — 版本号从远端当前 `1.7.2` 推进到 `1.7.3`，同步 Assembly / File / Informational 版本。
+2. `README.md` — 当前版本、发布产物文件名和版本 tag 示例统一改为 `1.7.3`。
+3. `project-log/05-current-status.md` — 当前版本更新为 `V1.7.3 待发布`，同步当前阶段说明。
+
+**遇到的问题**：
+
+- 当前机器没有 `dotnet` 命令，无法在本机执行 .NET / WPF 编译验证。
+- 推送 `main` 时远端已包含 `v1.7.1` / `v1.7.2` 相关提交，需要先 rebase 到 `origin/main`，再把本轮发布版本改为 `1.7.3`。
+
+**解决方式**：
+
+- 使用本机可执行的 XAML 解析、多语言 key 完整性、`git diff --check` 和产物目录检查进行提交前验证；正式构建交由 GitHub Actions tag 构建触发。
+- 保留远端已有 `1.7.1` / `1.7.2` 发布记录和功能记录，本轮作为 `1.7.3` 追加。
+
+**验证方式**：
+
+- 7 个 `Resources/Strings*.xaml` 文件 XML 解析。
+- 应用窗口 XAML 文件 XML 解析。
+- 7 个资源文件 key 完整性检查。
+- `git diff --check`
+- 本地产物目录检查。
+- `dotnet build ChromeIsolator.sln`（尝试执行）。
+
+**验证结果**：
+
+- 通过。应用窗口 XAML 和 7 个资源 XAML 均可解析。
+- 通过。7 个资源文件均为 144 个 key，无缺失、无额外 key。
+- 通过。`git diff --check` 无输出。
+- 未运行成功。`dotnet build ChromeIsolator.sln` 因当前机器没有 `dotnet` 命令失败。
+
+**本地产物清理**：
+
+- 无。本轮检查未发现 `bin/`、`obj/`、`artifacts/`、`TestResults/`、`.vs/` 等构建或测试产物。
+
+---
+
+## 2026-06-05（逐项复核并修复评审确认项）
+
+**触发原因**：用户要求针对本轮评审提出的每一项 bug / 风险 / 优化再次全面检查，确认成立后全部修改。
+
+**修改内容**：
+
+1. `Services/FingerprintInjector.cs`、`Services/ChromeManager.cs`、`ViewModels/MainViewModel.cs` — 差异模式 CDP 注入失败不再静默退出；注入器失败会回写到对应环境错误提示，说明浏览器可继续使用但本次可能按基础模式运行，并提示关闭后重新启动可重试。
+2. `Services/ShellService.cs`、`ViewModels/SettingsViewModel.cs` — “设为默认浏览器”补齐 StartMenuInternet 注册项，设置页按钮增加局部异常处理和成功 / 失败提示，避免进入全局 fatal handler。
+3. `App.xaml.cs` — 第二实例向已有实例转发唤醒或外部链接失败时显示提示；外部链接转发失败时自动复制链接，不再静默丢弃用户操作。
+4. `ViewModels/MainViewModel.cs`、`MainWindow.xaml`、`Resources/Strings*.xaml` — 高级详情内存值改为 Windows 可用物理内存；7 语言标签同步改为“可用物理内存”语义；高级信息标签列加宽并允许换行，避免多语言长标签截断。
+5. `README.md` — 修正双击环境列表的说明：未运行环境启动，运行中环境带到前台。
+6. `project-log/11-code-review-log.md` — 新增第九轮复核记录，逐条说明自检结论、修复结果和验证情况。
+
+**遇到的问题**：
+
+- 当前 macOS 环境没有 `dotnet` 命令，无法执行 .NET / WPF 编译验证。
+- 默认浏览器注册最终是否能被 Windows 10 / 11 默认应用设置页识别，仍需要 Windows 实机验证。
+
+**解决方式**：
+
+- 使用本机可执行的验证替代：资源 XML 解析、多语言 key 完整性检查、`git diff --check` 和本地产物检查。
+- 默认浏览器注册在原有 Capabilities / ProgId 基础上补齐 StartMenuInternet 客户端入口，降低 Windows 默认应用设置页识别风险。
+
+**验证方式**：
+
+- 7 个 `Resources/Strings*.xaml` 文件 XML 解析。
+- 7 个资源文件 key 完整性检查。
+- `git diff --check`
+- 本地产物目录检查。
+- `dotnet build ChromeIsolator.sln`（尝试执行）。
+
+**验证结果**：
+
+- 通过。7 个资源文件 XML 均可解析。
+- 通过。7 个资源文件均为 144 个 key，无缺失、无额外 key。
+- 通过。`git diff --check` 无输出。
+- 通过。本轮未生成 `bin/`、`obj/`、`artifacts/`、`TestResults/`。
+- 未运行成功。`dotnet build ChromeIsolator.sln` 因当前机器没有 `dotnet` 命令失败。
+
+**本地产物清理**：
+
+- 无。本轮未生成构建、测试、调试或预览产物。
+
+---
+
 ## 2026-05-26（V1.7.1 发布触发）
 
 **状态：进行中，待 GitHub 推送与 tag 构建**

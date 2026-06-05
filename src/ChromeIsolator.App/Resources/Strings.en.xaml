@@ -34,7 +34,7 @@
     <sys:String x:Key="LabelChromeVersion">Browser version</sys:String>
     <sys:String x:Key="LabelChromePath">Browser path</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU cores</sys:String>
-    <sys:String x:Key="LabelMemory">Memory</sys:String>
+    <sys:String x:Key="LabelMemory">Available physical memory</sys:String>
     <sys:String x:Key="EmptyProfiles">No environments yet. Click "Add environment" above to create one.</sys:String>
 
     <!-- SettingsWindow -->
@@ -123,6 +123,9 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">No environment is available yet. Create an environment before opening external links.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">The browser engine is not ready, so this link cannot be opened. You can copy the link first.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator only handles http and https links. You can copy this link and handle it manually.</sys:String>
+    <sys:String x:Key="MsgEnvironmentVariationFailed">Variation mode injection failed: {0}. The browser can still be used, but this run may behave like base mode; close and start it again to retry variation mode.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows default apps settings opened. Select ChromeIsolator in the browser list to finish setting http / https defaults.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestFailed">Could not open default apps settings: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">New version available: {0}&#x0A;&#x0A;Go to download?</sys:String>
     <sys:String x:Key="MsgUpToDate">Already up to date ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Update check failed: {0}</sys:String>

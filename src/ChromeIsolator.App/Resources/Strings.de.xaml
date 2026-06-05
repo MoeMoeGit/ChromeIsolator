@@ -34,7 +34,7 @@
     <sys:String x:Key="LabelChromeVersion">Browser-Version</sys:String>
     <sys:String x:Key="LabelChromePath">Browser-Pfad</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU-Kerne</sys:String>
-    <sys:String x:Key="LabelMemory">Arbeitsspeicher</sys:String>
+    <sys:String x:Key="LabelMemory">Verfügbarer physischer Speicher</sys:String>
     <sys:String x:Key="EmptyProfiles">Keine Umgebungen vorhanden. Klicken Sie oben auf „Umgebung hinzufügen“.</sys:String>
 
     <!-- SettingsWindow -->
@@ -123,6 +123,9 @@ Edge vorübergehend verwenden?</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">Es ist noch keine Umgebung verfügbar. Erstellen Sie zuerst eine Umgebung.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Die Browser-Engine ist noch nicht bereit. Der Link kann zuerst kopiert werden.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator verarbeitet nur http- und https-Links. Kopieren Sie diesen Link bei Bedarf manuell.</sys:String>
+    <sys:String x:Key="MsgEnvironmentVariationFailed">Variationsmodus-Injektion fehlgeschlagen: {0}. Der Browser kann weiter verwendet werden, läuft diesmal aber möglicherweise wie im Basismodus. Schließen und erneut starten, um den Variationsmodus erneut zu versuchen.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestOpened">Die Windows-Einstellungen für Standard-Apps wurden geöffnet. Wählen Sie ChromeIsolator in der Browserliste, um die http-/https-Standards festzulegen.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestFailed">Standard-App-Einstellungen konnten nicht geöffnet werden: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Neue Version verfügbar: {0}&#x0A;&#x0A;Zur Download-Seite gehen?</sys:String>
     <sys:String x:Key="MsgUpToDate">Bereits aktuell ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Update-Prüfung fehlgeschlagen: {0}</sys:String>

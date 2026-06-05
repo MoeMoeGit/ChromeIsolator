@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using System.Windows;
 using ChromeIsolator.Models;
 using ChromeIsolator.Services;
@@ -51,6 +52,7 @@ public sealed class MainViewModel : ObservableObject
         SelectedProfile = Profiles.FirstOrDefault();
 
         _chromeManager.ProfileExited += OnProfileExited;
+        _chromeManager.ProfileWarning += OnProfileWarning;
         L10n.LanguageChanged += OnLanguageChanged;
         RefreshChromeStatus();
         _ = RefreshDiskSizesAsync();
@@ -135,9 +137,9 @@ public sealed class MainViewModel : ObservableObject
     {
         get
         {
-            var gc = GC.GetGCMemoryInfo();
-            var totalMb = gc.TotalAvailableMemoryBytes / (1024.0 * 1024.0);
-            return $"{totalMb:F0} MB";
+            return TryGetAvailablePhysicalMemoryBytes(out var bytes)
+                ? FormatBytes(bytes)
+                : "-";
         }
     }
 
@@ -697,6 +699,21 @@ public sealed class MainViewModel : ObservableObject
         });
     }
 
+    private void OnProfileWarning(string folder, string message)
+    {
+        WpfApplication.Current.Dispatcher.BeginInvoke(() =>
+        {
+            var profile = Profiles.FirstOrDefault(item => item.Folder == folder);
+            if (profile is null)
+            {
+                return;
+            }
+
+            profile.Error = L10n.Format("MsgEnvironmentVariationFailed", message);
+            RaiseCommandState();
+        });
+    }
+
     private ProfileViewModel? ResolveExternalLinkProfile()
     {
         if (Profiles.Count == 0)
@@ -898,5 +915,52 @@ public sealed class MainViewModel : ObservableObject
         }
 
         SelectedProfile = selected is not null && Profiles.Contains(selected) ? selected : Profiles.FirstOrDefault();
+    }
+
+    private static string FormatBytes(ulong bytes)
+    {
+        var mb = bytes / (1024.0 * 1024.0);
+        if (mb < 1024)
+        {
+            return $"{mb:F0} MB";
+        }
+
+        return $"{mb / 1024.0:F1} GB";
+    }
+
+    private static bool TryGetAvailablePhysicalMemoryBytes(out ulong bytes)
+    {
+        bytes = 0;
+        if (!OperatingSystem.IsWindows())
+        {
+            return false;
+        }
+
+        var status = new MemoryStatusEx();
+        status.Length = (uint)Marshal.SizeOf<MemoryStatusEx>();
+        if (!GlobalMemoryStatusEx(ref status))
+        {
+            return false;
+        }
+
+        bytes = status.AvailablePhysical;
+        return true;
+    }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool GlobalMemoryStatusEx(ref MemoryStatusEx buffer);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MemoryStatusEx
+    {
+        public uint Length;
+        public uint MemoryLoad;
+        public ulong TotalPhysical;
+        public ulong AvailablePhysical;
+        public ulong TotalPageFile;
+        public ulong AvailablePageFile;
+        public ulong TotalVirtual;
+        public ulong AvailableVirtual;
+        public ulong AvailableExtendedVirtual;
     }
 }

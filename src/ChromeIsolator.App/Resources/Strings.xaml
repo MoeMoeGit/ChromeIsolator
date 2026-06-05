@@ -34,7 +34,7 @@
     <sys:String x:Key="LabelChromeVersion">浏览器版本</sys:String>
     <sys:String x:Key="LabelChromePath">浏览器路径</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU 核心</sys:String>
-    <sys:String x:Key="LabelMemory">可用内存</sys:String>
+    <sys:String x:Key="LabelMemory">可用物理内存</sys:String>
     <sys:String x:Key="EmptyProfiles">暂无环境，点击上方「添加环境」创建</sys:String>
 
     <!-- SettingsWindow -->
@@ -124,6 +124,9 @@
     <sys:String x:Key="MsgExternalLinkNoProfiles">还没有可用环境。请先创建一个环境，再打开外部链接。</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">浏览器引擎尚未就绪，无法打开这个链接。你可以先复制链接。</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator 只处理 http 和 https 链接。你可以复制这个链接后手动处理。</sys:String>
+    <sys:String x:Key="MsgEnvironmentVariationFailed">差异模式注入失败：{0}。浏览器仍可使用，但本次可能只按基础模式运行；关闭后重新启动可重试差异模式。</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestOpened">已打开 Windows 默认应用设置。请在浏览器列表中选择 ChromeIsolator，完成 http / https 默认浏览器设置。</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestFailed">无法打开默认应用设置：{0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">发现新版本：{0}&#x0A;&#x0A;是否前往下载？</sys:String>
     <sys:String x:Key="MsgUpToDate">当前已是最新版本（{0}）</sys:String>
     <sys:String x:Key="MsgUpdateFailed">检查更新失败：{0}</sys:String>

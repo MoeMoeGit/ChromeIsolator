@@ -30,6 +30,7 @@ public sealed class ChromeManager
     private const int SW_RESTORE = 9;
 
     public event Action<string>? ProfileExited;
+    public event Action<string, string>? ProfileWarning;
 
     public ChromeManager(Func<bool>? isEdgeFallbackAllowed = null)
     {
@@ -168,6 +169,9 @@ public sealed class ChromeManager
             if (port is not null)
             {
                 var injector = new FingerprintInjector(port.Value, profile.InstanceNumber);
+                injector.Failed += ex => ProfileWarning?.Invoke(
+                    profile.Folder,
+                    ex.Message);
                 _debugPorts[profile.Folder] = port.Value;
                 _fingerprintInjectors[profile.Folder] = injector;
 

@@ -48,6 +48,15 @@ public static class ShellService
         using var registeredApps = Registry.CurrentUser.CreateSubKey(@"Software\RegisteredApplications");
         registeredApps?.SetValue("ChromeIsolator", @"Software\Clients\StartMenuInternet\ChromeIsolator\Capabilities");
 
+        using var client = Registry.CurrentUser.CreateSubKey(@"Software\Clients\StartMenuInternet\ChromeIsolator");
+        client?.SetValue("", "ChromeIsolator");
+
+        using var clientDefaultIcon = Registry.CurrentUser.CreateSubKey(@"Software\Clients\StartMenuInternet\ChromeIsolator\DefaultIcon");
+        clientDefaultIcon?.SetValue("", $"\"{executablePath}\",0");
+
+        using var clientCommand = Registry.CurrentUser.CreateSubKey(@"Software\Clients\StartMenuInternet\ChromeIsolator\shell\open\command");
+        clientCommand?.SetValue("", $"\"{executablePath}\"");
+
         using var capabilities = Registry.CurrentUser.CreateSubKey(@"Software\Clients\StartMenuInternet\ChromeIsolator\Capabilities");
         capabilities?.SetValue("ApplicationName", "ChromeIsolator");
         capabilities?.SetValue("ApplicationDescription", "Open links in a selected ChromeIsolator environment.");

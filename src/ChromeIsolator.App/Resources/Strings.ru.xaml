@@ -34,7 +34,7 @@
     <sys:String x:Key="LabelChromeVersion">Версия браузера</sys:String>
     <sys:String x:Key="LabelChromePath">Путь браузера</sys:String>
     <sys:String x:Key="LabelCpuCores">Ядра CPU</sys:String>
-    <sys:String x:Key="LabelMemory">Память</sys:String>
+    <sys:String x:Key="LabelMemory">Доступная физическая память</sys:String>
     <sys:String x:Key="EmptyProfiles">Нет сред. Нажмите «Добавить среду» выше, чтобы создать.</sys:String>
 
     <!-- SettingsWindow -->
@@ -123,6 +123,9 @@
     <sys:String x:Key="MsgExternalLinkNoProfiles">Нет доступных сред. Сначала создайте среду.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Движок браузера не готов, поэтому ссылка не может быть открыта. Можно сначала скопировать ссылку.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator обрабатывает только ссылки http и https. При необходимости скопируйте эту ссылку вручную.</sys:String>
+    <sys:String x:Key="MsgEnvironmentVariationFailed">Не удалось применить режим различий: {0}. Браузером можно пользоваться, но этот запуск может работать как базовый режим. Закройте и запустите снова, чтобы повторить режим различий.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestOpened">Открыты настройки приложений Windows по умолчанию. Выберите ChromeIsolator в списке браузеров, чтобы завершить настройку http / https.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestFailed">Не удалось открыть настройки приложений по умолчанию: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}&#x0A;&#x0A;Перейти к загрузке?</sys:String>
     <sys:String x:Key="MsgUpToDate">Уже актуальная версия ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Ошибка проверки обновлений: {0}</sys:String>

@@ -34,7 +34,7 @@
     <sys:String x:Key="LabelChromeVersion">ブラウザー バージョン</sys:String>
     <sys:String x:Key="LabelChromePath">ブラウザー パス</sys:String>
     <sys:String x:Key="LabelCpuCores">CPU コア</sys:String>
-    <sys:String x:Key="LabelMemory">メモリ</sys:String>
+    <sys:String x:Key="LabelMemory">利用可能な物理メモリ</sys:String>
     <sys:String x:Key="EmptyProfiles">環境がありません。上の「環境を追加」で作成してください。</sys:String>
 
     <!-- SettingsWindow -->
@@ -123,6 +123,9 @@
     <sys:String x:Key="MsgExternalLinkNoProfiles">利用できる環境がありません。先に環境を作成してください。</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">ブラウザーエンジンの準備ができていないため、このリンクを開けません。先にリンクをコピーできます。</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator は http と https リンクのみ処理します。必要に応じてこのリンクをコピーしてください。</sys:String>
+    <sys:String x:Key="MsgEnvironmentVariationFailed">差分モードの注入に失敗しました: {0}。ブラウザーは使用できますが、今回は基本モードとして動作する可能性があります。閉じて再起動すると差分モードを再試行できます。</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows の既定のアプリ設定を開きました。ブラウザー一覧で ChromeIsolator を選択し、http / https の既定設定を完了してください。</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestFailed">既定のアプリ設定を開けませんでした: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">新しいバージョンがあります：{0}&#x0A;&#x0A;ダウンロードページに移動しますか？</sys:String>
     <sys:String x:Key="MsgUpToDate">最新バージョンです（{0}）</sys:String>
     <sys:String x:Key="MsgUpdateFailed">更新確認に失敗しました：{0}</sys:String>

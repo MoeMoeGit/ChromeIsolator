@@ -34,7 +34,7 @@
     <sys:String x:Key="LabelChromeVersion">Version du navigateur</sys:String>
     <sys:String x:Key="LabelChromePath">Chemin du navigateur</sys:String>
     <sys:String x:Key="LabelCpuCores">Cœurs CPU</sys:String>
-    <sys:String x:Key="LabelMemory">Mémoire</sys:String>
+    <sys:String x:Key="LabelMemory">Mémoire physique disponible</sys:String>
     <sys:String x:Key="EmptyProfiles">Aucun environnement. Cliquez sur « Ajouter un environnement » pour en créer un.</sys:String>
 
     <!-- SettingsWindow -->
@@ -123,6 +123,9 @@ Utiliser Edge temporairement ?</sys:String>
     <sys:String x:Key="MsgExternalLinkNoProfiles">Aucun environnement disponible. Créez d&apos;abord un environnement.</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Le moteur du navigateur n&apos;est pas prêt. Vous pouvez d&apos;abord copier le lien.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator traite uniquement les liens http et https. Vous pouvez copier ce lien manuellement.</sys:String>
+    <sys:String x:Key="MsgEnvironmentVariationFailed">Échec de l&apos;injection du mode variation : {0}. Le navigateur reste utilisable, mais cette session peut fonctionner comme le mode de base. Fermez puis relancez pour réessayer le mode variation.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestOpened">Les paramètres Windows des applications par défaut ont été ouverts. Sélectionnez ChromeIsolator dans la liste des navigateurs pour terminer les réglages http / https.</sys:String>
+    <sys:String x:Key="MsgDefaultBrowserRequestFailed">Impossible d&apos;ouvrir les paramètres des applications par défaut : {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Nouvelle version disponible : {0}&#x0A;&#x0A;Aller à la page de téléchargement ?</sys:String>
     <sys:String x:Key="MsgUpToDate">Déjà à jour ({0})</sys:String>
     <sys:String x:Key="MsgUpdateFailed">Échec de la vérification : {0}</sys:String>
