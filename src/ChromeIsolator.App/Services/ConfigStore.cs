@@ -10,20 +10,30 @@ public sealed class ConfigStore
         WriteIndented = true
     };
 
+    public bool RecoveredFromBackup { get; private set; }
+    public bool UsedDefaultAfterLoadFailure { get; private set; }
+
     public AppConfig Load()
     {
         AppPaths.EnsureDirectories();
+        RecoveredFromBackup = false;
+        UsedDefaultAfterLoadFailure = false;
 
         if (TryLoad(AppPaths.ConfigFile, out var config))
         {
             return config;
         }
 
+        var primaryExists = File.Exists(AppPaths.ConfigFile);
+        var backupExists = File.Exists(AppPaths.ConfigBackupFile);
         if (TryLoad(AppPaths.ConfigBackupFile, out config))
         {
+            RecoveredFromBackup = true;
+            TryRestorePrimaryFromBackup();
             return config;
         }
 
+        UsedDefaultAfterLoadFailure = primaryExists || backupExists;
         return new AppConfig();
     }
 
@@ -73,6 +83,18 @@ public sealed class ConfigStore
         {
             config = new AppConfig();
             return false;
+        }
+    }
+
+    private static void TryRestorePrimaryFromBackup()
+    {
+        try
+        {
+            File.Copy(AppPaths.ConfigBackupFile, AppPaths.ConfigFile, overwrite: true);
+        }
+        catch
+        {
+            // Loading from backup is enough to keep the app usable; restore can be retried next launch.
         }
     }
 }

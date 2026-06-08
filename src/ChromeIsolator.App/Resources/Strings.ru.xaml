@@ -68,6 +68,7 @@
     <sys:String x:Key="SectionExternalLinks">Внешние ссылки</sys:String>
     <sys:String x:Key="ExternalLinkDescription">Когда другие приложения открывают ссылки http / https, они отправляются в выбранную среду.</sys:String>
     <sys:String x:Key="LabelExternalLinkTarget">Открывать в</sys:String>
+    <sys:String x:Key="ExternalLinkAutoTarget">Автоматически (среда с наименьшим номером)</sys:String>
     <sys:String x:Key="BtnSetDefaultBrowser">Сделать браузером по умолчанию</sys:String>
     <sys:String x:Key="SectionLanguage">Язык / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Открыть папку браузера</sys:String>
@@ -124,6 +125,8 @@
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Движок браузера не готов, поэтому ссылка не может быть открыта. Можно сначала скопировать ссылку.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator обрабатывает только ссылки http и https. При необходимости скопируйте эту ссылку вручную.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">Не удалось применить режим различий: {0}. Браузером можно пользоваться, но этот запуск может работать как базовый режим. Закройте и запустите снова, чтобы повторить режим различий.</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromBackup">Не удалось прочитать файл конфигурации, поэтому ChromeIsolator восстановил его из резервной копии. Проверьте имена сред, заметки, режим различий и настройки внешних ссылок.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Не удалось прочитать файл конфигурации и резервную копию, поэтому ChromeIsolator использовал настройки по умолчанию и заново обнаружил среды на диске. Некоторые имена, заметки или настройки может потребоваться задать снова.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Открыты настройки приложений Windows по умолчанию. Выберите ChromeIsolator в списке браузеров, чтобы завершить настройку http / https.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">Не удалось открыть настройки приложений по умолчанию: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}&#x0A;&#x0A;Перейти к загрузке?</sys:String>
@@ -145,6 +148,7 @@
     <sys:String x:Key="ChromeInstalling">Установка Chrome...</sys:String>
     <sys:String x:Key="ChromeVerifying">Проверка Chrome...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">Исполняемый файл Chrome не найден после установки</sys:String>
+    <sys:String x:Key="ChromeExitedImmediately">Браузер закрылся сразу после запуска. Убедитесь, что эта среда не заблокирована другим процессом Chrome, затем повторите попытку.</sys:String>
     <sys:String x:Key="ChromeDone">Установка Chrome завершена</sys:String>
 
     <!-- Status -->

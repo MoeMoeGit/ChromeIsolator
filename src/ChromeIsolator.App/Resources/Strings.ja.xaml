@@ -68,6 +68,7 @@
     <sys:String x:Key="SectionExternalLinks">外部リンク</sys:String>
     <sys:String x:Key="ExternalLinkDescription">他のアプリが http / https リンクを開くと、選択した環境へ送ります。</sys:String>
     <sys:String x:Key="LabelExternalLinkTarget">開く先</sys:String>
+    <sys:String x:Key="ExternalLinkAutoTarget">自動選択（番号が最小の環境）</sys:String>
     <sys:String x:Key="BtnSetDefaultBrowser">既定のブラウザーに設定</sys:String>
     <sys:String x:Key="SectionLanguage">言語 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">ブラウザー フォルダーを開く</sys:String>
@@ -124,6 +125,8 @@
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">ブラウザーエンジンの準備ができていないため、このリンクを開けません。先にリンクをコピーできます。</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator は http と https リンクのみ処理します。必要に応じてこのリンクをコピーしてください。</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">差分モードの注入に失敗しました: {0}。ブラウザーは使用できますが、今回は基本モードとして動作する可能性があります。閉じて再起動すると差分モードを再試行できます。</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromBackup">設定ファイルを読み取れなかったため、バックアップから復元しました。環境名、メモ、差分モード、外部リンク設定を確認してください。</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">設定ファイルとバックアップを読み取れなかったため、既定設定を使用し、ディスク上の環境を再検出しました。一部の名前、メモ、設定は再設定が必要な場合があります。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows の既定のアプリ設定を開きました。ブラウザー一覧で ChromeIsolator を選択し、http / https の既定設定を完了してください。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">既定のアプリ設定を開けませんでした: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">新しいバージョンがあります：{0}&#x0A;&#x0A;ダウンロードページに移動しますか？</sys:String>
@@ -145,6 +148,7 @@
     <sys:String x:Key="ChromeInstalling">Chrome をインストール中...</sys:String>
     <sys:String x:Key="ChromeVerifying">Chrome を検証中...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">インストール後も Chrome 実行ファイルが見つかりません</sys:String>
+    <sys:String x:Key="ChromeExitedImmediately">ブラウザーは起動直後に終了しました。この環境が別の Chrome プロセスにロックされていないことを確認して、もう一度試してください。</sys:String>
     <sys:String x:Key="ChromeDone">Chrome のインストールが完了しました</sys:String>
 
     <!-- Status -->

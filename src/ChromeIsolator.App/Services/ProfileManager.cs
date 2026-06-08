@@ -11,11 +11,15 @@ public sealed class ProfileManager
     {
         _configStore = configStore;
         Config = _configStore.Load();
+        RecoveredConfigFromBackup = _configStore.RecoveredFromBackup;
+        UsedDefaultConfigAfterLoadFailure = _configStore.UsedDefaultAfterLoadFailure;
         ReconcileProfilesWithDisk(File.Exists(AppPaths.ConfigFile));
         EnsureProfileDirectories();
     }
 
     public AppConfig Config { get; }
+    public bool RecoveredConfigFromBackup { get; }
+    public bool UsedDefaultConfigAfterLoadFailure { get; }
 
     public Profile AddProfile()
     {
@@ -87,7 +91,7 @@ public sealed class ProfileManager
 
         if (diskFolders.Count == 0)
         {
-            if (configExists && Config.Profiles.Count > 0)
+            if (configExists && !UsedDefaultConfigAfterLoadFailure && Config.Profiles.Count > 0)
             {
                 Config.Profiles.Clear();
                 Save();

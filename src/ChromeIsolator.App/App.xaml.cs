@@ -1,6 +1,7 @@
 using System.Windows;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using ChromeIsolator.Services;
 using ChromeIsolator.ViewModels;
@@ -11,7 +12,6 @@ namespace ChromeIsolator;
 public partial class App : WpfApplication
 {
     private const string SingleInstanceMutexName = @"Local\ChromeIsolator.SingleInstance";
-    private const string SingleInstancePipeName = "ChromeIsolator.SingleInstance";
     private const int ASFW_ANY = -1;
 
     private Mutex? _singleInstanceMutex;
@@ -85,7 +85,10 @@ public partial class App : WpfApplication
     {
         try
         {
-            _chromeManager?.StopAll(_profileManager?.Config.Profiles ?? []);
+            if (_chromeManager?.HasRunningProfiles == true)
+            {
+                _chromeManager.StopAll(_profileManager?.Config.Profiles ?? []);
+            }
         }
         catch
         {
@@ -257,6 +260,27 @@ public partial class App : WpfApplication
         }
 
         return "open-url " + Convert.ToBase64String(Encoding.UTF8.GetBytes(externalUrl));
+    }
+
+    private static string SingleInstancePipeName
+    {
+        get
+        {
+            try
+            {
+                var sid = WindowsIdentity.GetCurrent().User?.Value;
+                if (!string.IsNullOrWhiteSpace(sid))
+                {
+                    return "ChromeIsolator.SingleInstance." + Convert.ToHexString(Encoding.UTF8.GetBytes(sid));
+                }
+            }
+            catch
+            {
+                // Fall back to the historical name if Windows identity lookup fails.
+            }
+
+            return "ChromeIsolator.SingleInstance";
+        }
     }
 
     private static bool TryParseExternalUrlMessage(string? message, out string url)

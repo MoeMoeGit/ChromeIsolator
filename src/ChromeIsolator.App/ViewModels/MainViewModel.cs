@@ -55,6 +55,7 @@ public sealed class MainViewModel : ObservableObject
         _chromeManager.ProfileWarning += OnProfileWarning;
         L10n.LanguageChanged += OnLanguageChanged;
         RefreshChromeStatus();
+        NotifyConfigRecoveryIfNeeded();
         _ = RefreshDiskSizesAsync();
     }
 
@@ -263,6 +264,7 @@ public sealed class MainViewModel : ObservableObject
     {
         if (_isShuttingDown) return;
         _isShuttingDown = true;
+        var shutdownRequested = false;
 
         try
         {
@@ -278,11 +280,16 @@ public sealed class MainViewModel : ObservableObject
             }
 
             await Task.Run(() => _chromeManager.StopAll(profileModels));
+            shutdownRequested = true;
             WpfApplication.Current.Shutdown();
         }
         finally
         {
             _isBulkStopping = false;
+            if (!shutdownRequested)
+            {
+                _isShuttingDown = false;
+            }
         }
     }
 
@@ -878,6 +885,22 @@ public sealed class MainViewModel : ObservableObject
             _profileManager.Config.FirstRunCompleted = true;
             _profileManager.Save();
         }
+    }
+
+    private void NotifyConfigRecoveryIfNeeded()
+    {
+        if (!_profileManager.RecoveredConfigFromBackup && !_profileManager.UsedDefaultConfigAfterLoadFailure)
+        {
+            return;
+        }
+
+        WpfApplication.Current.Dispatcher.BeginInvoke(() =>
+        {
+            var message = _profileManager.RecoveredConfigFromBackup
+                ? L10n.GetString("MsgConfigRecoveredFromBackup")
+                : L10n.GetString("MsgConfigResetAfterLoadFailure");
+            WpfMessageBox.Show(message, L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
+        });
     }
 
     private async Task RefreshDiskSizesAsync()

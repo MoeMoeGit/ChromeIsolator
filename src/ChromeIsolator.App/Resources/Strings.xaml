@@ -68,6 +68,7 @@
     <sys:String x:Key="SectionExternalLinks">外部链接</sys:String>
     <sys:String x:Key="ExternalLinkDescription">其他应用打开 http / https 链接时，默认转发到指定环境。</sys:String>
     <sys:String x:Key="LabelExternalLinkTarget">打开到</sys:String>
+    <sys:String x:Key="ExternalLinkAutoTarget">自动选择（编号最小环境）</sys:String>
     <sys:String x:Key="BtnSetDefaultBrowser">设为默认浏览器</sys:String>
     <sys:String x:Key="SectionLanguage">语言 / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">打开浏览器文件夹</sys:String>
@@ -125,6 +126,8 @@
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">浏览器引擎尚未就绪，无法打开这个链接。你可以先复制链接。</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator 只处理 http 和 https 链接。你可以复制这个链接后手动处理。</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">差异模式注入失败：{0}。浏览器仍可使用，但本次可能只按基础模式运行；关闭后重新启动可重试差异模式。</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromBackup">配置文件无法读取，已从备份恢复。请检查环境名称、备注、差异模式和外部链接设置是否正确。</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">配置文件和备份都无法读取，已使用默认配置并根据磁盘环境重新识别。部分名称、备注或设置可能需要重新配置。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">已打开 Windows 默认应用设置。请在浏览器列表中选择 ChromeIsolator，完成 http / https 默认浏览器设置。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">无法打开默认应用设置：{0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">发现新版本：{0}&#x0A;&#x0A;是否前往下载？</sys:String>
@@ -146,6 +149,7 @@
     <sys:String x:Key="ChromeInstalling">正在安装 Chrome...</sys:String>
     <sys:String x:Key="ChromeVerifying">正在验证 Chrome...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">Chrome 安装后仍未找到可执行文件</sys:String>
+    <sys:String x:Key="ChromeExitedImmediately">浏览器启动后立即退出。请确认该环境未被其他 Chrome 进程占用，或稍后重试。</sys:String>
     <sys:String x:Key="ChromeDone">Chrome 安装完成</sys:String>
 
     <!-- Status -->

@@ -43,11 +43,14 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         }
         ProfileModeView = CollectionViewSource.GetDefaultView(ProfileModes);
         ProfileModeView.Filter = FilterProfileMode;
-        ExternalLinkProfiles = _profileManager.Config.Profiles
+        ExternalLinkProfiles =
+        [
+            SettingsProfileOptionViewModel.CreateAutomatic(),
+            .. _profileManager.Config.Profiles
             .OrderBy(profile => profile.InstanceNumber == 0 ? int.MaxValue : profile.InstanceNumber)
             .ThenBy(profile => profile.Folder, StringComparer.OrdinalIgnoreCase)
             .Select(profile => new SettingsProfileOptionViewModel(profile))
-            .ToList();
+        ];
         _selectedExternalLinkProfile = ResolveSelectedExternalLinkProfile();
         _selectedLanguage = Languages.FirstOrDefault(l => l.Code == L10n.CurrentLanguage) ?? Languages[0];
 
@@ -104,7 +107,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         {
             if (SetProperty(ref _selectedExternalLinkProfile, value))
             {
-                _profileManager.SetExternalLinkProfile(value?.Model);
+                _profileManager.SetExternalLinkProfile(value?.IsAutomatic == true ? null : value?.Model);
             }
         }
     }
@@ -337,6 +340,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         if (!string.IsNullOrWhiteSpace(configuredFolder))
         {
             var configured = ExternalLinkProfiles.FirstOrDefault(profile =>
+                !profile.IsAutomatic &&
                 string.Equals(profile.Folder, configuredFolder, StringComparison.OrdinalIgnoreCase));
             if (configured is not null)
             {
@@ -344,26 +348,38 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
             }
         }
 
-        var fallback = ExternalLinkProfiles[0];
-        _profileManager.SetExternalLinkProfile(fallback.Model);
-        return fallback;
+        return ExternalLinkProfiles.FirstOrDefault(profile => profile.IsAutomatic);
     }
 }
 
 public sealed class SettingsProfileOptionViewModel : ObservableObject
 {
-    public SettingsProfileOptionViewModel(Profile model)
+    private SettingsProfileOptionViewModel(Profile? model, bool isAutomatic)
     {
         Model = model;
+        IsAutomatic = isAutomatic;
     }
 
-    public Profile Model { get; }
-    public string Folder => Model.Folder;
+    public SettingsProfileOptionViewModel(Profile model)
+        : this(model, false)
+    {
+    }
+
+    public static SettingsProfileOptionViewModel CreateAutomatic() => new(null, true);
+
+    public Profile? Model { get; }
+    public bool IsAutomatic { get; }
+    public string Folder => Model?.Folder ?? "";
 
     public string Title
     {
         get
         {
+            if (IsAutomatic || Model is null)
+            {
+                return L10n.GetString("ExternalLinkAutoTarget");
+            }
+
             var defaultName = string.Format(L10n.GetString("LabelFolder") == "Folder" ? "Profile {0}" : "环境{0}", Model.InstanceNumber);
             return string.IsNullOrWhiteSpace(Model.DisplayName)
                 ? defaultName

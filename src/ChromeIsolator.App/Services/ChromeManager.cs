@@ -40,6 +40,16 @@ public sealed class ChromeManager
     public ChromeInfo? CurrentChrome => ResolveBrowser(_isEdgeFallbackAllowed());
     public ChromeInfo? InstalledChrome => ResolveChrome();
     public ChromeInfo? InstalledEdge => ResolveEdge();
+    public bool HasRunningProfiles
+    {
+        get
+        {
+            lock (_syncRoot)
+            {
+                return _processes.Values.Any(process => !process.HasExited);
+            }
+        }
+    }
 
     public bool IsRunning(Profile profile)
     {
@@ -166,6 +176,13 @@ public sealed class ChromeManager
             }
 
             _processes[profile.Folder] = process;
+            if (process.HasExited)
+            {
+                _processes.Remove(profile.Folder);
+                process.Dispose();
+                throw new InvalidOperationException(L10n.GetString("ChromeExitedImmediately"));
+            }
+
             if (port is not null)
             {
                 var injector = new FingerprintInjector(port.Value, profile.InstanceNumber);

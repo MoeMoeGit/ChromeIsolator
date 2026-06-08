@@ -68,6 +68,7 @@
     <sys:String x:Key="SectionExternalLinks">Externe Links</sys:String>
     <sys:String x:Key="ExternalLinkDescription">Wenn andere Apps http-/https-Links öffnen, werden sie standardmäßig an die ausgewählte Umgebung gesendet.</sys:String>
     <sys:String x:Key="LabelExternalLinkTarget">Öffnen in</sys:String>
+    <sys:String x:Key="ExternalLinkAutoTarget">Automatisch (Umgebung mit niedrigster Nummer)</sys:String>
     <sys:String x:Key="BtnSetDefaultBrowser">Als Standardbrowser festlegen</sys:String>
     <sys:String x:Key="SectionLanguage">Sprache / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Browser-Ordner öffnen</sys:String>
@@ -124,6 +125,8 @@ Edge vorübergehend verwenden?</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Die Browser-Engine ist noch nicht bereit. Der Link kann zuerst kopiert werden.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator verarbeitet nur http- und https-Links. Kopieren Sie diesen Link bei Bedarf manuell.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">Variationsmodus-Injektion fehlgeschlagen: {0}. Der Browser kann weiter verwendet werden, läuft diesmal aber möglicherweise wie im Basismodus. Schließen und erneut starten, um den Variationsmodus erneut zu versuchen.</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromBackup">Die Konfigurationsdatei konnte nicht gelesen werden und wurde aus der Sicherung wiederhergestellt. Prüfen Sie Umgebungsnamen, Notizen, Variationsmodus und externe Linkeinstellungen.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Konfigurationsdatei und Sicherung konnten nicht gelesen werden. ChromeIsolator verwendet Standardwerte und hat Umgebungen vom Datenträger neu erkannt. Einige Namen, Notizen oder Einstellungen müssen eventuell neu gesetzt werden.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Die Windows-Einstellungen für Standard-Apps wurden geöffnet. Wählen Sie ChromeIsolator in der Browserliste, um die http-/https-Standards festzulegen.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">Standard-App-Einstellungen konnten nicht geöffnet werden: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Neue Version verfügbar: {0}&#x0A;&#x0A;Zur Download-Seite gehen?</sys:String>
@@ -145,6 +148,7 @@ Edge vorübergehend verwenden?</sys:String>
     <sys:String x:Key="ChromeInstalling">Chrome wird installiert...</sys:String>
     <sys:String x:Key="ChromeVerifying">Chrome wird überprüft...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">Chrome-Executable nach Installation immer noch nicht gefunden</sys:String>
+    <sys:String x:Key="ChromeExitedImmediately">Der Browser wurde direkt nach dem Start beendet. Stellen Sie sicher, dass diese Umgebung nicht durch einen anderen Chrome-Prozess gesperrt ist, und versuchen Sie es erneut.</sys:String>
     <sys:String x:Key="ChromeDone">Chrome-Installation abgeschlossen</sys:String>
 
     <!-- Status -->

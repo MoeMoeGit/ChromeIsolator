@@ -68,9 +68,7 @@ public partial class MainWindow : Window
         _allowClose = true;
         try
         {
-            await _viewModel.StopAllAsync();
-            Close();
-            WpfApplication.Current.Shutdown();
+            await _viewModel.StopAllAndQuitAsync();
         }
         catch (Exception ex)
         {

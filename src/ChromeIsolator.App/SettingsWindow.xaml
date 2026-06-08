@@ -75,7 +75,7 @@
                     <ComboBox ItemsSource="{Binding ExternalLinkProfiles}"
                               SelectedItem="{Binding SelectedExternalLinkProfile}"
                               Margin="0,6,0,0"
-                              Width="260"
+                              Width="360"
                               HorizontalAlignment="Left">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>

@@ -68,6 +68,7 @@
     <sys:String x:Key="SectionExternalLinks">Liens externes</sys:String>
     <sys:String x:Key="ExternalLinkDescription">Quand d&apos;autres apps ouvrent des liens http / https, ils sont envoyés par défaut à l&apos;environnement choisi.</sys:String>
     <sys:String x:Key="LabelExternalLinkTarget">Ouvrir dans</sys:String>
+    <sys:String x:Key="ExternalLinkAutoTarget">Automatique (environnement au plus petit numéro)</sys:String>
     <sys:String x:Key="BtnSetDefaultBrowser">Définir comme navigateur par défaut</sys:String>
     <sys:String x:Key="SectionLanguage">Langue / Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Ouvrir le dossier du navigateur</sys:String>
@@ -124,6 +125,8 @@ Utiliser Edge temporairement ?</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">Le moteur du navigateur n&apos;est pas prêt. Vous pouvez d&apos;abord copier le lien.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator traite uniquement les liens http et https. Vous pouvez copier ce lien manuellement.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">Échec de l&apos;injection du mode variation : {0}. Le navigateur reste utilisable, mais cette session peut fonctionner comme le mode de base. Fermez puis relancez pour réessayer le mode variation.</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromBackup">Le fichier de configuration n&apos;a pas pu être lu ; ChromeIsolator l&apos;a restauré depuis la sauvegarde. Vérifiez les noms d&apos;environnements, notes, mode variation et paramètres de liens externes.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Le fichier de configuration et sa sauvegarde n&apos;ont pas pu être lus ; ChromeIsolator a utilisé les paramètres par défaut et redétecté les environnements sur le disque. Certains noms, notes ou paramètres peuvent devoir être reconfigurés.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Les paramètres Windows des applications par défaut ont été ouverts. Sélectionnez ChromeIsolator dans la liste des navigateurs pour terminer les réglages http / https.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">Impossible d&apos;ouvrir les paramètres des applications par défaut : {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Nouvelle version disponible : {0}&#x0A;&#x0A;Aller à la page de téléchargement ?</sys:String>
@@ -145,6 +148,7 @@ Utiliser Edge temporairement ?</sys:String>
     <sys:String x:Key="ChromeInstalling">Installation de Chrome...</sys:String>
     <sys:String x:Key="ChromeVerifying">Vérification de Chrome...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">Exécutable Chrome introuvable après l'installation</sys:String>
+    <sys:String x:Key="ChromeExitedImmediately">Le navigateur s&apos;est fermé immédiatement après le lancement. Vérifiez que cet environnement n&apos;est pas verrouillé par un autre processus Chrome, puis réessayez.</sys:String>
     <sys:String x:Key="ChromeDone">Installation de Chrome terminée</sys:String>
 
     <!-- Status -->

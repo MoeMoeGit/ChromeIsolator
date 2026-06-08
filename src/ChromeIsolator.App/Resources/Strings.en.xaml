@@ -68,6 +68,7 @@
     <sys:String x:Key="SectionExternalLinks">External links</sys:String>
     <sys:String x:Key="ExternalLinkDescription">When other apps open http / https links, send them to the selected environment by default.</sys:String>
     <sys:String x:Key="LabelExternalLinkTarget">Open to</sys:String>
+    <sys:String x:Key="ExternalLinkAutoTarget">Automatic (lowest-numbered environment)</sys:String>
     <sys:String x:Key="BtnSetDefaultBrowser">Set as default browser</sys:String>
     <sys:String x:Key="SectionLanguage">Language</sys:String>
     <sys:String x:Key="BtnOpenChromeFolder">Open browser folder</sys:String>
@@ -124,6 +125,8 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgExternalLinkBrowserNotReady">The browser engine is not ready, so this link cannot be opened. You can copy the link first.</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator only handles http and https links. You can copy this link and handle it manually.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">Variation mode injection failed: {0}. The browser can still be used, but this run may behave like base mode; close and start it again to retry variation mode.</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromBackup">The config file could not be read, so ChromeIsolator restored it from the backup. Check environment names, notes, variation mode, and external link settings.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">The config file and backup could not be read, so ChromeIsolator used default settings and rediscovered environments from disk. Some names, notes, or settings may need to be configured again.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows default apps settings opened. Select ChromeIsolator in the browser list to finish setting http / https defaults.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">Could not open default apps settings: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">New version available: {0}&#x0A;&#x0A;Go to download?</sys:String>
@@ -145,6 +148,7 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="ChromeInstalling">Installing Chrome...</sys:String>
     <sys:String x:Key="ChromeVerifying">Verifying Chrome...</sys:String>
     <sys:String x:Key="ChromeInstallFailed">Chrome executable still not found after installation</sys:String>
+    <sys:String x:Key="ChromeExitedImmediately">The browser exited immediately after launch. Make sure this environment is not already locked by another Chrome process, then try again.</sys:String>
     <sys:String x:Key="ChromeDone">Chrome installation finished</sys:String>
 
     <!-- Status -->

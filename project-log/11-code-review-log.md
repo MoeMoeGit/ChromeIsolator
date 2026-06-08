@@ -29,6 +29,8 @@ A 评审（发现） → B 验证 + 修复确认项 + 评审（发现）
 | 7 | Codex | 2026-05-25 | 2 | 2 |
 | 8 | Codex | 2026-05-25 | 3 | 3 |
 | 9 | Codex + 用户 | 2026-05-25 | 2 个待办 + 2 个后续优化 | — |
+| 10 | Codex | 2026-06-05 | 6 | 6 |
+| 11 | Codex | 2026-06-08 | 3 个确认项 + 2 个待确认项 + 4 个优化项 | 3 个确认项已修复 |
 
 ---
 
@@ -776,10 +778,85 @@ A 评审（发现） → B 验证 + 修复确认项 + 评审（发现）
 
 ---
 
+## K — 第十一轮复核（全项目风险与用户流程优化）
+
+**评审人**：Codex
+**日期**：2026-06-08
+**范围**：先读取 `project-log/README.md`、当前状态、功能设计和架构文档，再全量检查应用入口、单实例 / 外部链接、Chrome 生命周期、配置读写、Profile 管理、CDP 注入、设置页、托盘、安装器和资源文件。
+
+### 复核结论
+
+本轮先只做评审和分析，经用户确认后落地全部建议：修复启动后立即退出反馈、退出兜底重复关闭、单实例管道用户隔离、配置恢复提示，并把外部链接目标改为显式“自动选择（编号最小环境）”。
+
+### 已确认并修复
+
+#### 问题 1：浏览器启动后立即退出时 UI 可能短暂进入运行态，错误反馈不明确
+
+- **类型**：生命周期 / 稳定性 / 用户反馈
+- **状态**：已修复
+- **位置**：`src/ChromeIsolator.App/Services/ChromeManager.cs`、`src/ChromeIsolator.App/Resources/Strings*.xaml`
+- **自检结论**：`ChromeManager.Start()` 已经用锁降低 `Exited` handler 和字典登记的竞态风险，但启动后立即退出的同步失败语义仍不明确，UI 可能先按运行处理，再等待退出事件回正。profile 被锁、启动参数异常或浏览器策略限制都可能触发这种路径。
+- **修复结果**：`process.Start()` 后立即检查 `HasExited`；若浏览器已退出，清理登记并抛出本地化错误，提示用户确认环境是否被其他 Chrome 进程占用或稍后重试。
+
+#### 问题 2：退出流程存在重复 StopAll 兜底
+
+- **类型**：退出稳定性 / 性能
+- **状态**：已修复
+- **位置**：`src/ChromeIsolator.App/MainWindow.xaml.cs`、`src/ChromeIsolator.App/App.xaml.cs`、`src/ChromeIsolator.App/Services/ChromeManager.cs`
+- **自检结论**：托盘退出路径会关闭全部环境并触发应用退出，`App.OnExit` 又会无条件调用 `_chromeManager.StopAll(...)`。多数情况下第二次为空转，但仍会增加退出路径复杂度。
+- **修复结果**：`ChromeManager` 增加 `HasRunningProfiles`；`App.OnExit` 只在仍有已登记运行进程时兜底关闭；托盘退出路径交由 `StopAllAndQuitAsync()` 完成停止和退出，不再重复 `Close()`。二次自查发现关闭失败后 `_isShuttingDown` 会保持 `true`、导致用户无法重试退出，已改为失败时恢复该状态。
+
+#### 问题 3：配置损坏恢复是静默的，用户不知道设置可能回退
+
+- **类型**：数据恢复 / 用户可理解性
+- **状态**：已修复
+- **位置**：`src/ChromeIsolator.App/Services/ConfigStore.cs`、`src/ChromeIsolator.App/Services/ProfileManager.cs`、`src/ChromeIsolator.App/ViewModels/MainViewModel.cs`、`src/ChromeIsolator.App/Resources/Strings*.xaml`
+- **自检结论**：配置读取失败时会尝试 `.bak` 或默认配置，并根据磁盘 profile 重新同步环境。这个策略能保护 profile 数据，但环境名称、备注、差异模式、外部链接目标等设置可能回退，静默处理会让用户困惑。
+- **修复结果**：`ConfigStore` 记录是否从备份恢复或在配置 / 备份均失败后使用默认配置；备份可读时复制回主配置；配置和备份都不可读且磁盘无环境时保留默认 p1-p3；主窗口启动后弹出一次本地化提示，引导用户检查名称、备注、差异模式和外部链接设置。
+
+#### 优化 1：外部链接目标增加显式自动模式
+
+- **类型**：用户流程 / 设置语义
+- **状态**：已优化
+- **位置**：`src/ChromeIsolator.App/ViewModels/SettingsViewModel.cs`、`src/ChromeIsolator.App/Resources/Strings*.xaml`
+- **自检结论**：原实现打开设置页时会把未配置目标自动写为第一个环境，功能可用，但“未配置自动选择”和“用户固定选择 p1”语义混在一起。
+- **修复结果**：设置页外部链接目标列表置顶显示“自动选择（编号最小环境）”；选择该项时配置保存为 `null`，运行时继续动态选择编号最小的 `pN`。二次自查将外部链接目标下拉框从 260px 加宽到 360px，减少长语言文案截断。
+
+#### 优化 2：单实例管道名称增加用户隔离
+
+- **类型**：本地安全 / 稳定性
+- **状态**：已加固，仍需 Windows 实机验证
+- **位置**：`src/ChromeIsolator.App/App.xaml.cs`
+- **自检结论**：固定管道名可能在多用户或异常本地进程场景中造成干扰。虽然 mutex 使用 `Local\` 已按会话隔离，但管道名也应避免跨用户冲突。
+- **修复结果**：管道名追加当前 Windows 用户 SID 的十六进制后缀；如果 SID 获取失败，回退历史管道名。
+
+### 待确认问题
+
+1. Windows 默认应用页面是否稳定识别 ChromeIsolator，并能完成真实 http / https 外部链接转发。当前代码已加固注册表项，但仍需 Windows 10 / 11 实机验证。
+2. 本轮代码未完成 `dotnet build`，因为当前机器没有 `dotnet` 命令。需要在 Windows / .NET 8 WPF 构建环境运行 `dotnet build ChromeIsolator.sln`。
+
+### 验证内容
+
+- 7 个多语言资源 XAML 文件 XML 解析。
+- 7 个多语言资源 key 数量检查。
+- `git diff --check`。
+- `dotnet --info` / `dotnet build ChromeIsolator.sln` 环境探测。
+
+### 验证结果
+
+- 通过。应用窗口、主题和 7 个资源 XAML 均可解析。
+- 通过。7 个资源文件均为 148 个 key，无缺失、无额外 key。
+- 通过。`git diff --check` 无输出。
+- 通过。本轮未生成 `bin/`、`obj/`、`artifacts/`、`TestResults/`、`.vs/` 等构建或测试产物。
+- 未运行成功。`dotnet --info` 因当前机器没有 `dotnet` 命令失败；需要在 Windows / .NET 8 WPF 构建环境执行 `dotnet build ChromeIsolator.sln`。
+
+---
+
 ## 变更记录
 
 | 日期 | 变更内容 | 原因 |
 |------|----------|------|
+| 2026-06-08 | 新增第十一轮复核，确认并修复启动后立即退出反馈、退出兜底重复关闭、配置恢复提示、外部链接自动目标和单实例管道用户隔离 | 用户要求全项目查 bug / 风险并从用户角度提优化，确认后按建议全部落地 |
 | 2026-06-05 | 新增第九轮复核，确认并修复差异模式失败反馈、默认浏览器异常处理和注册加固、内存信息语义、README 双击描述、第二实例转发失败兜底 | 对用户要求的每条 bug / 优化项二次自检后落地确认项 |
 | 2026-05-25 | 新增第九轮复核，记录冷启动唤醒可靠性、高级浏览器信息刷新、Chrome 下载入口和多语言默认环境名后续待办 | 用户要求先全面复核确认问题性质，并只记录后续待办，不立即实现 |
 | 2026-05-25 | 新增第八轮复核，确认并修复最近使用时间持久化、单个关闭失败状态恢复和配置原子写入 | 对前一轮提出的问题再次自检后，确认需要全部落地 |

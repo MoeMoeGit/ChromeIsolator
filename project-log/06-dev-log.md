@@ -4,6 +4,85 @@
 
 ---
 
+## 2026-06-08（V1.7.4 发布触发）
+
+**触发原因**：用户要求将本轮全项目复核修复全部提交 GitHub；如有版本号则推进版本号，并发布新的 Release。
+
+**修改内容**：
+1. `Directory.Build.props` — 版本号从 `1.7.3` 推进到 `1.7.4`，同步 Assembly / File / Informational 版本。
+2. `README.md` — 当前版本、发布产物文件名和版本 tag 示例统一改为 `1.7.4`。
+3. `project-log/05-current-status.md` — 当前版本更新为 `V1.7.4 待发布`，同步当前阶段和任务交接信息。
+
+**遇到的问题**：
+- 当前机器没有 `dotnet` 命令，无法执行 .NET / WPF 编译验证。
+
+**解决方式**：
+- 保留本机可执行的 XAML/XML 解析、多语言 key 数量检查、`git diff --check` 和本地产物检查作为提交前验证；正式 Windows 构建交由 GitHub Actions tag 构建触发。
+
+**验证方式**：
+- 7 个 `Resources/Strings*.xaml` 文件 XML 解析。
+- 应用窗口和主题 XAML 文件 XML 解析。
+- 7 个资源文件 key 完整性检查。
+- `git diff --check`
+- 本地产物目录检查。
+- `dotnet --info`（环境探测）。
+
+**验证结果**：
+- 通过。应用窗口、主题和 7 个资源 XAML 均可解析。
+- 通过。7 个资源文件均为 148 个 key，无缺失、无额外 key。
+- 通过。`git diff --check` 无输出。
+- 通过。本轮未生成 `bin/`、`obj/`、`artifacts/`、`TestResults/`、`.vs/` 等构建或测试产物。
+- 未运行成功。`dotnet --info` 因当前机器没有 `dotnet` 命令失败；Windows / .NET 8 WPF 构建交由 GitHub Actions tag 构建验证。
+
+**本地产物清理**：
+- 无。本轮未生成需要清理的构建、测试、调试或预览产物。
+
+---
+
+## 2026-06-08（全项目复核与用户流程优化）
+
+**触发原因**：用户要求先阅读 `project-log/README.md`，整体理解项目后检查全项目 bug / 风险，并从用户角度提出优化；用户确认后要求全部按建议落地。
+
+**修改内容**：
+1. `project-log/11-code-review-log.md` — 新增第十一轮复核，记录已确认问题、待确认问题、优化项、自检结论、修复结果和验证结果。
+2. `project-log/05-current-status.md` — 更新当前版本阶段、已完成项、待处理项、下一步和任务交接，移除过期的 V1.2.0 当前待办。
+3. `Services/ChromeManager.cs` — 启动浏览器后立即检查是否已退出，若已退出则清理状态并返回明确错误；新增 `HasRunningProfiles` 供退出兜底判断。
+4. `MainWindow.xaml.cs`、`App.xaml.cs` — 托盘退出路径交由 `StopAllAndQuitAsync()` 完成停止和退出；`App.OnExit` 只在仍有运行进程时执行兜底关闭，减少重复关闭。
+5. `App.xaml.cs` — 单实例管道名追加当前 Windows 用户 SID 后缀，降低多用户或本地进程干扰风险；SID 获取失败时保留历史管道名兜底。
+6. `MainViewModel.cs` — 二次自查修复退出失败后的重试问题：`StopAllAndQuitAsync()` 如果关闭环境抛异常，会恢复 `_isShuttingDown`，允许用户再次点击退出。
+7. `ConfigStore.cs`、`ProfileManager.cs`、`MainViewModel.cs` — 配置从 `.bak` 恢复或回退默认配置时记录状态，并在主窗口启动后提示用户检查环境名称、备注、差异模式和外部链接设置；备份可读时复制回主配置；配置和备份都不可读且磁盘无环境时保留默认 p1-p3。
+8. `SettingsViewModel.cs` — 外部链接目标新增显式“自动选择（编号最小环境）”选项；选择该项时配置保存为 `null`，运行时继续动态选择编号最小环境。
+9. `SettingsWindow.xaml` — 外部链接目标下拉框从 260px 加宽到 360px，减少德语 / 俄语等长文案被截断。
+10. `Resources/Strings*.xaml` — 7 语言新增外部链接自动目标、浏览器立即退出、配置恢复和配置重置提示文案。
+
+**遇到的问题**：
+- 当前机器没有 `dotnet` 命令，无法执行 .NET / WPF 编译验证。
+- 默认浏览器注册、真实外部 App 链接转发、配置恢复提示和浏览器立即退出错误提示仍需 Windows 实机验证。
+- 二次自查发现退出路径、配置恢复回写和外部链接下拉宽度仍有细节问题，已继续修复。
+
+**解决方式**：
+- 使用本机可执行的 XAML/XML 解析、多语言 key 数量检查、`git diff --check` 和本地产物检查作为本轮基础验证。
+- 将未能在当前机器验证的 Windows 行为写入 `05-current-status.md` 和 `11-code-review-log.md` 的待确认项。
+
+**验证方式**：
+- `dotnet --info`
+- 应用窗口、主题和 7 个资源 XAML 文件 XML 解析。
+- 7 个资源文件 key 数量检查。
+- `git diff --check`
+- 本地产物目录检查。
+
+**验证结果**：
+- 未运行成功。`dotnet --info` 因当前机器没有 `dotnet` 命令失败；需要在 Windows / .NET 8 WPF 构建环境执行 `dotnet build ChromeIsolator.sln`。
+- 通过。应用窗口、主题和 7 个资源 XAML 均可解析。
+- 通过。7 个资源文件均为 148 个 key，无缺失、无额外 key。
+- 通过。`git diff --check` 无输出。
+- 通过。本轮未生成 `bin/`、`obj/`、`artifacts/`、`TestResults/`、`.vs/` 等构建或测试产物。
+
+**本地产物清理**：
+- 无。本轮未生成需要清理的构建、测试、调试或预览产物。
+
+---
+
 ## 2026-06-05（V1.7.3 发布触发）
 
 **状态：进行中，待 GitHub 推送与 tag 构建**
