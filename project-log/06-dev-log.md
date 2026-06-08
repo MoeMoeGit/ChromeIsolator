@@ -4,7 +4,7 @@
 
 ---
 
-## 2026-06-08（V1.7.4 发布触发）
+## 2026-06-08（V1.7.4 发布完成）
 
 **触发原因**：用户要求将本轮全项目复核修复全部提交 GitHub；如有版本号则推进版本号，并发布新的 Release。
 
@@ -12,6 +12,7 @@
 1. `Directory.Build.props` — 版本号从 `1.7.3` 推进到 `1.7.4`，同步 Assembly / File / Informational 版本。
 2. `README.md` — 当前版本、发布产物文件名和版本 tag 示例统一改为 `1.7.4`。
 3. `project-log/05-current-status.md` — 当前版本更新为 `V1.7.4 待发布`，同步当前阶段和任务交接信息。
+4. GitHub — 提交 `fix: release 1.7.4 stability fixes`，推送 `main`，创建并推送 `v1.7.4` tag，触发 GitHub Actions 自动创建 Release。
 
 **遇到的问题**：
 - 当前机器没有 `dotnet` 命令，无法执行 .NET / WPF 编译验证。
@@ -33,6 +34,9 @@
 - 通过。`git diff --check` 无输出。
 - 通过。本轮未生成 `bin/`、`obj/`、`artifacts/`、`TestResults/`、`.vs/` 等构建或测试产物。
 - 未运行成功。`dotnet --info` 因当前机器没有 `dotnet` 命令失败；Windows / .NET 8 WPF 构建交由 GitHub Actions tag 构建验证。
+- 通过。GitHub Actions `Build` 在 `main` 和 `v1.7.4` 上均成功。
+- 通过。GitHub Release `ChromeIsolator v1.7.4` 已创建：`https://github.com/MoeMoeGit/ChromeIsolator/releases/tag/v1.7.4`。
+- 通过。Release 资产已上传：`ChromeIsolator-win-x64-v1.7.4.zip` 和 `ChromeIsolator-Setup-x64-v1.7.4.msi`。
 
 **本地产物清理**：
 - 无。本轮未生成需要清理的构建、测试、调试或预览产物。
