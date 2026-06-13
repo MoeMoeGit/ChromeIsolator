@@ -87,7 +87,7 @@ public partial class App : WpfApplication
         {
             if (_chromeManager?.HasRunningProfiles == true)
             {
-                _chromeManager.StopAll(_profileManager?.Config.Profiles ?? []);
+                _chromeManager.StopAllAsync(_profileManager?.Config.Profiles ?? []).Wait(TimeSpan.FromSeconds(5));
             }
         }
         catch
@@ -184,19 +184,19 @@ public partial class App : WpfApplication
     {
         AllowSetForegroundWindow(ASFW_ANY);
 
-        for (var attempt = 0; attempt < 5; attempt++)
+        for (var attempt = 0; attempt < 10; attempt++)
         {
             try
             {
                 using var client = new NamedPipeClientStream(".", SingleInstancePipeName, PipeDirection.Out);
-                client.Connect(250);
+                client.Connect(500);
                 using var writer = new StreamWriter(client) { AutoFlush = true };
                 writer.WriteLine(CreateSingleInstanceMessage(externalUrl));
                 return true;
             }
             catch
             {
-                Thread.Sleep(150);
+                Thread.Sleep(250);
             }
         }
 

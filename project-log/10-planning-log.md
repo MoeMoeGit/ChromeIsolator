@@ -403,3 +403,23 @@
 **决策依据**：设置页承担总览和少量开关，按环境批量管理属于二级任务。独立窗口能把大量列表、搜索和运行状态放在合适空间内，同时保持主设置页简洁。
 
 **改动范围**：`SettingsWindow.xaml`、`SettingsViewModel.cs`、新增差异模式管理窗口、`Resources/Strings*.xaml`、README 和 project-log。
+
+---
+
+### ADR-012 [2026-06-13] 核心流程异步化与容错增强
+
+**状态**：已采用
+
+**替代关系**：无
+
+**背景与需求**：在大量环境并发运行和关闭时，同步的 `.Wait()` 容易引起线程池饿死，并且进程的 `Kill` 抛出异常会阻断批量操作。同时 Chrome 安装包达上百兆，网络波动容易导致重新下载，单实例唤醒时间也过紧。
+
+**采用的方案**：
+1. 将 `ChromeManager.Stop` 改为异步的 `StopAsync`，并在 `StopAll` 中使用 `Task.WhenAll` 进行并发控制。
+2. 捕获 `process.Kill` 的底层异常。
+3. 对 `PrepareChromeAsync` 增加循环重试机制，对断线进行容错处理。
+4. 增大 `App.xaml.cs` 中 `NamedPipeClientStream` 的重试次数和连接超时时间。
+
+**决策依据**：彻底的异步化和合理的容错是提升桌面客户端抗压能力的关键。上述调整均不改变整体架构，只在关键节点增加稳定性和性能优化。
+
+**改动范围**：`ChromeManager.cs`，`MainViewModel.cs`，`App.xaml.cs`。

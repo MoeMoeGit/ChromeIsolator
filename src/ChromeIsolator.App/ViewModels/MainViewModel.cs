@@ -215,7 +215,7 @@ public sealed class MainViewModel : ObservableObject
             }
             RaiseCommandState();
 
-            await Task.Run(() => _chromeManager.StopAll(profileModels)).ConfigureAwait(true);
+            await _chromeManager.StopAllAsync(profileModels).ConfigureAwait(true);
 
             foreach (var profile in affectedProfiles)
             {
@@ -279,7 +279,7 @@ public sealed class MainViewModel : ObservableObject
                 }
             }
 
-            await Task.Run(() => _chromeManager.StopAll(profileModels));
+            await _chromeManager.StopAllAsync(profileModels);
             shutdownRequested = true;
             WpfApplication.Current.Shutdown();
         }
@@ -662,7 +662,7 @@ public sealed class MainViewModel : ObservableObject
 
         try
         {
-            await Task.Run(() => _chromeManager.Stop(profile.Model)).ConfigureAwait(true);
+            await _chromeManager.StopAsync(profile.Model).ConfigureAwait(true);
 
             profile.IsRunning = false;
             profile.DebugPort = null;

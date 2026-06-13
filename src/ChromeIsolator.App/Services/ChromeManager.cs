@@ -217,7 +217,7 @@ public sealed class ChromeManager
         using var process = Process.Start(startInfo);
     }
 
-    public void Stop(Profile profile)
+    public async Task StopAsync(Profile profile)
     {
         Process? process;
         FingerprintInjector? injector;
@@ -241,14 +241,16 @@ public sealed class ChromeManager
         {
             if (injector is not null)
             {
-                injector.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(2));
+                var disposeTask = injector.DisposeAsync().AsTask();
+                await Task.WhenAny(disposeTask, Task.Delay(TimeSpan.FromSeconds(2))).ConfigureAwait(false);
             }
 
             if (!process.HasExited)
             {
                 if (port is not null)
                 {
-                    TryCloseBrowserViaCdpAsync(port.Value).Wait(TimeSpan.FromSeconds(2));
+                    var cdpTask = TryCloseBrowserViaCdpAsync(port.Value);
+                    await Task.WhenAny(cdpTask, Task.Delay(TimeSpan.FromSeconds(2))).ConfigureAwait(false);
                 }
 
                 if (!process.HasExited)
@@ -256,10 +258,33 @@ public sealed class ChromeManager
                     process.CloseMainWindow();
                 }
 
-                if (!process.WaitForExit(5000))
+                using var processCts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                try
                 {
-                    process.Kill(entireProcessTree: true);
-                    process.WaitForExit(5000);
+                    await process.WaitForExitAsync(processCts.Token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    if (!process.HasExited)
+                    {
+                        try
+                        {
+                            process.Kill(entireProcessTree: true);
+                        }
+                        catch
+                        {
+                            // Ignore exceptions if process has already exited or access is denied
+                        }
+
+                        using var killCts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                        try
+                        {
+                            await process.WaitForExitAsync(killCts.Token).ConfigureAwait(false);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -269,12 +294,10 @@ public sealed class ChromeManager
         }
     }
 
-    public void StopAll(IEnumerable<Profile> profiles)
+    public Task StopAllAsync(IEnumerable<Profile> profiles)
     {
-        foreach (var profile in profiles.ToList())
-        {
-            Stop(profile);
-        }
+        var tasks = profiles.ToList().Select(StopAsync);
+        return Task.WhenAll(tasks);
     }
 
     public async Task PrepareChromeAsync(IProgress<(double Percent, string Status)>? progress = null, CancellationToken cancellationToken = default)
@@ -291,36 +314,66 @@ public sealed class ChromeManager
 
         progress?.Report((0, L10n.GetString("ChromeConnecting")));
 
-        using (var httpClient = new HttpClient())
-        using (var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+        const int maxRetries = 3;
+        Exception? lastException = null;
+
+        for (int attempt = 1; attempt <= maxRetries; attempt++)
         {
-            response.EnsureSuccessStatusCode();
-            var totalBytes = response.Content.Headers.ContentLength;
-
-            progress?.Report((0, L10n.GetString("ChromeDownloading")));
-
-            await using var source = await response.Content.ReadAsStreamAsync(cancellationToken);
-            await using var destination = File.Create(installerPath);
-            var buffer = new byte[128 * 1024];
-            long readBytes = 0;
-            while (true)
+            try
             {
-                var read = await source.ReadAsync(buffer, cancellationToken);
-                if (read == 0)
+                using (var httpClient = new HttpClient())
+                using (var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
                 {
-                    break;
+                    response.EnsureSuccessStatusCode();
+                    var totalBytes = response.Content.Headers.ContentLength;
+
+                    progress?.Report((0, L10n.GetString("ChromeDownloading")));
+
+                    await using var source = await response.Content.ReadAsStreamAsync(cancellationToken);
+                    await using var destination = File.Create(installerPath);
+                    var buffer = new byte[128 * 1024];
+                    long readBytes = 0;
+                    while (true)
+                    {
+                        var read = await source.ReadAsync(buffer, cancellationToken);
+                        if (read == 0)
+                        {
+                            break;
+                        }
+
+                        await destination.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
+                        readBytes += read;
+                        if (totalBytes is > 0)
+                        {
+                            var percent = (double)readBytes / totalBytes.Value * 80;
+                            var downloadedMB = readBytes / (1024.0 * 1024.0);
+                            var totalMB = totalBytes.Value / (1024.0 * 1024.0);
+                            progress?.Report((percent, L10n.Format("ChromeDownloadingProgress", $"{downloadedMB:F1}", $"{totalMB:F1}")));
+                        }
+                    }
                 }
 
-                await destination.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
-                readBytes += read;
-                if (totalBytes is > 0)
+                lastException = null;
+                break; // Download succeeded
+            }
+            catch (OperationCanceledException)
+            {
+                throw; // Don't retry if user canceled
+            }
+            catch (Exception ex)
+            {
+                lastException = ex;
+                if (attempt < maxRetries)
                 {
-                    var percent = (double)readBytes / totalBytes.Value * 80;
-                    var downloadedMB = readBytes / (1024.0 * 1024.0);
-                    var totalMB = totalBytes.Value / (1024.0 * 1024.0);
-                    progress?.Report((percent, L10n.Format("ChromeDownloadingProgress", $"{downloadedMB:F1}", $"{totalMB:F1}")));
+                    progress?.Report((0, L10n.GetString("ChromeConnecting") + $" (Retrying {attempt}/{maxRetries - 1})"));
+                    await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
                 }
             }
+        }
+
+        if (lastException is not null)
+        {
+            throw new InvalidOperationException($"{L10n.GetString("ChromeInstallFailed")} ({lastException.Message})", lastException);
         }
 
         cancellationToken.ThrowIfCancellationRequested();

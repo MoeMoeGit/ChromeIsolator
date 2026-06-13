@@ -4,6 +4,34 @@
 
 ---
 
+## 2026-06-13（V1.7.5 异步化与容错增强）
+
+**触发原因**：用户要求根据查出的 bug 和风险点进行代码优化，但保留原有的环境命名逻辑。
+
+**修改内容**：
+1. `ChromeManager.cs` — 将同步阻塞的 `Stop` 改为完全异步的 `StopAsync`，移除 `.Wait()`；在执行 `process.Kill(entireProcessTree: true)` 处添加安全的 `try-catch`。对 `PrepareChromeAsync` 下载官方 Chrome 的过程增加最多重试 3 次的断线容错。
+2. `MainViewModel.cs` — 更新单个和批量停止的调用，使用 `Task.WhenAll` 实现 `StopAllAsync`，大幅缩短多环境并发关闭耗时。
+3. `App.xaml.cs` — `NotifyExistingInstance` 的单实例管道重试连接次数从 5 提高到 10，单次超时设为 500ms，以防应用处于高负载（如批量关闭）时响应超时导致传递失败。
+
+**遇到的问题**：
+- `Process.WaitForExitAsync()` 在 .NET 8 下需要恰当处理 `CancellationToken` 以配合 Kill 回退。
+- 下载 `HttpClient.GetAsync` 需要抛弃并重建实例以确保安全重试。
+
+**解决方式**：
+- `WaitForExitAsync` 加上带有超时的 Token，超时抛出取消异常后捕捉并进入 `Kill` 流程。
+- 下载逻辑使用 `for` 循环包围 `HttpClient` 初始化和读写操作，捕捉异常后记录并重试。
+
+**验证方式**：
+- XAML/XML 解析。
+- `git diff --check`
+- `dotnet --info` 失败后不再本机验证，需 Windows 实机。
+
+**验证结果**：
+- 由于本机没有 `dotnet`，代码逻辑检查通过，待在 Windows 平台编译测试。
+
+**本地产物清理**：
+- 无。
+
 ## 2026-06-08（V1.7.4 发布完成）
 
 **触发原因**：用户要求将本轮全项目复核修复全部提交 GitHub；如有版本号则推进版本号，并发布新的 Release。
