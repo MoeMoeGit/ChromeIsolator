@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-07-07（V1.7.6 环境模式窗口布局与发布状态修正）
+
+**触发原因**：发布前复核发现环境模式管理窗口在多语言长文案下可能挤压环境名；同时 `05-current-status.md` 中仍保留 `v1.7.5` tag / build 待办等过时状态。
+
+**修改内容**：
+1. `EnvironmentModeWindow.xaml` — 将环境模式列表项从单行四列改为两层布局：环境名和运行提示一行，采集模式 / 差异模式复选框下一行并支持换行；窗口默认宽度调整为 `640`，最小宽度调整为 `560`。
+2. `project-log/05-current-status.md` — 同步 V1.7.6 当前状态、发布待办和交接信息。
+3. `Directory.Build.props` — 版本号从 `1.7.5` 推进到 `1.7.6`，同步 Assembly / File / Informational 版本。
+4. `README.md` — 同步当前版本、zip / MSI 产物文件名和 tag 示例为 `v1.7.6`。
+
+**验证方式**：
+- `dotnet build ChromeIsolator.sln`
+- `git diff --check`
+- 多语言资源键一致性检查
+
+**验证结果**：
+- 通过。`dotnet build ChromeIsolator.sln` 构建成功，0 warning / 0 error。
+- 通过。`git diff --check` 未发现空白问题。
+- 通过。多语言资源键未发现缺失或多余项。
+
+---
+
 ## 2026-07-07（V1.7.5 采集模式与调试端口常开）
 
 **触发原因**：cscout 需要复用本机已登录 ChromeIsolator 环境进行采集。用户确认不希望启用原“差异模式 / 虚拟硬件参数”，因为抖音后台可能拒绝访问；需要新增独立采集模式，只开放本机调试端口，不注入指纹参数。

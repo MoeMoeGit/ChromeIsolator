@@ -2,9 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource EnvironmentModeManagerTitle}"
-        Width="560"
+        Width="640"
         Height="520"
-        MinWidth="480"
+        MinWidth="560"
         MinHeight="420"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
@@ -67,37 +67,38 @@
                      HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid MinHeight="42">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Title}"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"
-                                       Foreground="{StaticResource TextPrimaryBrush}" />
-                            <CheckBox Grid.Column="1"
-                                      Content="{DynamicResource CollectorDebugModeLabel}"
-                                      IsChecked="{Binding EnableCollectorDebug}"
-                                      IsEnabled="{Binding CanChangeMode}"
-                                      Margin="12,0,0,0"
-                                      VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="2"
-                                      Content="{DynamicResource EnvironmentVariationModeLabel}"
-                                      IsChecked="{Binding EnableEnvironmentVariation}"
-                                      IsEnabled="{Binding CanChangeMode}"
-                                      Margin="12,0,0,0"
-                                      VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="3"
-                                       Text="{DynamicResource EnvironmentModeRunningHint}"
-                                       Foreground="{StaticResource TextTertiaryBrush}"
-                                       FontSize="12"
-                                       Margin="12,0,0,0"
-                                       VerticalAlignment="Center"
-                                       Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}" />
-                        </Grid>
+                        <StackPanel MinHeight="54"
+                                    Margin="0,2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="Wrap"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource TextPrimaryBrush}" />
+                                <TextBlock Grid.Column="1"
+                                           Text="{DynamicResource EnvironmentModeRunningHint}"
+                                           Foreground="{StaticResource TextTertiaryBrush}"
+                                           FontSize="12"
+                                           Margin="12,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}" />
+                            </Grid>
+                            <WrapPanel Margin="0,8,0,0">
+                                <CheckBox Content="{DynamicResource CollectorDebugModeLabel}"
+                                          IsChecked="{Binding EnableCollectorDebug}"
+                                          IsEnabled="{Binding CanChangeMode}"
+                                          Margin="0,0,16,4"
+                                          VerticalAlignment="Center" />
+                                <CheckBox Content="{DynamicResource EnvironmentVariationModeLabel}"
+                                          IsChecked="{Binding EnableEnvironmentVariation}"
+                                          IsEnabled="{Binding CanChangeMode}"
+                                          Margin="0,0,16,4"
+                                          VerticalAlignment="Center" />
+                            </WrapPanel>
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
