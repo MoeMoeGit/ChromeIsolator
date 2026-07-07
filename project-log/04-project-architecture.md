@@ -134,11 +134,12 @@ ChromeIsolator/
 | WiX Toolset | 待定 | 构建 MSI 安装包 |
 | Google Chrome Stable | 最新官方 Stable | 浏览器运行时 |
 | GitHub Releases API | v3 REST | 检查 ChromeIsolator 新版本 |
-| Chrome DevTools Protocol | 随 Chrome | 仅在差异模式开启时注入轻量环境差异 |
+| Chrome DevTools Protocol | 随 Chrome | 差异模式用于注入轻量环境差异；采集模式用于本机工具连接已登录环境 |
 | Windows 默认应用 / URL Protocol | Windows Shell | 接收系统外部 http / https 链接 |
 
 ## 变更记录
 
 | 日期 | 变更内容 | 原因 |
 |------|----------|------|
+| 2026-07-07 | 补充采集模式架构：`EnableCollectorDebug` 独立于 `EnableEnvironmentVariation`，只开放 `41000 + 环境编号` 本机 CDP 端口，供 cscout attach 已登录环境 | 采集不应依赖或触发虚拟硬件参数注入 |
 | 2026-05-21 | 初始化 Windows 桌面应用架构 | 确认 ChromeIsolator 的平台、模块和安装/数据目录策略 |

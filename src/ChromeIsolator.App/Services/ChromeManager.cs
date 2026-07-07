@@ -112,9 +112,12 @@ public sealed class ChromeManager
             }
 
             var enableEnvironmentVariation = profile.EnableEnvironmentVariation;
-            var port = enableEnvironmentVariation
-                ? PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1))
-                : (int?)null;
+            var enableCollectorDebug = profile.EnableCollectorDebug;
+            var port = enableCollectorDebug
+                ? PortAllocator.FindAvailablePort(41000 + Math.Max(profile.InstanceNumber, 1))
+                : enableEnvironmentVariation
+                    ? PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1))
+                    : (int?)null;
             var runningCount = _processes.Count;
             var offsetX = 50 + runningCount * 30;
             var offsetY = 50 + runningCount * 30;
@@ -127,6 +130,7 @@ public sealed class ChromeManager
             startInfo.ArgumentList.Add("--no-first-run");
             if (port is not null)
             {
+                startInfo.ArgumentList.Add("--remote-debugging-address=127.0.0.1");
                 startInfo.ArgumentList.Add($"--remote-debugging-port={port.Value}");
             }
             startInfo.ArgumentList.Add($"--window-position={offsetX},{offsetY}");
@@ -185,14 +189,18 @@ public sealed class ChromeManager
 
             if (port is not null)
             {
-                var injector = new FingerprintInjector(port.Value, profile.InstanceNumber);
-                injector.Failed += ex => ProfileWarning?.Invoke(
-                    profile.Folder,
-                    ex.Message);
                 _debugPorts[profile.Folder] = port.Value;
-                _fingerprintInjectors[profile.Folder] = injector;
 
-                _ = injector.StartAsync();
+                if (enableEnvironmentVariation)
+                {
+                    var injector = new FingerprintInjector(port.Value, profile.InstanceNumber);
+                    injector.Failed += ex => ProfileWarning?.Invoke(
+                        profile.Folder,
+                        ex.Message);
+                    _fingerprintInjectors[profile.Folder] = injector;
+
+                    _ = injector.StartAsync();
+                }
             }
         }
     }

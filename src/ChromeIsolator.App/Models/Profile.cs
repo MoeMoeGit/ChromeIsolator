@@ -6,6 +6,7 @@ public sealed class Profile
     public string DisplayName { get; set; } = "";
     public string Note { get; set; } = "";
     public bool EnableEnvironmentVariation { get; set; }
+    public bool EnableCollectorDebug { get; set; }
     public DateTime? LastUsed { get; set; }
 
     public int InstanceNumber

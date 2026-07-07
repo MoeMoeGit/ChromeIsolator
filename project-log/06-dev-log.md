@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-07-07（V1.7.5 采集模式与调试端口常开）
+
+**触发原因**：cscout 需要复用本机已登录 ChromeIsolator 环境进行采集。用户确认不希望启用原“差异模式 / 虚拟硬件参数”，因为抖音后台可能拒绝访问；需要新增独立采集模式，只开放本机调试端口，不注入指纹参数。
+
+**修改内容**：
+1. `Directory.Build.props` — 版本号从 `1.7.4` 推进到 `1.7.5`，同步 Assembly / File / Informational 版本。
+2. `Models/Profile.cs` — 新增 `EnableCollectorDebug` profile 开关。
+3. `Services/ChromeManager.cs` — 采集模式使用 `41000 + 环境编号` 端口，差异模式未启用采集模式时仍使用 `40000 + 环境编号`；调试端口显式绑定 `127.0.0.1`；只有差异模式才启动 `FingerprintInjector`。
+4. `ViewModels/ProfileViewModel.cs` — 详情栏调试端口文案区分基础模式、采集模式、差异模式、差异 + 采集模式。
+5. `ViewModels/SettingsViewModel.cs`、`EnvironmentModeWindow.xaml` — 环境模式管理窗口新增采集模式复选框，并在摘要中分别统计差异模式、采集模式和总环境数。
+6. `Resources/Strings*.xaml` — 补齐 7 语言采集模式、差异模式和摘要文案资源键。
+7. `README.md` — 补充采集模式说明和 V1.7.5 产物文件名。
+8. `project-log/*.md` — 同步当前状态、功能设计、架构、环境配置、规划决策和长期设计决策。
+
+**遇到的问题**：
+- 原差异模式曾在抖音后台触发拒绝访问，不适合作为采集前提。
+- 中间改动曾留下重复三元表达式，导致 `ChromeManager.cs` 编译失败。
+
+**解决方式**：
+- 将采集模式拆成独立 `EnableCollectorDebug`，不复用差异模式，不注入 navigator 硬件参数。
+- 删除重复表达式，并补充资源键完整性检查。
+
+**验证方式**：
+- `dotnet build ChromeIsolator.sln`
+- 检查所有 `Strings*.xaml` 均包含新增采集模式资源键
+- 后续发布前运行 `scripts\publish-win-x64.ps1` 和 `scripts\build-msi.ps1`
+
+**验证结果**：
+- 通过。`dotnet build ChromeIsolator.sln` 构建成功，0 warning / 0 error。
+- 通过。7 个资源文件采集模式新增键完整。
+- 部分未验证。需要 cscout 安装 Playwright 后连接真实采集模式环境，验证抖音后台页面采集。
+
+**本地产物清理**：
+- 本轮构建产物位于已忽略的 `src/ChromeIsolator.App/bin/`、`src/ChromeIsolator.App/obj/`；发布产物会在打包后保留用于 GitHub Release。
+
 ## 2026-06-13（V1.7.5 异步化与容错增强）
 
 **触发原因**：用户要求根据查出的 bug 和风险点进行代码优化，但保留原有的环境命名逻辑。

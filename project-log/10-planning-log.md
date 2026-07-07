@@ -4,6 +4,40 @@
 
 ---
 
+### ADR-012 [2026-07-07] 采集模式独立于差异模式
+
+**状态**：已采用
+
+**替代关系**：补充 ADR-004、ADR-011
+
+**背景与需求**：cscout 需要连接已登录的 ChromeIsolator 环境采集抖音 / 视频号后台页面。原差异模式会注入 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory`，用户反馈这类虚拟硬件参数模式可能导致抖音后台拒绝访问，因此采集不能依赖差异模式。
+
+**采用的方案**：新增独立 profile 开关 `EnableCollectorDebug`。启用后，环境启动时开放 `41000 + 环境编号` 的本机 CDP 调试端口，并显式绑定 `127.0.0.1`。该模式不启动 `FingerprintInjector`。`EnableEnvironmentVariation` 继续只负责差异模式；两个模式同时启用时使用采集端口并继续执行差异注入。
+
+**备选方案**：
+
+1. 复用差异模式端口
+   - 优点：改动少。
+   - 缺点：采集会隐式启用虚拟硬件参数，可能触发抖音后台拒绝访问。
+   - 放弃原因：采集和指纹差异是不同需求，不能绑定。
+
+2. 由 cscout 每次关闭并重启 profile
+   - 优点：不改 ChromeIsolator。
+   - 缺点：不能复用用户已经打开并登录好的环境，多账号日常使用成本高。
+   - 放弃原因：用户明确希望一个环境保持一个账号组登录态。
+
+**决策依据**：
+
+- 不破坏基础模式：默认仍不开放调试端口。
+- 不破坏差异模式：原虚拟硬件参数注入继续保留但不作为采集前提。
+- 采集模式只服务本机工具连接，端口限定在 `127.0.0.1`。
+
+**改动范围**：
+
+- `Profile.cs`、`ChromeManager.cs`、`ProfileViewModel.cs`、`SettingsViewModel.cs`、`EnvironmentModeWindow.xaml`、`Resources/Strings*.xaml`、README 和 project-log。
+
+---
+
 ### ADR-001 [2026-05-21] Windows 桌面技术栈选择
 
 **状态**：已采用

@@ -71,14 +71,26 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <CheckBox IsChecked="{Binding EnableEnvironmentVariation}"
+                            <TextBlock Text="{Binding Title}"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+                            <CheckBox Grid.Column="1"
+                                      Content="{DynamicResource CollectorDebugModeLabel}"
+                                      IsChecked="{Binding EnableCollectorDebug}"
                                       IsEnabled="{Binding CanChangeMode}"
-                                      VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Title}"
-                                           TextWrapping="Wrap" />
-                            </CheckBox>
-                            <TextBlock Grid.Column="1"
+                                      Margin="12,0,0,0"
+                                      VerticalAlignment="Center" />
+                            <CheckBox Grid.Column="2"
+                                      Content="{DynamicResource EnvironmentVariationModeLabel}"
+                                      IsChecked="{Binding EnableEnvironmentVariation}"
+                                      IsEnabled="{Binding CanChangeMode}"
+                                      Margin="12,0,0,0"
+                                      VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="3"
                                        Text="{DynamicResource EnvironmentModeRunningHint}"
                                        Foreground="{StaticResource TextTertiaryBrush}"
                                        FontSize="12"

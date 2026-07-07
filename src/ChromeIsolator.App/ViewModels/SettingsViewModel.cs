@@ -171,6 +171,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         L10n.Format(
             "EnvironmentModeSummary",
             ProfileModes.Count(profile => profile.EnableEnvironmentVariation),
+            ProfileModes.Count(profile => profile.EnableCollectorDebug),
             ProfileModes.Count);
 
     public string ProfileModeSearchText
@@ -242,7 +243,8 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
 
     private void OnProfileModeChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(SettingsProfileModeViewModel.EnableEnvironmentVariation))
+        if (e.PropertyName == nameof(SettingsProfileModeViewModel.EnableEnvironmentVariation)
+            || e.PropertyName == nameof(SettingsProfileModeViewModel.EnableCollectorDebug))
         {
             OnPropertyChanged(nameof(EnvironmentModeSummary));
         }
@@ -431,6 +433,22 @@ public sealed class SettingsProfileModeViewModel : ObservableObject
             }
 
             _profile.EnableEnvironmentVariation = value;
+            _profileManager.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool EnableCollectorDebug
+    {
+        get => _profile.EnableCollectorDebug;
+        set
+        {
+            if (IsRunning || _profile.EnableCollectorDebug == value)
+            {
+                return;
+            }
+
+            _profile.EnableCollectorDebug = value;
             _profileManager.Save();
             OnPropertyChanged();
         }

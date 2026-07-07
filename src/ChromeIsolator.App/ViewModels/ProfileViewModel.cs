@@ -162,9 +162,23 @@ public sealed class ProfileViewModel : ObservableObject
     {
         get
         {
-            if (!Model.EnableEnvironmentVariation)
+            if (!Model.EnableEnvironmentVariation && !Model.EnableCollectorDebug)
             {
                 return L10n.GetString("DebugPortBaseMode");
+            }
+
+            if (Model.EnableEnvironmentVariation && Model.EnableCollectorDebug)
+            {
+                return DebugPort is null
+                    ? L10n.GetString("DebugPortVariationCollectorMode")
+                    : L10n.Format("DebugPortVariationCollectorModeWithPort", DebugPort.Value.ToString(CultureInfo.InvariantCulture));
+            }
+
+            if (Model.EnableCollectorDebug)
+            {
+                return DebugPort is null
+                    ? L10n.GetString("DebugPortCollectorMode")
+                    : L10n.Format("DebugPortCollectorModeWithPort", DebugPort.Value.ToString(CultureInfo.InvariantCulture));
             }
 
             return DebugPort is null
