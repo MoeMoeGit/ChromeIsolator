@@ -1,11 +1,11 @@
 <WixLocalization Culture="zh-CN" Codepage="936" xmlns="http://wixtoolset.org/schemas/v4/wxl">
   <String Id="WelcomeDlg_Title" Overridable="yes" Value="浏览器多开安装程序" />
   <String Id="WelcomeDlgTitle" Overridable="yes" Value="{\WixUI_Font_Bigger}欢迎安装浏览器多开" />
-  <String Id="WelcomeDlgDescription" Overridable="yes" Value="安装程序将把浏览器多开安装到本机。程序文件进入 Program Files；环境数据仍保存在当前 Windows 用户的 LocalAppData。点击“下一步”开始。" />
+  <String Id="WelcomeDlgDescription" Overridable="yes" Value="安装程序将把浏览器多开安装到本机。程序文件进入 Program Files；环境数据保存在当前 Windows 用户的 LocalAppData。浏览器多开不会读取或修改你日常 Chrome 的数据。点击“下一步”开始。" />
 
   <String Id="MaintenanceWelcomeDlg_Title" Overridable="yes" Value="浏览器多开维护程序" />
   <String Id="MaintenanceWelcomeDlgTitle" Overridable="yes" Value="{\WixUI_Font_Bigger}浏览器多开已安装" />
-  <String Id="MaintenanceWelcomeDlgDescription" Overridable="yes" Value="可以修复当前安装，或从本机卸载浏览器多开。卸载只移除程序文件和快捷方式，环境数据会保留。点击“下一步”继续。" />
+  <String Id="MaintenanceWelcomeDlgDescription" Overridable="yes" Value="可以修复当前安装，或从本机卸载浏览器多开。卸载默认只移除程序文件和快捷方式，环境数据会继续保留在 LocalAppData。点击“下一步”继续。" />
 
   <String Id="MaintenanceTypeDlg_Title" Overridable="yes" Value="浏览器多开维护程序" />
   <String Id="MaintenanceTypeDlgTitle" Overridable="yes" Value="{\WixUI_Font_Title}选择维护操作" />
@@ -13,13 +13,13 @@
   <String Id="MaintenanceTypeDlgRepairButton" Overridable="yes" Value="修复" />
   <String Id="MaintenanceTypeDlgRepairText" Overridable="yes" Value="重新安装缺失或损坏的程序文件。" />
   <String Id="MaintenanceTypeDlgRemoveButton" Overridable="yes" Value="卸载" />
-  <String Id="MaintenanceTypeDlgRemoveText" Overridable="yes" Value="移除程序文件和快捷方式，保留环境数据。" />
+  <String Id="MaintenanceTypeDlgRemoveText" Overridable="yes" Value="移除程序文件和快捷方式，默认保留环境数据。" />
   <String Id="MaintenanceTypeDlgChangeDisabledText" Overridable="yes" Value="浏览器多开不支持自定义功能安装。" />
 
   <String Id="VerifyReadyDlgInstallTitle" Overridable="yes" Value="{\WixUI_Font_Title}准备安装浏览器多开" />
   <String Id="VerifyReadyDlgInstallText" Overridable="yes" Value="点击“安装”开始复制程序文件并创建快捷方式。" />
   <String Id="VerifyReadyDlgRemoveTitle" Overridable="yes" Value="{\WixUI_Font_Title}准备卸载浏览器多开" />
-  <String Id="VerifyReadyDlgRemoveText" Overridable="yes" Value="点击“卸载”移除程序文件和快捷方式。环境数据会保留。" />
+  <String Id="VerifyReadyDlgRemoveText" Overridable="yes" Value="点击“卸载”移除程序文件和快捷方式。环境数据默认保留在 %LOCALAPPDATA%\ChromeIsolator；如需彻底删除，可在卸载后手动清理该目录。" />
   <String Id="VerifyReadyDlgRepairTitle" Overridable="yes" Value="{\WixUI_Font_Title}准备修复浏览器多开" />
   <String Id="VerifyReadyDlgRepairText" Overridable="yes" Value="点击“修复”重新安装程序文件。" />
 
@@ -32,9 +32,9 @@
 
   <String Id="ExitDialog_Title" Overridable="yes" Value="浏览器多开安装程序" />
   <String Id="ExitDialogTitle" Overridable="yes" Value="{\WixUI_Font_Bigger}操作已完成" />
-  <String Id="ExitDialogDescription" Overridable="yes" Value="本次操作已完成。点击“完成”退出。" />
+  <String Id="ExitDialogDescription" Overridable="yes" Value="本次操作已完成。点击“完成”退出安装程序。" />
 
   <String Id="FilesInUseTitle" Overridable="yes" Value="{\WixUI_Font_Title}浏览器多开正在运行" />
   <String Id="FilesInUseDescription" Overridable="yes" Value="需要先关闭正在运行的程序。" />
-  <String Id="FilesInUseText" Overridable="yes" Value="浏览器多开正在运行。请先从系统托盘退出，再点“重试”继续；不处理可点“退出”。" />
+  <String Id="FilesInUseText" Overridable="yes" Value="浏览器多开正在运行。请在系统托盘图标上右键选择退出，再点“重试”继续；不处理可点“退出”。" />
 </WixLocalization>

@@ -1,20 +1,33 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
   <Package
-    Name="ChromeIsolator"
+    Name="浏览器多开"
     Manufacturer="Lucas"
     Version="$(var.ProductVersion)"
     UpgradeCode="{3D3597E8-A21D-4581-A7C6-B2DC1759F6AF}"
     Codepage="65001"
     Scope="perMachine">
-    <MajorUpgrade DowngradeErrorMessage="A newer version of ChromeIsolator is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="已安装更新版本的浏览器多开。" />
     <MediaTemplate EmbedCab="yes" />
     <Icon Id="AppIcon.ico" SourceFile="$(var.ProjectRoot)\assets\icons\AppIcon.ico" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectRoot)\installer\assets\WixUIBanner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectRoot)\installer\assets\WixUIDialog.bmp" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="启动浏览器多开" />
+    <CustomAction
+      Id="SetLaunchApplicationTarget"
+      Property="WixUnelevatedShellExecTarget"
+      Value="[INSTALLFOLDER]ChromeIsolator.exe" />
+    <CustomAction
+      Id="LaunchApplication"
+      BinaryRef="Wix4UtilCA_X64"
+      DllEntry="WixUnelevatedShellExec"
+      Execute="immediate"
+      Return="ignore" />
     <util:CloseApplication
       Id="PromptCloseChromeIsolator"
       Target="ChromeIsolator.exe"
-      Description="浏览器多开正在运行。请先从系统托盘退出浏览器多开，然后点击重试继续安装、升级或卸载。"
+      Description="浏览器多开正在运行。请在系统托盘图标上右键选择退出，然后点击重试继续安装、升级或卸载。"
       PromptToContinue="yes"
       RebootPrompt="no" />
 
@@ -39,8 +52,9 @@
       <DialogRef Id="VerifyReadyDlg" />
       <DialogRef Id="WelcomeDlg" />
 
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="EndDialog" Value="Return" Order="1" Condition="NOT Installed" />
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2" Condition="Installed AND PATCH" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Property="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" Order="1" Condition="NOT Installed" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="EndDialog" Value="Return" Order="2" Condition="NOT Installed" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="3" Condition="Installed AND PATCH" />
 
       <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg" />
       <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg" />
@@ -49,6 +63,8 @@
 
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1" Condition="Installed AND NOT PATCH" />
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2" Condition="Installed AND PATCH" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="SetLaunchApplicationTarget" Order="1" Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication" Order="2" Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed" />
       <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999" />
     </UI>
 
@@ -59,7 +75,7 @@
     </StandardDirectory>
 
     <StandardDirectory Id="ProgramMenuFolder">
-      <Directory Id="ApplicationProgramsFolder" Name="ChromeIsolator" />
+      <Directory Id="ApplicationProgramsFolder" Name="浏览器多开" />
     </StandardDirectory>
 
     <StandardDirectory Id="DesktopFolder" />
@@ -87,7 +103,7 @@
       <RegistryValue Root="HKLM" Key="Software\ChromeIsolator" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
     </Component>
 
-    <Feature Id="MainFeature" Title="ChromeIsolator" Level="1">
+    <Feature Id="MainFeature" Title="浏览器多开" Level="1">
       <ComponentGroupRef Id="PublishedFiles" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="DesktopShortcut" />

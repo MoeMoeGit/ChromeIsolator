@@ -36,9 +36,16 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 
 ## 当前状态
 
-核心功能已完成，包括环境管理、环境备注、外部链接接收、浏览器引擎设置、可选采集模式、可选差异模式、多语言、设置面板、系统托盘和 MSI 安装包构建。当前版本为 V1.7.6，项目继续验证采集模式、默认浏览器注册、真实外部链接行为和本轮稳定性优化。
+核心功能已完成，包括环境管理、环境备注、外部链接接收、浏览器引擎设置、可选采集模式、可选差异模式、多语言、设置面板、系统托盘和 MSI 安装包构建。当前版本为 V1.7.7，项目继续验证采集模式、默认浏览器注册、真实外部链接行为和本轮稳定性优化。
 
 安装包使用 self-contained 发布，普通用户无需预先安装 .NET Runtime。
+
+## 下载安装
+
+- 普通用户建议下载 GitHub Release 中的 `ChromeIsolator-Setup-x64-v*.msi` 安装包。
+- 临时测试或不想安装时，可下载 `ChromeIsolator-win-x64-v*.zip` 解压运行。
+- 早期安装包未签名，Windows Defender SmartScreen 可能提示“Windows 已保护你的电脑”。确认来源为本项目 Release 后，可点击“更多信息”，再点击“仍要运行”。
+- 安装器会创建开始菜单和桌面快捷方式。卸载默认只移除程序文件和快捷方式，保留 `%LOCALAPPDATA%\ChromeIsolator` 下的环境数据。
 
 ## 浏览器引擎
 
@@ -119,7 +126,7 @@ dotnet run --project .\src\ChromeIsolator.App\ChromeIsolator.App.csproj
 
 ```text
 artifacts\publish\win-x64\
-artifacts\publish\ChromeIsolator-win-x64-v1.7.6.zip
+artifacts\publish\ChromeIsolator-win-x64-v1.7.7.zip
 ```
 
 ### 构建 MSI 安装包
@@ -133,12 +140,12 @@ artifacts\publish\ChromeIsolator-win-x64-v1.7.6.zip
 安装包产物位于：
 
 ```text
-artifacts\installer\ChromeIsolator-Setup-x64-v1.7.6.msi
+artifacts\installer\ChromeIsolator-Setup-x64-v1.7.7.msi
 ```
 
 ## 版本管理
 
-项目版本统一写在根目录 `Directory.Build.props`。发布新版本时只修改其中的 `Version`、`AssemblyVersion`、`FileVersion` 和 `InformationalVersion`，然后创建同版本 tag，例如 `v1.7.6`。
+项目版本统一写在根目录 `Directory.Build.props`。发布新版本时只修改其中的 `Version`、`AssemblyVersion`、`FileVersion` 和 `InformationalVersion`，然后创建同版本 tag，例如 `v1.7.7`。
 
 GitHub Actions 会在 tag 推送时自动构建，并创建 GitHub Release，上传带版本号的 win-x64 zip 和 MSI 安装包。
 

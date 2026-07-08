@@ -4,6 +4,42 @@
 
 ---
 
+## 2026-07-08（V1.7.7 安装器体验与发布说明优化）
+
+**触发原因**：用户要求从产品经理角度复核 Windows 安装程序，并确认安装完成后启动应用、强化安装 / 卸载说明、保留桌面和开始菜单快捷方式、统一品牌、补充 Release 安装指引，同时确认 WiX 默认文字和图片是否已替换为项目自有内容。
+
+**修改内容**：
+1. `installer/Product.wxs` — 产品名统一为“浏览器多开”；保留桌面和开始菜单快捷方式；安装完成页新增默认勾选的“启动浏览器多开”，通过 WiX Util `WixUnelevatedShellExec` 按当前用户权限启动应用；运行中提示改为明确“系统托盘图标右键选择退出”；接入自定义 `WixUIBannerBmp` 和 `WixUIDialogBmp`。
+2. `installer/Strings.zh-CN.wxl` — 强化欢迎、维护、卸载和运行中提示文案：说明不会读取或修改日常 Chrome 数据，卸载默认保留 `%LOCALAPPDATA%\ChromeIsolator` 环境数据。
+3. `installer/assets/` — 新增安装器 banner / dialog 位图，替换 WiX UI 默认图片；图片只使用英文和图标，避免构建机中文字体缺失导致乱码。
+4. `README.md` — 新增“下载安装”章节，说明普通用户下载 MSI、临时测试下载 ZIP、SmartScreen 处理方式和卸载默认保留数据，并同步 V1.7.7 产物文件名。
+5. `.github/release-notes.md`、`.github/workflows/build.yml` — GitHub tag Release 自动带上安装建议、SmartScreen 提示和 MSI / ZIP 选择说明。
+6. `Directory.Build.props` — 版本号从 `1.7.6` 推进到 `1.7.7`，同步 Assembly / File / Informational 版本。
+
+**遇到的问题**：
+- WiX localization summary codepage 不接受 UTF-8，`Codepage="65001"` 会导致 WIX0349。
+- `WixUnelevatedShellExecTarget` 不能直接在 Property 值里引用 `[INSTALLFOLDER]`，会触发非法属性引用警告。
+- 首版安装器图片包含中文，但当前构建环境字体渲染为方块。
+
+**解决方式**：
+- `Strings.zh-CN.wxl` 保持 `Codepage="936"`，继续由 WiX 正常打包中文本地化。
+- 使用 `SetLaunchApplicationTarget` CustomAction 在完成页点击时设置 `WixUnelevatedShellExecTarget`，再执行 `LaunchApplication`。
+- 安装器图片改为英文品牌图和图标，中文解释全部放入 WiX 文案资源。
+
+**验证方式**：
+- `dotnet build ChromeIsolator.sln`
+- `git diff --check`
+- `scripts\build-msi.ps1`
+- 人工查看 `installer/assets/WixUIBanner.bmp` 和 `installer/assets/WixUIDialog.bmp`
+
+**验证结果**：
+- 通过。`dotnet build ChromeIsolator.sln` 构建成功，0 warning / 0 error。
+- 通过。`git diff --check` 未发现空白问题。
+- 通过。MSI 成功生成：`artifacts\installer\ChromeIsolator-Setup-x64-v1.7.7.msi`。
+- 通过。自定义安装器图片不再出现中文乱码。
+
+---
+
 ## 2026-07-07（V1.7.6 环境模式窗口布局与发布状态修正）
 
 **触发原因**：发布前复核发现环境模式管理窗口在多语言长文案下可能挤压环境名；同时 `05-current-status.md` 中仍保留 `v1.7.5` tag / build 待办等过时状态。

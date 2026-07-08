@@ -53,9 +53,12 @@ dotnet publish -c Release
 - MSI 使用自定义最小 UI：欢迎页、进度页、完成页。
 - 安装 / 卸载流程只保留必要反馈，避免许可页和目录页等额外交互。
 - 安装目录继续固定到 `%ProgramFiles%\ChromeIsolator`，不暴露给普通用户选择。
-- 欢迎页和维护页文案已本地化为中文，明确说明程序文件与环境数据的分离。
-- `util:CloseApplication` 在程序运行中时提示先从系统托盘退出，再点击重试继续安装、升级或卸载。
-- 安装完成后仍会创建开始菜单和桌面快捷方式；用户数据继续保留在 `%LOCALAPPDATA%\ChromeIsolator`。
+- 欢迎页和维护页文案已本地化为中文，明确说明程序文件与环境数据分离、不会读取或修改用户日常 Chrome 数据。
+- `util:CloseApplication` 在程序运行中时提示用户从系统托盘图标右键退出，再点击重试继续安装、升级或卸载。
+- 安装完成后仍会创建开始菜单和桌面快捷方式；完成页默认勾选“启动浏览器多开”。
+- 卸载默认只移除程序文件和快捷方式；用户数据继续保留在 `%LOCALAPPDATA%\ChromeIsolator`，如需彻底清理需用户手动删除。
+- WiX UI 默认横幅和背景图已替换为 `installer/assets/` 下的项目自有位图。
+- GitHub Release 说明固定展示 MSI / ZIP 下载建议、SmartScreen 处理方式和卸载保留数据说明。
 
 ### 版本管理规范
 
@@ -106,13 +109,11 @@ Directory.Build.props
 
 ## CI/CD
 
-暂不适用，原因：当前处于规划阶段，尚未创建代码工程和安装项目。
+当前使用 GitHub Actions 在 Windows runner 构建 Release。
 
-后续建议：
-
-- GitHub Actions 构建 Windows Release。
-- 生成 MSI 安装包并作为 Release Asset 上传。
-- 在 CI 中运行单元测试。
+- `main` 推送和 PR 会执行构建、发布 zip 和 MSI artifact。
+- `v*` tag 推送会校验 tag 版本与 `Directory.Build.props` 一致，构建 zip / MSI，并自动创建 GitHub Release。
+- GitHub Release 固定使用 `.github/release-notes.md` 作为说明，提示 MSI / ZIP 下载选择、SmartScreen 处理方式和卸载默认保留数据。
 - 安装包签名作为后续发布质量目标，不阻塞早期可用版本发布。
 
 ## 代码签名策略
@@ -122,7 +123,7 @@ Directory.Build.props
 - 早期 Release 可以发布未签名 MSI / EXE。
 - 未签名安装包可能触发 Windows SmartScreen、浏览器下载警告或“未知发布者”提示。
 - 用户确认“有提示没关系，能用就行”，因此签名不作为 MVP 阻塞项。
-- README 安装说明后续需要补充 Windows 安全提示：如果出现 SmartScreen，点击“更多信息”后选择“仍要运行”。
+- README 和 GitHub Release 说明已补充 Windows 安全提示：如果出现 SmartScreen，点击“更多信息”后选择“仍要运行”。
 - CI / 发布脚本后续可以预留签名步骤，但默认关闭。
 - 正式期如需要提升安装信任度，再购买 OV / EV Code Signing Certificate，并使用 `signtool` 对主程序和安装包签名。
 
@@ -165,6 +166,7 @@ dotnet test
 
 | 日期 | 变更内容 | 原因 |
 |------|----------|------|
+| 2026-07-08 | 优化安装器产品体验：完成页默认启动应用、品牌名统一为“浏览器多开”、替换 WiX 默认图片、强化卸载保留数据和运行中退出提示，并补充 Release 安装指引 | 降低普通用户首次安装、升级和卸载时的理解成本 |
 | 2026-05-23 | MSI 安装 / 卸载反馈收口为最小自定义 UI | 保留欢迎页、进度页和完成页，同时避免引入许可页和目录页 |
 | 2026-05-21 | 初始化 Windows 安装与发布规划 | 明确 MSI、Program Files 和 LocalAppData 的职责 |
 | 2026-05-21 | 增加代码签名策略 | 用户确认早期未签名提示可接受，签名不阻塞 MVP |
