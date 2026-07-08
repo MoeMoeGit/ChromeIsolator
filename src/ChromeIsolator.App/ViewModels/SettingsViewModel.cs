@@ -64,6 +64,8 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         CopyEmailCommand = new RelayCommand(() => ShellService.CopyText(ContactEmail));
         ReinstallChromeCommand = new RelayCommand(() => { _reinstallChrome(); RefreshChromeStatus(); });
         SetDefaultBrowserCommand = new RelayCommand(RequestDefaultBrowser);
+        EnableCollectorDebugForEditableCommand = new RelayCommand(() => SetCollectorDebugForEditable(true));
+        DisableCollectorDebugForEditableCommand = new RelayCommand(() => SetCollectorDebugForEditable(false));
 
         RefreshChromeStatus();
         UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
@@ -122,6 +124,8 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
     public RelayCommand CopyEmailCommand { get; }
     public RelayCommand ReinstallChromeCommand { get; }
     public RelayCommand SetDefaultBrowserCommand { get; }
+    public RelayCommand EnableCollectorDebugForEditableCommand { get; }
+    public RelayCommand DisableCollectorDebugForEditableCommand { get; }
 
     public string DataPath => AppPaths.SupportDir;
     public string ProfilesPath => AppPaths.ProfilesDir;
@@ -170,8 +174,8 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
     public string EnvironmentModeSummary =>
         L10n.Format(
             "EnvironmentModeSummary",
-            ProfileModes.Count(profile => profile.EnableEnvironmentVariation),
             ProfileModes.Count(profile => profile.EnableCollectorDebug),
+            ProfileModes.Count(profile => profile.EnableEnvironmentVariation),
             ProfileModes.Count);
 
     public string ProfileModeSearchText
@@ -268,6 +272,17 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         }
 
         return profileMode.Title.Contains(ProfileModeSearchText.Trim(), StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    private void SetCollectorDebugForEditable(bool enabled)
+    {
+        foreach (var profileMode in ProfileModes.Where(profile => profile.CanChangeMode))
+        {
+            profileMode.EnableCollectorDebug = enabled;
+        }
+
+        OnPropertyChanged(nameof(EnvironmentModeSummary));
+        ProfileModeView.Refresh();
     }
 
     private async void CheckForUpdates()
