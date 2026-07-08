@@ -26,6 +26,11 @@ packages/
 # VS Code
 .vscode/
 
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
 # Common AI assistant / agent files
 .claude/
 CLAUDE.md
