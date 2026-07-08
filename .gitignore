@@ -91,3 +91,7 @@ out/
 *.msix
 *.msixbundle
 *.appinstaller
+
+# Additional AI tools
+.mimocode/
+.agents/
