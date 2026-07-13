@@ -29,7 +29,14 @@ public static class IconHelper
             using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream is not null)
             {
-                _cachedIcon = BitmapFrame.Create(stream);
+                // The resource stream is disposed when this method returns.  Load the ICO
+                // eagerly so WPF (and the Windows taskbar) never needs that closed stream
+                // when it retrieves the window icon later.
+                _cachedIcon = BitmapFrame.Create(
+                    stream,
+                    BitmapCreateOptions.PreservePixelFormat,
+                    BitmapCacheOption.OnLoad);
+                _cachedIcon.Freeze();
                 return _cachedIcon;
             }
         }
