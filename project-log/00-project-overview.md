@@ -53,7 +53,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本复刻。BrowserIsolator �
 | 桌面应用 | C# / WPF / .NET | Windows 10/11 x86-64 桌面应用 |
 | UI 架构 | MVVM-ish | 使用清晰 ViewModel / Service 分层，不过度引入框架 |
 | 浏览器控制 | `System.Diagnostics.Process` | 启动、关闭和跟踪浏览器进程 |
-| CDP 通信 | HTTP + WebSocket | 仅在差异模式开启时访问 `/json/version`、`/json`，通过 browser-level WebSocket 注入脚本 |
+| CDP 通信 | HTTP + WebSocket | 差异模式由本应用通过 browser-level WebSocket 注入脚本；采集模式只开放本机端口，由 cscout 创建后台 target 并导航 |
 | 外部链接接收 | Windows URL Protocol / 默认应用 | 注册为可选 http / https 处理程序，接收系统外部链接并转发到指定环境 |
 | 配置存储 | JSON 文件 | `%LOCALAPPDATA%\ChromeIsolator\config.json` |
 | 数据存储 | 文件系统 | `%LOCALAPPDATA%\ChromeIsolator\Profiles\` |
