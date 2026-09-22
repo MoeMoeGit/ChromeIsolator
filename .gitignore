@@ -33,8 +33,6 @@ packages/
 
 # Common AI assistant / agent files
 .claude/
-CLAUDE.md
-claude.md
 .cursor/
 .cursorignore
 .windsurf/

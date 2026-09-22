@@ -4,6 +4,8 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 
 项目定位很简单：做好本地浏览器环境隔离。它不是复杂的反检测平台，也不承诺绕过网站风控；它只是把多个浏览器环境清楚地分开，让日常多账号使用更稳定、更省心。
 
+开发者与 AI 协作约定、架构、质量和发布文档见 [handbook 开发导航](handbook/README.md)；运行与数据恢复注意事项见 [使用与管理指南](handbook/13-operation-guide.md)。
+
 ## 主要功能
 
 - **独立环境**：每个环境使用单独的 Chrome 数据目录，登录状态、Cookie、缓存、密码和扩展配置互不影响
@@ -61,7 +63,7 @@ ChromeIsolator 的核心策略是“浏览器程序文件可共享，用户数�
 
 ## 数据位置
 
-所有用户数据计划保存在：
+所有用户数据保存在：
 
 ```text
 %LOCALAPPDATA%\ChromeIsolator\
@@ -76,7 +78,7 @@ ChromeIsolator 的核心策略是“浏览器程序文件可共享，用户数�
 
 其中 `Chrome\` 用于保存官方 Chrome 安装包下载和浏览器引擎相关临时文件。
 
-应用程序本体计划通过安装包安装到：
+应用程序本体通过安装包安装到：
 
 ```text
 %ProgramFiles%\ChromeIsolator\
