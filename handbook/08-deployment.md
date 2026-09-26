@@ -5,7 +5,7 @@
 ## 当前环境与触发关系
 
 - 唯一版本来源：`Directory.Build.props`，当前 `2.0.0`。
-- 最新已发布版本仍为 1.7.9；2.0.0 通过 `v2.0.0` 标签触发构建与发布，结果以 GitHub Actions 与 Release 为准。
+- 最新已发布版本为 [2.0.0](https://github.com/MoeMoeGit/ChromeIsolator/releases/tag/v2.0.0)；`v2.0.0` 标签构建、兼容测试与 MSI／ZIP 发布成功，尚未完成 Windows 实机安装与视觉验收。
 - `main` push 和 PR：GitHub Actions 执行 Release 构建并上传 workflow artifacts。
 - `v*` tag：先校验 tag 与项目版本一致，再自动创建 GitHub Release 并上传 ZIP/MSI。
 - 普通 push 不授权修改版本、创建 tag 或发布 Release；发布必须由用户明确要求。
