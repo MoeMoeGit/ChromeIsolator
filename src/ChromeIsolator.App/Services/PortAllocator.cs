@@ -5,12 +5,12 @@ namespace ChromeIsolator.Services;
 
 public static class PortAllocator
 {
-    public static int FindAvailablePort(int preferred, int attempts = 10)
+    public static int FindAvailablePort(int preferred, int attempts = 10, IEnumerable<int>? reserved = null)
     {
         for (var offset = 0; offset < attempts; offset++)
         {
             var port = preferred + offset;
-            if (IsAvailable(port))
+            if (port is > 0 and <= 65535 && !(reserved?.Contains(port) ?? false) && IsAvailable(port))
             {
                 return port;
             }

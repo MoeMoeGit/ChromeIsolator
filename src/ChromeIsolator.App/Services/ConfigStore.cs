@@ -10,31 +10,44 @@ public sealed class ConfigStore
         WriteIndented = true
     };
 
+    public bool LoadedExistingConfig { get; private set; }
     public bool RecoveredFromBackup { get; private set; }
     public bool UsedDefaultAfterLoadFailure { get; private set; }
 
     public AppConfig Load()
     {
         AppPaths.EnsureDirectories();
+        LoadedExistingConfig = false;
         RecoveredFromBackup = false;
         UsedDefaultAfterLoadFailure = false;
 
         if (TryLoad(AppPaths.ConfigFile, out var config))
         {
+            LoadedExistingConfig = true;
             return config;
         }
 
         var primaryExists = File.Exists(AppPaths.ConfigFile);
         var backupExists = File.Exists(AppPaths.ConfigBackupFile);
+        if (primaryExists)
+        {
+            try
+            {
+                File.Copy(AppPaths.ConfigFile, Path.Combine(AppPaths.SupportDir,
+                    $"config.corrupt-{DateTime.UtcNow:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}.json"));
+            }
+            catch { /* Recovery may still succeed when a diagnostic copy cannot be written. */ }
+        }
         if (TryLoad(AppPaths.ConfigBackupFile, out config))
         {
             RecoveredFromBackup = true;
             TryRestorePrimaryFromBackup();
+            LoadedExistingConfig = true;
             return config;
         }
 
         UsedDefaultAfterLoadFailure = primaryExists || backupExists;
-        return new AppConfig();
+        return AppConfig.CreateNew();
     }
 
     public void Save(AppConfig config)
@@ -76,7 +89,16 @@ public sealed class ConfigStore
             }
 
             var json = File.ReadAllText(path);
-            config = JsonSerializer.Deserialize<AppConfig>(json, JsonOptions) ?? new AppConfig();
+            var loaded = JsonSerializer.Deserialize<AppConfig>(json, JsonOptions);
+            if (loaded?.Profiles is null || loaded.Profiles.Any(profile => profile is null))
+            {
+                config = new AppConfig();
+                return false;
+            }
+            loaded.Profiles = loaded.Profiles.Where(profile => profile.InstanceNumber > 0)
+                .GroupBy(profile => profile.Folder, StringComparer.OrdinalIgnoreCase)
+                .Select(group => group.First()).ToList();
+            config = loaded;
             return true;
         }
         catch

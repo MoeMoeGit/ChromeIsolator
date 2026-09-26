@@ -9,6 +9,11 @@ public sealed class AppConfig
         new() { Folder = "p3" }
     ];
 
+    public static AppConfig CreateNew() => new()
+    {
+        Profiles = [Profile.NewEnvironment("p1"), Profile.NewEnvironment("p2"), Profile.NewEnvironment("p3")]
+    };
+
     public bool ShowAdvancedDetails { get; set; }
     public string? Language { get; set; }
     public bool FirstRunCompleted { get; set; }

@@ -30,7 +30,7 @@ public sealed class ProfileViewModel : ObservableObject
     {
         get
         {
-            var defaultName = string.Format(L10n.GetString("LabelFolder") == "Folder" ? "Profile {0}" : "环境{0}", Model.InstanceNumber);
+            var defaultName = L10n.Format("DefaultProfileName", Model.InstanceNumber);
             return string.IsNullOrWhiteSpace(Model.DisplayName)
                 ? defaultName
                 : $"{defaultName} - {Model.DisplayName}";

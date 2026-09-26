@@ -7,17 +7,25 @@ public sealed class ProfileManager
 {
     private readonly ConfigStore _configStore;
 
-    public ProfileManager(ConfigStore configStore)
+    private readonly Action<string> _recycleDirectory;
+
+    public ProfileManager(ConfigStore configStore, Action<string>? recycleDirectory = null)
     {
         _configStore = configStore;
+        _recycleDirectory = recycleDirectory ?? (path => FileSystem.DeleteDirectory(
+            path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin));
         Config = _configStore.Load();
         RecoveredConfigFromBackup = _configStore.RecoveredFromBackup;
         UsedDefaultConfigAfterLoadFailure = _configStore.UsedDefaultAfterLoadFailure;
-        ReconcileProfilesWithDisk(File.Exists(AppPaths.ConfigFile));
+        var reconciled = ReconcileProfilesWithDisk(_configStore.LoadedExistingConfig);
+        if (reconciled || !_configStore.LoadedExistingConfig) Save();
         EnsureProfileDirectories();
     }
 
     public AppConfig Config { get; }
+    public event Action<Exception>? SaveFailed;
+    public Exception? LastSaveError { get; private set; }
+    public bool RebuiltConfigFromDisk { get; private set; }
     public bool RecoveredConfigFromBackup { get; }
     public bool UsedDefaultConfigAfterLoadFailure { get; }
 
@@ -25,9 +33,9 @@ public sealed class ProfileManager
     {
         var nextNumber = GetNextAvailableProfileNumber();
 
-        var profile = new Profile { Folder = $"p{nextNumber}" };
-        Config.Profiles.Add(profile);
+        var profile = Profile.NewEnvironment($"p{nextNumber}");
         Directory.CreateDirectory(AppPaths.ProfileDir(profile.Folder));
+        Config.Profiles.Add(profile);
         Save();
         return profile;
     }
@@ -50,21 +58,35 @@ public sealed class ProfileManager
         Save();
     }
 
-    public void MoveProfileToRecycleBin(Profile profile)
+    public bool MoveProfileToRecycleBin(Profile profile)
     {
+        var originalProfiles = Config.Profiles.ToList();
+        var originalTarget = Config.ExternalLinkProfileFolder;
         var folder = profile.Folder;
-        var path = AppPaths.ProfileDir(profile.Folder);
-        if (Directory.Exists(path))
-        {
-            FileSystem.DeleteDirectory(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-        }
-
         Config.Profiles.RemoveAll(item => string.Equals(item.Folder, folder, StringComparison.OrdinalIgnoreCase));
-        if (string.Equals(Config.ExternalLinkProfileFolder, folder, StringComparison.OrdinalIgnoreCase))
-        {
+        if (string.Equals(originalTarget, folder, StringComparison.OrdinalIgnoreCase))
             Config.ExternalLinkProfileFolder = null;
+
+        // Do not remove browser data unless its removal from the configuration is durable.
+        if (!Save())
+        {
+            Config.Profiles = originalProfiles;
+            Config.ExternalLinkProfileFolder = originalTarget;
+            return false;
         }
-        Save();
+        try
+        {
+            var path = AppPaths.ProfileDir(folder);
+            if (Directory.Exists(path)) _recycleDirectory(path);
+            return true;
+        }
+        catch
+        {
+            Config.Profiles = originalProfiles;
+            Config.ExternalLinkProfileFolder = originalTarget;
+            Save();
+            throw;
+        }
     }
 
     public void EnsureProfileDirectories()
@@ -76,9 +98,23 @@ public sealed class ProfileManager
         }
     }
 
-    public void Save() => _configStore.Save(Config);
+    public bool Save()
+    {
+        try
+        {
+            _configStore.Save(Config);
+            LastSaveError = null;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            LastSaveError = ex;
+            SaveFailed?.Invoke(ex);
+            return false;
+        }
+    }
 
-    private void ReconcileProfilesWithDisk(bool configExists)
+    private bool ReconcileProfilesWithDisk(bool configExists)
     {
         AppPaths.EnsureDirectories();
 
@@ -89,21 +125,15 @@ public sealed class ProfileManager
             .Cast<string>()
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        if (diskFolders.Count == 0)
-        {
-            if (configExists && !UsedDefaultConfigAfterLoadFailure && Config.Profiles.Count > 0)
-            {
-                Config.Profiles.Clear();
-                Save();
-            }
-
-            return;
-        }
-
+        // A valid configuration owns names, notes and modes even if a directory was lost.
+        // When rebuilding from disk, never apply new-environment defaults to recovered profiles.
         var changed = false;
-        var beforeCount = Config.Profiles.Count;
-        Config.Profiles.RemoveAll(profile => !diskFolders.Contains(profile.Folder));
-        changed = changed || beforeCount != Config.Profiles.Count;
+        if (!configExists && diskFolders.Count > 0)
+        {
+            Config.Profiles.Clear();
+            RebuiltConfigFromDisk = true;
+            changed = true;
+        }
 
         var uniqueProfiles = Config.Profiles
             .GroupBy(profile => profile.Folder, StringComparer.OrdinalIgnoreCase)
@@ -136,18 +166,12 @@ public sealed class ProfileManager
             changed = true;
         }
 
-        if (changed)
-        {
-            Save();
-        }
+        return changed;
     }
 
     private static bool IsProfileFolder(string folder)
     {
-        return folder.Length > 1 &&
-            folder[0] is 'p' or 'P' &&
-            int.TryParse(folder[1..], out var number) &&
-            number > 0;
+        return new Profile { Folder = folder }.InstanceNumber > 0;
     }
 
     private int GetNextAvailableProfileNumber()

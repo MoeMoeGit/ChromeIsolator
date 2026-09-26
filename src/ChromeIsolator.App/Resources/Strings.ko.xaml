@@ -65,7 +65,7 @@
     <sys:String x:Key="EnvironmentModeSummary">수집 {0}/{2}, 차이 {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">관리</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">수집 및 차이 모드 관리</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">수집이 필요한 환경에서 수집 모드를 켜세요. 실행 중인 환경은 닫은 뒤 변경하세요. 차이 모드는 필요할 때만 켜세요.</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">새 환경은 기본적으로 수집이 켜지며 기존 설정은 유지됩니다. 모드를 바꾸기 전에 환경을 닫으세요. 일괄 작업은 필터 결과 중 변경 가능한 환경에만 적용됩니다. 차이 모드는 필요할 때만 켜세요.</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">수집 켜기</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">수집 끄기</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">수집 모드</sys:String>
@@ -134,7 +134,7 @@ Edge를 임시로 사용할까요?</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator는 http 및 https 링크만 처리합니다. 필요하면 이 링크를 복사하세요.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">차이 모드 주입 실패: {0}. 브라우저는 계속 사용할 수 있지만 이번 실행은 기본 모드처럼 동작할 수 있습니다. 닫은 뒤 다시 시작하면 차이 모드를 재시도할 수 있습니다.</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromBackup">설정 파일을 읽을 수 없어 백업에서 복원했습니다. 환경 이름, 메모, 차이 모드, 외부 링크 설정을 확인하세요.</sys:String>
-    <sys:String x:Key="MsgConfigResetAfterLoadFailure">설정 파일과 백업을 모두 읽을 수 없어 기본 설정을 사용하고 디스크의 환경을 다시 인식했습니다. 일부 이름, 메모 또는 설정은 다시 구성해야 할 수 있습니다.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">설정과 백업을 읽을 수 없고 복구할 환경 폴더도 없어 기본 설정을 사용합니다.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows 기본 앱 설정을 열었습니다. 브라우저 목록에서 ChromeIsolator를 선택하여 http / https 기본 설정을 완료하세요.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">기본 앱 설정을 열 수 없습니다: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">새 버전이 있습니다: {0}&#x0A;&#x0A;다운로드 페이지로 이동하시겠습니까?</sys:String>
@@ -174,4 +174,8 @@ Edge를 임시로 사용할까요?</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">브라우저 엔진 없음</sys:String>
     <sys:String x:Key="ChromeAvailable">브라우저 엔진 사용 가능: {0}({1})</sys:String>
 
+    <sys:String x:Key="DefaultProfileName">환경 {0}</sys:String>
+    <sys:String x:Key="MsgConfigSaveFailed">설정을 저장하지 못했습니다. 변경 사항은 현재 메모리에만 유지됩니다: {0}</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromDisk">디스크 폴더에서 환경을 복원했습니다. 이름, 메모 및 모드를 다시 설정해야 할 수 있습니다.</sys:String>
+    <sys:String x:Key="NoMatchingEnvironments">필터와 일치하는 환경이 없습니다</sys:String>
 </ResourceDictionary>

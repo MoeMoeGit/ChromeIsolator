@@ -4,7 +4,8 @@
 
 ## 当前环境与触发关系
 
-- 唯一版本来源：`Directory.Build.props`，当前 `1.7.9`。
+- 唯一版本来源：`Directory.Build.props`，当前 `1.7.10`。
+- 最新已发布版本仍为 1.7.9；1.7.10 此次仅同步源码，不创建发布标签或 Release。
 - `main` push 和 PR：GitHub Actions 执行 Release 构建并上传 workflow artifacts。
 - `v*` tag：先校验 tag 与项目版本一致，再自动创建 GitHub Release 并上传 ZIP/MSI。
 - 普通 push 不授权修改版本、创建 tag 或发布 Release；发布必须由用户明确要求。
@@ -46,6 +47,6 @@ MSI 固定安装到 `%ProgramFiles%\ChromeIsolator`，创建开始菜单和桌�
 
 | 平台 / 环境 | 最近已知结果 | 当前未覆盖 |
 | --- | --- | --- |
-| GitHub Actions `windows-latest` | 历史标签已生成 ZIP/MSI | 本次纯文档迁移未触发 CI |
+| GitHub Actions `windows-latest` | 历史标签已生成 ZIP/MSI | main 推送会重新运行测试、构建与打包 |
 | Windows 10/11 x64 | 历史上完成安装、升级与功能回归 | 01 中列出的默认浏览器和异常恢复路径 |
 | macOS / Ubuntu | 非运行目标 | 不支持 WPF 应用验证 |

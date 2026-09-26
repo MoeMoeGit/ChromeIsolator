@@ -65,7 +65,7 @@
     <sys:String x:Key="EnvironmentModeSummary">収集 {0}/{2}、差分 {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">管理</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">収集と差分モードを管理</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">収集が必要な環境で収集モードを有効にします。実行中の環境は閉じてから変更してください。差分モードは必要な場合のみ有効にします。</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">新規環境では収集が既定で有効です。既存の設定は変わりません。変更前に環境を閉じてください。一括操作は絞り込み結果の変更可能な環境のみが対象です。差分は必要な場合のみ有効にします。</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">収集を有効化</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">収集を無効化</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">収集モード</sys:String>
@@ -134,7 +134,7 @@
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator は http と https リンクのみ処理します。必要に応じてこのリンクをコピーしてください。</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">差分モードの注入に失敗しました: {0}。ブラウザーは使用できますが、今回は基本モードとして動作する可能性があります。閉じて再起動すると差分モードを再試行できます。</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromBackup">設定ファイルを読み取れなかったため、バックアップから復元しました。環境名、メモ、差分モード、外部リンク設定を確認してください。</sys:String>
-    <sys:String x:Key="MsgConfigResetAfterLoadFailure">設定ファイルとバックアップを読み取れなかったため、既定設定を使用し、ディスク上の環境を再検出しました。一部の名前、メモ、設定は再設定が必要な場合があります。</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">設定とバックアップを読み込めず、復元可能な環境フォルダーもないため、既定設定を使用しています。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows の既定のアプリ設定を開きました。ブラウザー一覧で ChromeIsolator を選択し、http / https の既定設定を完了してください。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">既定のアプリ設定を開けませんでした: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">新しいバージョンがあります：{0}&#x0A;&#x0A;ダウンロードページに移動しますか？</sys:String>
@@ -174,4 +174,8 @@
     <sys:String x:Key="ChromeNotFoundShort">ブラウザーエンジンが見つかりません</sys:String>
     <sys:String x:Key="ChromeAvailable">ブラウザーエンジン利用可能: {0}（{1}）</sys:String>
 
+    <sys:String x:Key="DefaultProfileName">環境{0}</sys:String>
+    <sys:String x:Key="MsgConfigSaveFailed">設定を保存できません。変更は現在メモリ内にのみ保持されています：{0}</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromDisk">ディスク上のフォルダーから環境を復元しました。名前、メモ、モードの再設定が必要な場合があります。</sys:String>
+    <sys:String x:Key="NoMatchingEnvironments">条件に一致する環境はありません</sys:String>
 </ResourceDictionary>

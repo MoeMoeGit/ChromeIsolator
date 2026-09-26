@@ -64,8 +64,8 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         CopyEmailCommand = new RelayCommand(() => ShellService.CopyText(ContactEmail));
         ReinstallChromeCommand = new RelayCommand(() => { _reinstallChrome(); RefreshChromeStatus(); });
         SetDefaultBrowserCommand = new RelayCommand(RequestDefaultBrowser);
-        EnableCollectorDebugForEditableCommand = new RelayCommand(() => SetCollectorDebugForEditable(true));
-        DisableCollectorDebugForEditableCommand = new RelayCommand(() => SetCollectorDebugForEditable(false));
+        EnableCollectorDebugForEditableCommand = new RelayCommand(() => SetCollectorDebugForEditable(true), () => CanSetCollectorDebug(true));
+        DisableCollectorDebugForEditableCommand = new RelayCommand(() => SetCollectorDebugForEditable(false), () => CanSetCollectorDebug(false));
 
         RefreshChromeStatus();
         UpdateStatusText = L10n.Format("MsgCurrentVersion", _updateService.CurrentVersion);
@@ -94,6 +94,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
                 }
                 OnPropertyChanged(nameof(EnvironmentModeSummary));
                 ProfileModeView.Refresh();
+                RefreshModeCommands();
                 foreach (var profile in ExternalLinkProfiles)
                 {
                     profile.RefreshLocalizedProperties();
@@ -186,6 +187,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
             if (SetProperty(ref _profileModeSearchText, value))
             {
                 ProfileModeView.Refresh();
+                RefreshModeCommands();
             }
         }
     }
@@ -198,6 +200,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
             if (SetProperty(ref _showOnlyEditableModes, value))
             {
                 ProfileModeView.Refresh();
+                RefreshModeCommands();
             }
         }
     }
@@ -209,6 +212,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
             profileMode.RefreshModeState();
         }
         ProfileModeView.Refresh();
+        RefreshModeCommands();
         OnPropertyChanged(nameof(EnvironmentModeSummary));
     }
 
@@ -251,6 +255,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
             || e.PropertyName == nameof(SettingsProfileModeViewModel.EnableCollectorDebug))
         {
             OnPropertyChanged(nameof(EnvironmentModeSummary));
+            RefreshModeCommands();
         }
     }
 
@@ -274,15 +279,27 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         return profileMode.Title.Contains(ProfileModeSearchText.Trim(), StringComparison.CurrentCultureIgnoreCase);
     }
 
+    private bool CanSetCollectorDebug(bool enabled) => ProfileModeView.Cast<SettingsProfileModeViewModel>()
+        .Any(profile => profile.CanChangeMode && profile.EnableCollectorDebug != enabled);
+
+    private void RefreshModeCommands()
+    {
+        EnableCollectorDebugForEditableCommand.RaiseCanExecuteChanged();
+        DisableCollectorDebugForEditableCommand.RaiseCanExecuteChanged();
+    }
+
     private void SetCollectorDebugForEditable(bool enabled)
     {
-        foreach (var profileMode in ProfileModes.Where(profile => profile.CanChangeMode))
+        var changed = false;
+        foreach (var profileMode in ProfileModeView.Cast<SettingsProfileModeViewModel>().ToList())
         {
-            profileMode.EnableCollectorDebug = enabled;
+            changed |= profileMode.SetCollectorDebug(enabled, persist: false);
         }
+        if (changed) _profileManager.Save();
 
         OnPropertyChanged(nameof(EnvironmentModeSummary));
         ProfileModeView.Refresh();
+        RefreshModeCommands();
     }
 
     private async void CheckForUpdates()
@@ -427,7 +444,7 @@ public sealed class SettingsProfileModeViewModel : ObservableObject
     {
         get
         {
-            var defaultName = string.Format(L10n.GetString("LabelFolder") == "Folder" ? "Profile {0}" : "环境{0}", _profile.InstanceNumber);
+            var defaultName = L10n.Format("DefaultProfileName", _profile.InstanceNumber);
             return string.IsNullOrWhiteSpace(_profile.DisplayName)
                 ? defaultName
                 : $"{defaultName} - {_profile.DisplayName}";
@@ -456,17 +473,16 @@ public sealed class SettingsProfileModeViewModel : ObservableObject
     public bool EnableCollectorDebug
     {
         get => _profile.EnableCollectorDebug;
-        set
-        {
-            if (IsRunning || _profile.EnableCollectorDebug == value)
-            {
-                return;
-            }
+        set => SetCollectorDebug(value);
+    }
 
-            _profile.EnableCollectorDebug = value;
-            _profileManager.Save();
-            OnPropertyChanged();
-        }
+    internal bool SetCollectorDebug(bool value, bool persist = true)
+    {
+        if (IsRunning || _profile.EnableCollectorDebug == value) return false;
+        _profile.EnableCollectorDebug = value;
+        if (persist) _profileManager.Save();
+        OnPropertyChanged(nameof(EnableCollectorDebug));
+        return true;
     }
 
     public void RefreshLocalizedProperties()

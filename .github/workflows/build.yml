@@ -42,6 +42,9 @@ jobs:
           "PUBLISH_ZIP=artifacts/publish/ChromeIsolator-win-x64-v$version.zip" | Out-File -FilePath $env:GITHUB_ENV -Append
           "MSI_PATH=artifacts/installer/ChromeIsolator-Setup-x64-v$version.msi" | Out-File -FilePath $env:GITHUB_ENV -Append
 
+      - name: Test compatibility and recovery
+        run: dotnet run --project tests/CompatibilityTests/CompatibilityTests.csproj
+
       - name: Build
         shell: pwsh
         run: dotnet build ChromeIsolator.sln -c Release --no-restore -p:Version=$env:VERSION

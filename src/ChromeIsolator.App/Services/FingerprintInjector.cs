@@ -85,10 +85,8 @@ public sealed class FingerprintInjector : IAsyncDisposable
                 _webSocket = new ClientWebSocket();
                 await _webSocket.ConnectAsync(browserWebSocketUrl, _cts.Token);
 
-                retryCount = 0;
-                lastError = null;
-
-                var receiveTask = Task.Run(ReceiveLoopAsync);
+                var connection = _webSocket;
+                var receiveTask = Task.Run(() => ReceiveLoopAsync(connection));
 
                 await SendCommandAsync("Target.setDiscoverTargets", new { discover = true });
                 await SendCommandAsync("Target.setAutoAttach", new
@@ -103,19 +101,24 @@ public sealed class FingerprintInjector : IAsyncDisposable
                     await AttachToTargetIfNeededAsync(targetId);
                 }
 
+                retryCount = 0;
+                lastError = null;
                 await receiveTask;
+                await CleanupWebSocketAsync();
 
                 if (_cts.IsCancellationRequested) break;
 
                 ClearTargetState();
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) when (_cts.IsCancellationRequested)
             {
                 break;
             }
             catch (Exception ex)
             {
                 lastError = ex;
+                await CleanupWebSocketAsync();
+                ClearTargetState();
                 if (retryCount >= maxRetries)
                 {
                     Failed?.Invoke(lastError);
@@ -139,26 +142,18 @@ public sealed class FingerprintInjector : IAsyncDisposable
         }
     }
 
-    private async Task CleanupWebSocketAsync()
+    private Task CleanupWebSocketAsync()
     {
-        if (_webSocket is not null)
+        var socket = Interlocked.Exchange(ref _webSocket, null);
+        // Abort is bounded even when Chrome never answers a close handshake.
+        socket?.Abort();
+        socket?.Dispose();
+        foreach (var entry in _pendingResponses)
         {
-            try
-            {
-                if (_webSocket.State is WebSocketState.Open or WebSocketState.CloseReceived)
-                {
-                    await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "reconnect", CancellationToken.None)
-                        .ConfigureAwait(false);
-                }
-            }
-            catch
-            {
-                // Best-effort cleanup.
-            }
-
-            _webSocket.Dispose();
-            _webSocket = null;
+            if (_pendingResponses.TryRemove(entry.Key, out var pending))
+                pending.TrySetException(new IOException("CDP connection closed."));
         }
+        return Task.CompletedTask;
     }
 
     private static string GenerateScript(int instanceNumber)
@@ -229,16 +224,16 @@ public sealed class FingerprintInjector : IAsyncDisposable
             .ToList();
     }
 
-    private async Task ReceiveLoopAsync()
+    private async Task ReceiveLoopAsync(ClientWebSocket socket)
     {
         var buffer = new byte[64 * 1024];
-        while (!_cts.IsCancellationRequested && _webSocket is { State: WebSocketState.Open })
+        while (!_cts.IsCancellationRequested && socket.State == WebSocketState.Open)
         {
             using var message = new MemoryStream();
             WebSocketReceiveResult result;
             do
             {
-                result = await _webSocket.ReceiveAsync(buffer, _cts.Token);
+                result = await socket.ReceiveAsync(buffer, _cts.Token);
                 if (result.MessageType == WebSocketMessageType.Close)
                 {
                     return;
@@ -247,11 +242,11 @@ public sealed class FingerprintInjector : IAsyncDisposable
                 message.Write(buffer, 0, result.Count);
             } while (!result.EndOfMessage);
 
-            await HandleMessageAsync(message.ToArray());
+            HandleMessage(message.ToArray());
         }
     }
 
-    private async Task HandleMessageAsync(byte[] payload)
+    private void HandleMessage(byte[] payload)
     {
         using var json = JsonDocument.Parse(payload);
         var root = json.RootElement;
@@ -347,7 +342,8 @@ public sealed class FingerprintInjector : IAsyncDisposable
 
     private async Task SendCommandAsync(string method, object parameters, string? sessionId = null)
     {
-        if (_webSocket is not { State: WebSocketState.Open })
+        var socket = _webSocket;
+        if (socket is not { State: WebSocketState.Open })
         {
             throw new InvalidOperationException("CDP WebSocket 未连接");
         }
@@ -372,7 +368,7 @@ public sealed class FingerprintInjector : IAsyncDisposable
 
             var json = JsonSerializer.Serialize(payload);
             var bytes = Encoding.UTF8.GetBytes(json);
-            await _webSocket.SendAsync(bytes, WebSocketMessageType.Text, true, _cts.Token);
+            await socket.SendAsync(bytes, WebSocketMessageType.Text, true, _cts.Token);
 
             var completed = await Task.WhenAny(pending.Task, Task.Delay(TimeSpan.FromSeconds(10), _cts.Token));
             if (completed != pending.Task)

@@ -73,33 +73,34 @@
                 BorderThickness="1"
                 CornerRadius="{StaticResource CardCornerRadius}"
                 Margin="0,16,0,0">
-            <ListBox ItemsSource="{Binding ProfileModeView}"
-                     ItemContainerStyle="{StaticResource ModernListBoxItem}"
-                     BorderThickness="0"
-                     Background="Transparent"
-                     Padding="4"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     HorizontalContentAlignment="Stretch">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel MinHeight="54"
-                                    Margin="0,2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Title}"
-                                           TextWrapping="Wrap"
-                                           VerticalAlignment="Center"
-                                           Foreground="{StaticResource TextPrimaryBrush}" />
-                                <TextBlock Grid.Column="1"
-                                           Text="{DynamicResource EnvironmentModeRunningHint}"
-                                           Foreground="{StaticResource TextTertiaryBrush}"
-                                           FontSize="12"
-                                           Margin="12,0,0,0"
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}" />
+            <Grid>
+                <ListBox ItemsSource="{Binding ProfileModeView}"
+                         ItemContainerStyle="{StaticResource ModernListBoxItem}"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Padding="4"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel MinHeight="54"
+                                        Margin="0,2">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Title}"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Center"
+                                               Foreground="{StaticResource TextPrimaryBrush}" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{DynamicResource EnvironmentModeRunningHint}"
+                                               Foreground="{StaticResource TextTertiaryBrush}"
+                                               FontSize="12"
+                                               Margin="12,0,0,0"
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}" />
                             </Grid>
                             <StackPanel Margin="0,8,0,0">
                                 <CheckBox Content="{DynamicResource CollectorDebugModeLabel}"
@@ -117,6 +118,12 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <TextBlock Text="{DynamicResource NoMatchingEnvironments}"
+                       Visibility="{Binding ProfileModeView.IsEmpty, Converter={StaticResource BoolToVis}}"
+                       Foreground="{StaticResource TextTertiaryBrush}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       TextWrapping="Wrap" Margin="16" IsHitTestVisible="False" />
+            </Grid>
         </Border>
     </DockPanel>
 </Window>

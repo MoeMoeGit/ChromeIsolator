@@ -9,11 +9,14 @@ public sealed class Profile
     public bool EnableCollectorDebug { get; set; }
     public DateTime? LastUsed { get; set; }
 
+    public static Profile NewEnvironment(string folder) => new() { Folder = folder, EnableCollectorDebug = true };
+
     public int InstanceNumber
     {
         get
         {
-            if (Folder.Length > 1 && int.TryParse(Folder[1..], out var value))
+            if (!string.IsNullOrEmpty(Folder) && Folder.Length > 1 && Folder[0] is 'p' or 'P' &&
+                Folder[1..].All(char.IsAsciiDigit) && int.TryParse(Folder[1..], out var value) && value > 0)
             {
                 return value;
             }

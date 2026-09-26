@@ -65,7 +65,7 @@
     <sys:String x:Key="EnvironmentModeSummary">Collector {0}/{2}, variation {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">Manage</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">Manage collector and variation modes</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">Enable collector mode for environments that need collection. Close a running environment before changing it; enable variation mode only when needed.</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">New environments enable collection by default; existing settings stay unchanged. Close running environments before changing modes. Bulk actions affect only editable filtered results. Enable variation only when needed.</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">Enable collector</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">Disable collector</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">Collector mode</sys:String>
@@ -134,7 +134,7 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator only handles http and https links. You can copy this link and handle it manually.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">Variation mode injection failed: {0}. The browser can still be used, but this run may behave like base mode; close and start it again to retry variation mode.</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromBackup">The config file could not be read, so ChromeIsolator restored it from the backup. Check environment names, notes, variation mode, and external link settings.</sys:String>
-    <sys:String x:Key="MsgConfigResetAfterLoadFailure">The config file and backup could not be read, so ChromeIsolator used default settings and rediscovered environments from disk. Some names, notes, or settings may need to be configured again.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Config and backup are unavailable, and no profile folders could be recovered. Default settings are in use.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Windows default apps settings opened. Select ChromeIsolator in the browser list to finish setting http / https defaults.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">Could not open default apps settings: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">New version available: {0}&#x0A;&#x0A;Go to download?</sys:String>
@@ -174,4 +174,8 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Browser engine not found</sys:String>
     <sys:String x:Key="ChromeAvailable">Browser engine available: {0} ({1})</sys:String>
 
+    <sys:String x:Key="DefaultProfileName">Profile {0}</sys:String>
+    <sys:String x:Key="MsgConfigSaveFailed">Could not save settings. Changes are currently kept only in memory: {0}</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromDisk">Profiles were rebuilt from folders on disk. Names, notes and modes may need to be set again.</sys:String>
+    <sys:String x:Key="NoMatchingEnvironments">No environments match your filters</sys:String>
 </ResourceDictionary>

@@ -12,8 +12,10 @@ namespace ChromeIsolator.Services;
 public sealed class ChromeManager
 {
     private readonly Func<bool> _isEdgeFallbackAllowed;
+    private readonly Func<ChromeInfo?>? _browserResolver;
     private readonly object _syncRoot = new();
     private readonly Dictionary<string, Process> _processes = [];
+    private readonly Dictionary<string, Task> _stopTasks = [];
     private readonly Dictionary<string, int> _debugPorts = [];
     private readonly Dictionary<string, FingerprintInjector> _fingerprintInjectors = [];
     private static readonly HttpClient CdpHttpClient = new()
@@ -37,7 +39,13 @@ public sealed class ChromeManager
         _isEdgeFallbackAllowed = isEdgeFallbackAllowed ?? (() => false);
     }
 
-    public ChromeInfo? CurrentChrome => ResolveBrowser(_isEdgeFallbackAllowed());
+    internal ChromeManager(Func<ChromeInfo?> browserResolver) : this()
+    {
+        _browserResolver = browserResolver;
+    }
+
+    public ChromeInfo? CurrentChrome => _browserResolver is null
+        ? ResolveBrowser(_isEdgeFallbackAllowed()) : _browserResolver();
     public ChromeInfo? InstalledChrome => ResolveChrome();
     public ChromeInfo? InstalledEdge => ResolveEdge();
     public bool HasRunningProfiles
@@ -55,7 +63,8 @@ public sealed class ChromeManager
     {
         lock (_syncRoot)
         {
-            return _processes.TryGetValue(profile.Folder, out var process) && !process.HasExited;
+            return _stopTasks.ContainsKey(profile.Folder) ||
+                    (_processes.TryGetValue(profile.Folder, out var process) && !process.HasExited);
         }
     }
 
@@ -94,6 +103,9 @@ public sealed class ChromeManager
 
         lock (_syncRoot)
         {
+            if (_stopTasks.ContainsKey(profile.Folder))
+                throw new InvalidOperationException(L10n.GetString("StatusStopping"));
+
             if (_processes.TryGetValue(profile.Folder, out var existing))
             {
                 if (!existing.HasExited)
@@ -114,9 +126,9 @@ public sealed class ChromeManager
             var enableEnvironmentVariation = profile.EnableEnvironmentVariation;
             var enableCollectorDebug = profile.EnableCollectorDebug;
             var port = enableCollectorDebug
-                ? PortAllocator.FindAvailablePort(41000 + Math.Max(profile.InstanceNumber, 1))
+                ? PortAllocator.FindAvailablePort(41000 + Math.Clamp(profile.InstanceNumber, 1, 65536), reserved: _debugPorts.Values)
                 : enableEnvironmentVariation
-                    ? PortAllocator.FindAvailablePort(40000 + Math.Max(profile.InstanceNumber, 1))
+                    ? PortAllocator.FindAvailablePort(40000 + Math.Clamp(profile.InstanceNumber, 1, 65536), reserved: _debugPorts.Values)
                     : (int?)null;
             var runningCount = _processes.Count;
             var offsetX = 50 + runningCount * 30;
@@ -150,6 +162,9 @@ public sealed class ChromeManager
                 Process? exitedProcess;
                 lock (_syncRoot)
                 {
+                    // An old Exited event must never remove a replacement process.
+                    if (!_processes.TryGetValue(profile.Folder, out var current) ||
+                        !ReferenceEquals(current, process) || _stopTasks.ContainsKey(profile.Folder)) return;
                     _fingerprintInjectors.Remove(profile.Folder, out injector);
                     _processes.Remove(profile.Folder, out exitedProcess);
                     _debugPorts.Remove(profile.Folder);
@@ -225,26 +240,26 @@ public sealed class ChromeManager
         using var process = Process.Start(startInfo);
     }
 
-    public async Task StopAsync(Profile profile)
+    public Task StopAsync(Profile profile)
     {
-        Process? process;
-        FingerprintInjector? injector;
-        int? port = null;
         lock (_syncRoot)
         {
-            _processes.Remove(profile.Folder, out process);
-            if (_debugPorts.Remove(profile.Folder, out var debugPort))
-            {
-                port = debugPort;
-            }
-            _fingerprintInjectors.Remove(profile.Folder, out injector);
+            if (_stopTasks.TryGetValue(profile.Folder, out var stopping)) return stopping;
+            if (!_processes.TryGetValue(profile.Folder, out var process)) return Task.CompletedTask;
+            _fingerprintInjectors.Remove(profile.Folder, out var injector);
+            int? port = _debugPorts.TryGetValue(profile.Folder, out var value) ? value : null;
+            var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            _stopTasks[profile.Folder] = completion.Task;
+            _ = StopCoreAsync(profile, process, injector, port, completion);
+            return completion.Task;
         }
+    }
 
-        if (process is null)
-        {
-            return;
-        }
-
+    private async Task StopCoreAsync(Profile profile, Process process, FingerprintInjector? injector,
+        int? port, TaskCompletionSource completion)
+    {
+        Exception? failure = null;
+        var stopped = false;
         try
         {
             if (injector is not null)
@@ -296,9 +311,36 @@ public sealed class ChromeManager
                 }
             }
         }
+        catch (Exception ex)
+        {
+            failure = ex;
+        }
         finally
         {
-            process.Dispose();
+            lock (_syncRoot)
+            {
+                if (process.HasExited)
+                {
+                    stopped = true;
+                    _processes.Remove(profile.Folder);
+                    _debugPorts.Remove(profile.Folder);
+                    process.Dispose();
+                }
+                else
+                {
+                    failure ??= new TimeoutException("Browser process did not exit.");
+                }
+                _stopTasks.Remove(profile.Folder);
+            }
+            try
+            {
+                if (stopped) ProfileExited?.Invoke(profile.Folder);
+            }
+            finally
+            {
+                if (failure is null) completion.TrySetResult();
+                else completion.TrySetException(failure);
+            }
         }
     }
 
@@ -416,6 +458,7 @@ public sealed class ChromeManager
 
     private static ChromeInfo? ResolveChrome()
     {
+        if (!OperatingSystem.IsWindows()) return null;
         var candidates = new[]
         {
             (ReadChromePathFromRegistry(Registry.LocalMachine), "系统 Chrome"),
@@ -438,6 +481,7 @@ public sealed class ChromeManager
 
     private static ChromeInfo? ResolveEdge()
     {
+        if (!OperatingSystem.IsWindows()) return null;
         var candidates = new[]
         {
             (ReadEdgePathFromRegistry(Registry.LocalMachine), "备用 Edge"),
@@ -458,12 +502,14 @@ public sealed class ChromeManager
         return null;
     }
 
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private static string? ReadChromePathFromRegistry(RegistryKey root)
     {
         using var key = root.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe");
         return key?.GetValue("") as string;
     }
 
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private static string? ReadEdgePathFromRegistry(RegistryKey root)
     {
         using var key = root.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe");

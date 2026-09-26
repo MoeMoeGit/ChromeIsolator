@@ -41,7 +41,8 @@ public sealed class MainViewModel : ObservableObject
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         RenameSelectedCommand = new RelayCommand(RenameSelected, () => SelectedProfile is not null);
         EditNoteCommand = new RelayCommand(EditSelectedNote, () => SelectedProfile is not null);
-        DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null);
+        DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedProfile is not null &&
+            !SelectedProfile.IsRunning && !SelectedProfile.IsStarting && !SelectedProfile.IsStopping);
         ClearErrorCommand = new RelayCommand(ClearError, () => SelectedProfile is not null && !string.IsNullOrEmpty(SelectedProfile?.Error));
         RetrySelectedCommand = new RelayCommand(RetrySelected, () => SelectedProfile is not null && !SelectedProfile!.IsRunning && !string.IsNullOrEmpty(SelectedProfile?.Error));
         OpenProfileFolderCommand = new RelayCommand(OpenProfileFolder, () => SelectedProfile is not null);
@@ -54,8 +55,10 @@ public sealed class MainViewModel : ObservableObject
         _chromeManager.ProfileExited += OnProfileExited;
         _chromeManager.ProfileWarning += OnProfileWarning;
         L10n.LanguageChanged += OnLanguageChanged;
+        _profileManager.SaveFailed += ShowConfigSaveError;
         RefreshChromeStatus();
         NotifyConfigRecoveryIfNeeded();
+        if (_profileManager.LastSaveError is { } saveError) ShowConfigSaveError(saveError);
         _ = RefreshDiskSizesAsync();
     }
 
@@ -295,7 +298,13 @@ public sealed class MainViewModel : ObservableObject
 
     private void AddProfile()
     {
-        var profile = _profileManager.AddProfile();
+        Profile profile;
+        try { profile = _profileManager.AddProfile(); }
+        catch (Exception ex)
+        {
+            WpfMessageBox.Show(ex.Message, L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
         var viewModel = new ProfileViewModel(profile);
         Profiles.Add(viewModel);
         SelectedProfile = viewModel;
@@ -485,7 +494,7 @@ public sealed class MainViewModel : ObservableObject
             return;
         }
 
-        if (SelectedProfile.IsRunning)
+        if (SelectedProfile.IsRunning || SelectedProfile.IsStarting || SelectedProfile.IsStopping)
         {
             WpfMessageBox.Show(L10n.GetString("MsgRunningEnvNoDelete"), L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -501,9 +510,17 @@ public sealed class MainViewModel : ObservableObject
         }
 
         var removed = SelectedProfile;
-        _profileManager.MoveProfileToRecycleBin(removed.Model);
-        Profiles.Remove(removed);
-        SelectedProfile = Profiles.FirstOrDefault();
+        if (removed.IsRunning || removed.IsStarting || removed.IsStopping || _chromeManager.IsRunning(removed.Model)) return;
+        try
+        {
+            if (!_profileManager.MoveProfileToRecycleBin(removed.Model)) return;
+            Profiles.Remove(removed);
+            SelectedProfile = Profiles.FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            WpfMessageBox.Show(ex.Message, L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private void ClearError()
@@ -542,7 +559,7 @@ public sealed class MainViewModel : ObservableObject
 
     public void StartProfile(ProfileViewModel profile, string? initialUrl = null)
     {
-        if (_isBulkStopping)
+        if (_isBulkStopping || _isShuttingDown || profile.IsRunning || profile.IsStarting || profile.IsStopping)
         {
             return;
         }
@@ -629,6 +646,13 @@ public sealed class MainViewModel : ObservableObject
             return;
         }
 
+        if (_isBulkStopping || _isShuttingDown || target.IsStopping)
+        {
+            ShowMainWindowForExternalLinkIssue();
+            ShowExternalLinkError(L10n.GetString("MsgExternalLinkBrowserNotReady"), url);
+            return;
+        }
+
         try
         {
             if (target.IsStarting)
@@ -694,6 +718,7 @@ public sealed class MainViewModel : ObservableObject
                 return;
             }
 
+            if (_chromeManager.IsRunning(profile.Model) || profile.IsStopping) return;
             profile.IsRunning = false;
             profile.IsStarting = false;
             profile.IsStopping = false;
@@ -867,6 +892,8 @@ public sealed class MainViewModel : ObservableObject
     private void RefreshChromeStatus()
     {
         var chrome = _chromeManager.CurrentChrome;
+        OnPropertyChanged(nameof(ChromeVersionText));
+        OnPropertyChanged(nameof(ChromePathText));
         ChromeStatusText = chrome is null
             ? L10n.GetString("ChromeNotFoundShort")
             : L10n.Format("ChromeAvailable", chrome.Version ?? "-", chrome.Source);
@@ -887,9 +914,16 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
+    private static void ShowConfigSaveError(Exception error)
+    {
+        WpfApplication.Current.Dispatcher.BeginInvoke(() => WpfMessageBox.Show(
+            L10n.Format("MsgConfigSaveFailed", error.Message), L10n.GetString("AppTitle"),
+            MessageBoxButton.OK, MessageBoxImage.Warning));
+    }
+
     private void NotifyConfigRecoveryIfNeeded()
     {
-        if (!_profileManager.RecoveredConfigFromBackup && !_profileManager.UsedDefaultConfigAfterLoadFailure)
+        if (!_profileManager.RecoveredConfigFromBackup && !_profileManager.UsedDefaultConfigAfterLoadFailure && !_profileManager.RebuiltConfigFromDisk)
         {
             return;
         }
@@ -898,14 +932,16 @@ public sealed class MainViewModel : ObservableObject
         {
             var message = _profileManager.RecoveredConfigFromBackup
                 ? L10n.GetString("MsgConfigRecoveredFromBackup")
-                : L10n.GetString("MsgConfigResetAfterLoadFailure");
+                : _profileManager.RebuiltConfigFromDisk
+                    ? L10n.GetString("MsgConfigRecoveredFromDisk")
+                    : L10n.GetString("MsgConfigResetAfterLoadFailure");
             WpfMessageBox.Show(message, L10n.GetString("AppTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
         });
     }
 
     private async Task RefreshDiskSizesAsync()
     {
-        foreach (var profile in Profiles)
+        foreach (var profile in Profiles.ToList())
         {
             await profile.RefreshDiskSizeAsync();
         }

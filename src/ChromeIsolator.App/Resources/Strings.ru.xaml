@@ -65,7 +65,7 @@
     <sys:String x:Key="EnvironmentModeSummary">Сбор {0}/{2}, различия {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">Управлять</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">Управление сбором и различиями</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">Включите режим сбора для нужных сред. Запущенную среду сначала нужно закрыть; режим различий включайте только при необходимости.</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">В новых средах сбор включён по умолчанию; прежние настройки сохраняются. Перед изменением режима закройте среду. Групповые действия затрагивают только доступные для изменения результаты фильтра. Различия включайте при необходимости.</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">Включить сбор</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">Отключить сбор</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">Режим сбора</sys:String>
@@ -134,7 +134,7 @@
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator обрабатывает только ссылки http и https. При необходимости скопируйте эту ссылку вручную.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">Не удалось применить режим различий: {0}. Браузером можно пользоваться, но этот запуск может работать как базовый режим. Закройте и запустите снова, чтобы повторить режим различий.</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromBackup">Не удалось прочитать файл конфигурации, поэтому ChromeIsolator восстановил его из резервной копии. Проверьте имена сред, заметки, режим различий и настройки внешних ссылок.</sys:String>
-    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Не удалось прочитать файл конфигурации и резервную копию, поэтому ChromeIsolator использовал настройки по умолчанию и заново обнаружил среды на диске. Некоторые имена, заметки или настройки может потребоваться задать снова.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Конфигурация и резервная копия недоступны; папки сред для восстановления не найдены. Используются настройки по умолчанию.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Открыты настройки приложений Windows по умолчанию. Выберите ChromeIsolator в списке браузеров, чтобы завершить настройку http / https.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">Не удалось открыть настройки приложений по умолчанию: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Доступна новая версия: {0}&#x0A;&#x0A;Перейти к загрузке?</sys:String>
@@ -174,4 +174,8 @@
     <sys:String x:Key="ChromeNotFoundShort">Движок браузера не найден</sys:String>
     <sys:String x:Key="ChromeAvailable">Движок браузера доступен: {0} ({1})</sys:String>
 
+    <sys:String x:Key="DefaultProfileName">Среда {0}</sys:String>
+    <sys:String x:Key="MsgConfigSaveFailed">Не удалось сохранить настройки. Изменения пока хранятся только в памяти: {0}</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromDisk">Среды восстановлены из папок на диске. Имена, заметки и режимы может потребоваться настроить заново.</sys:String>
+    <sys:String x:Key="NoMatchingEnvironments">Нет сред, соответствующих фильтрам</sys:String>
 </ResourceDictionary>

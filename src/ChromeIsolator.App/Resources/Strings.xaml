@@ -65,7 +65,7 @@
     <sys:String x:Key="EnvironmentModeSummary">采集 {0}/{2}，差异 {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">管理</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">管理采集与差异模式</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">为需要采集的环境启用采集模式。运行中的环境需先关闭后再切换；差异模式仅在明确需要时开启。</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">新建环境默认开启采集，已有环境保持原设置。运行中的环境需先关闭后再切换；差异模式仅按需开启。批量按钮只修改当前筛选结果中可切换的环境。</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">启用采集</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">关闭采集</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">采集模式</sys:String>
@@ -135,7 +135,7 @@
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator 只处理 http 和 https 链接。你可以复制这个链接后手动处理。</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">差异模式注入失败：{0}。浏览器仍可使用，但本次可能只按基础模式运行；关闭后重新启动可重试差异模式。</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromBackup">配置文件无法读取，已从备份恢复。请检查环境名称、备注、差异模式和外部链接设置是否正确。</sys:String>
-    <sys:String x:Key="MsgConfigResetAfterLoadFailure">配置文件和备份都无法读取，已使用默认配置并根据磁盘环境重新识别。部分名称、备注或设置可能需要重新配置。</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">配置与备份不可用，且未找到可恢复的环境目录，已使用默认配置。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">已打开 Windows 默认应用设置。请在浏览器列表中选择 ChromeIsolator，完成 http / https 默认浏览器设置。</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">无法打开默认应用设置：{0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">发现新版本：{0}&#x0A;&#x0A;是否前往下载？</sys:String>
@@ -175,4 +175,8 @@
     <sys:String x:Key="ChromeNotFoundShort">浏览器引擎未找到</sys:String>
     <sys:String x:Key="ChromeAvailable">浏览器引擎可用：{0}（{1}）</sys:String>
 
+    <sys:String x:Key="DefaultProfileName">环境{0}</sys:String>
+    <sys:String x:Key="MsgConfigSaveFailed">配置保存失败，本次修改暂时只保留在内存中：{0}</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromDisk">已根据磁盘目录重建环境列表。名称、备注和模式可能需要重新设置。</sys:String>
+    <sys:String x:Key="NoMatchingEnvironments">没有符合筛选条件的环境</sys:String>
 </ResourceDictionary>

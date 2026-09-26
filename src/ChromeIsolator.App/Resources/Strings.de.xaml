@@ -65,7 +65,7 @@
     <sys:String x:Key="EnvironmentModeSummary">Sammlung {0}/{2}, Variation {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">Verwalten</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">Sammlung und Variation verwalten</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">Aktivieren Sie den Sammlermodus für Umgebungen, die gesammelt werden sollen. Laufende Umgebungen müssen zuerst geschlossen werden; Variation nur bei Bedarf aktivieren.</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">Neue Umgebungen aktivieren die Sammlung standardmäßig; bestehende Einstellungen bleiben erhalten. Schließen Sie laufende Umgebungen vor Änderungen. Sammelaktionen betreffen nur bearbeitbare Filterergebnisse. Variation nur bei Bedarf aktivieren.</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">Sammlung ein</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">Sammlung aus</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">Sammlermodus</sys:String>
@@ -134,7 +134,7 @@ Edge vorübergehend verwenden?</sys:String>
     <sys:String x:Key="MsgExternalLinkInvalid">ChromeIsolator verarbeitet nur http- und https-Links. Kopieren Sie diesen Link bei Bedarf manuell.</sys:String>
     <sys:String x:Key="MsgEnvironmentVariationFailed">Variationsmodus-Injektion fehlgeschlagen: {0}. Der Browser kann weiter verwendet werden, läuft diesmal aber möglicherweise wie im Basismodus. Schließen und erneut starten, um den Variationsmodus erneut zu versuchen.</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromBackup">Die Konfigurationsdatei konnte nicht gelesen werden und wurde aus der Sicherung wiederhergestellt. Prüfen Sie Umgebungsnamen, Notizen, Variationsmodus und externe Linkeinstellungen.</sys:String>
-    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Konfigurationsdatei und Sicherung konnten nicht gelesen werden. ChromeIsolator verwendet Standardwerte und hat Umgebungen vom Datenträger neu erkannt. Einige Namen, Notizen oder Einstellungen müssen eventuell neu gesetzt werden.</sys:String>
+    <sys:String x:Key="MsgConfigResetAfterLoadFailure">Konfiguration und Sicherung sind nicht verfügbar; es wurden keine wiederherstellbaren Umgebungsordner gefunden. Standardeinstellungen werden verwendet.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestOpened">Die Windows-Einstellungen für Standard-Apps wurden geöffnet. Wählen Sie ChromeIsolator in der Browserliste, um die http-/https-Standards festzulegen.</sys:String>
     <sys:String x:Key="MsgDefaultBrowserRequestFailed">Standard-App-Einstellungen konnten nicht geöffnet werden: {0}</sys:String>
     <sys:String x:Key="MsgUpdateAvailable">Neue Version verfügbar: {0}&#x0A;&#x0A;Zur Download-Seite gehen?</sys:String>
@@ -174,4 +174,8 @@ Edge vorübergehend verwenden?</sys:String>
     <sys:String x:Key="ChromeNotFoundShort">Browser-Engine nicht gefunden</sys:String>
     <sys:String x:Key="ChromeAvailable">Browser-Engine verfügbar: {0} ({1})</sys:String>
 
+    <sys:String x:Key="DefaultProfileName">Umgebung {0}</sys:String>
+    <sys:String x:Key="MsgConfigSaveFailed">Einstellungen konnten nicht gespeichert werden. Änderungen bleiben vorerst nur im Arbeitsspeicher: {0}</sys:String>
+    <sys:String x:Key="MsgConfigRecoveredFromDisk">Umgebungen wurden aus Ordnern auf dem Datenträger wiederhergestellt. Namen, Notizen und Modi müssen eventuell erneut festgelegt werden.</sys:String>
+    <sys:String x:Key="NoMatchingEnvironments">Keine Umgebung entspricht dem Filter</sys:String>
 </ResourceDictionary>

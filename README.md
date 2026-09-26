@@ -18,8 +18,8 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 - **环境备注**：每个环境可保存一条最多 120 个字符的纯文本备注，用于记录账号、用途或注意事项；空备注不占用详情区域
 - **安全删除**：删除环境需要输入 `delete` 确认，对话框显示数据大小，数据会先移到 Windows 回收站
 - **错误恢复**：环境启动失败时可重试或清除错误状态
-- **基础模式**：默认不启用调试端口、不注入页面脚本，降低特定网站兼容问题；可在设置中为已关闭的指定环境单独启用“差异模式”
-- **采集模式 / 调试端口常开**：可在设置中为已关闭的指定环境单独启用本机 CDP 调试端口，端口为 `41000 + 环境编号`，便于 cscout 连接已登录环境；cscout 会自行创建后台标签页并导航，不要求用户提前打开具体页面。该模式不会自动启用差异注入
+- **基础模式**：关闭采集和差异后，不启用调试端口、不注入页面脚本，降低特定网站兼容问题；可在设置中为已关闭的指定环境单独启用“差异模式”
+- **采集模式 / 调试端口常开**：新建环境（含首次生成）默认开启，可在设置中对已关闭的环境单独关闭或启用本机 CDP 调试端口，端口为 `41000 + 环境编号`，便于 cscout 连接已登录环境；cscout 会自行创建后台标签页并导航，不要求用户提前打开具体页面。该模式不会自动启用差异注入
 - **轻量环境差异**：差异模式会为指定环境注入稳定的 `navigator.hardwareConcurrency` 和 `navigator.deviceMemory` 值，自动处理新打开的标签页，断线后自动重连（最多 5 次指数退避）
 - **外部链接**：可在设置中选择系统外部 http / https 链接默认打开到哪个环境，并发起“设为默认浏览器”请求；目标环境未运行时会自动启动，浏览器引擎未就绪时提示复制链接
 - **浏览器引擎设置**：首次运行先说明隔离策略；优先使用用户已安装的官方 Stable Chrome 程序文件；未安装 Chrome 时，用户确认后安装官方 Chrome，下载失败可打开 Google 官方 Chrome 下载页手动安装；Edge 只作为最后临时备用
@@ -38,7 +38,7 @@ ChromeIsolator 是 BrowserIsolator 的 Windows 版本：在一台 Windows 电脑
 
 ## 当前状态
 
-核心功能已完成，包括环境管理、环境备注、外部链接接收、浏览器引擎设置、可选采集模式、可选差异模式、多语言、设置面板、系统托盘和 MSI 安装包构建。当前版本为 V1.7.9，项目继续验证采集模式、默认浏览器注册、真实外部链接行为和本轮稳定性优化。
+核心功能已完成，包括环境管理、环境备注、外部链接接收、浏览器引擎设置、可选采集模式、可选差异模式、多语言、设置面板、系统托盘和 MSI 安装包构建。当前版本为 V1.7.10，项目继续验证采集模式、默认浏览器注册、真实外部链接行为和本轮稳定性优化。
 
 安装包使用 self-contained 发布，普通用户无需预先安装 .NET Runtime。
 
@@ -128,7 +128,7 @@ dotnet run --project .\src\ChromeIsolator.App\ChromeIsolator.App.csproj
 
 ```text
 artifacts\publish\win-x64\
-artifacts\publish\ChromeIsolator-win-x64-v1.7.9.zip
+artifacts\publish\ChromeIsolator-win-x64-v1.7.10.zip
 ```
 
 ### 构建 MSI 安装包
@@ -142,12 +142,12 @@ artifacts\publish\ChromeIsolator-win-x64-v1.7.9.zip
 安装包产物位于：
 
 ```text
-artifacts\installer\ChromeIsolator-Setup-x64-v1.7.9.msi
+artifacts\installer\ChromeIsolator-Setup-x64-v1.7.10.msi
 ```
 
 ## 版本管理
 
-项目版本统一写在根目录 `Directory.Build.props`。发布新版本时只修改其中的 `Version`、`AssemblyVersion`、`FileVersion` 和 `InformationalVersion`，然后创建同版本 tag，例如 `v1.7.9`。
+项目版本统一写在根目录 `Directory.Build.props`。发布新版本时只修改其中的 `Version`、`AssemblyVersion`、`FileVersion` 和 `InformationalVersion`，然后创建同版本 tag，例如 `v1.7.10`。
 
 GitHub Actions 会在 tag 推送时自动构建，并创建 GitHub Release，上传带版本号的 win-x64 zip 和 MSI 安装包。
 
