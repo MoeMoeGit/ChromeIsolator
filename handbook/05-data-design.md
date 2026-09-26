@@ -19,7 +19,7 @@
 | 环境 | `Profile` + `Profiles\pN` | `Folder` 是不区分大小写的唯一身份；`pN` 中 N 为正整数 |
 | 运行状态 | `ProfileViewModel` 与 `ChromeManager` 内存状态 | 不持久化；应用启动后根据受管进程重新建立 |
 
-`Profile` 当前保存 `Folder`、`DisplayName`、`Note`、两个模式开关和 `LastUsed`。`AppConfig` 保存语言、首次运行、Edge 备用、外部链接目标、窗口布局和高级详情开关。字段的最终事实以模型为准，不在本文复制完整序列化结构。
+`Profile` 当前保存 `Folder`、`DisplayName`、`Note`、两个模式开关和 `LastUsed`。`AppConfig` 保存外观（`Appearance`: system / light / dark，缺省为 system）、语言、首次运行、Edge 备用、外部链接目标、窗口布局和高级详情开关。字段的最终事实以模型为准，不在本文复制完整序列化结构。
 
 ## 兼容、恢复与删除
 

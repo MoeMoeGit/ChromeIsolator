@@ -52,6 +52,7 @@ public partial class App : WpfApplication
             var configStore = new ConfigStore();
             _profileManager = new ProfileManager(configStore);
             L10n.Initialize(_profileManager.Config.Language);
+            ThemeService.Initialize(_profileManager.Config.Appearance);
             _chromeManager = new ChromeManager(() => _profileManager.Config.AllowEdgeFallback);
             var updateService = new UpdateService();
             var mainViewModel = new MainViewModel(_profileManager, _chromeManager, updateService);
@@ -103,6 +104,7 @@ public partial class App : WpfApplication
             _singleInstanceMutex?.ReleaseMutex();
         }
         _singleInstanceMutex?.Dispose();
+        ThemeService.Shutdown();
         base.OnExit(e);
     }
 

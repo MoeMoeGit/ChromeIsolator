@@ -178,4 +178,8 @@
     <sys:String x:Key="MsgConfigSaveFailed">設定を保存できません。変更は現在メモリ内にのみ保持されています：{0}</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromDisk">ディスク上のフォルダーから環境を復元しました。名前、メモ、モードの再設定が必要な場合があります。</sys:String>
     <sys:String x:Key="NoMatchingEnvironments">条件に一致する環境はありません</sys:String>
+    <sys:String x:Key="LabelAppearance">外観</sys:String>
+    <sys:String x:Key="AppearanceSystem">システムに合わせる</sys:String>
+    <sys:String x:Key="AppearanceLight">ライト</sys:String>
+    <sys:String x:Key="AppearanceDark">ダーク</sys:String>
 </ResourceDictionary>

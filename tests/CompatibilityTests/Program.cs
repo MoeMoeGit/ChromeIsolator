@@ -19,6 +19,10 @@ static void Check(bool condition, string message)
 
 try
 {
+    var legacyAppearance = JsonSerializer.Deserialize<AppConfig>("""{"Profiles":[]}""")!;
+    Check(legacyAppearance.Appearance == "system", "Legacy config defaults to system appearance");
+    var darkAppearance = new AppConfig { Appearance = "dark" };
+    Check(JsonSerializer.Deserialize<AppConfig>(JsonSerializer.Serialize(darkAppearance))!.Appearance == "dark", "Appearance survives config round trip");
     AppPaths.EnsureDirectories();
     var store = new ConfigStore();
     var firstManager = new ProfileManager(store);

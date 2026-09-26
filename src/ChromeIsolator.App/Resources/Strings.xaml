@@ -179,4 +179,8 @@
     <sys:String x:Key="MsgConfigSaveFailed">配置保存失败，本次修改暂时只保留在内存中：{0}</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromDisk">已根据磁盘目录重建环境列表。名称、备注和模式可能需要重新设置。</sys:String>
     <sys:String x:Key="NoMatchingEnvironments">没有符合筛选条件的环境</sys:String>
+    <sys:String x:Key="LabelAppearance">外观</sys:String>
+    <sys:String x:Key="AppearanceSystem">跟随系统</sys:String>
+    <sys:String x:Key="AppearanceLight">浅色</sys:String>
+    <sys:String x:Key="AppearanceDark">深色</sys:String>
 </ResourceDictionary>

@@ -4,36 +4,37 @@
         Title="{DynamicResource DownloadTitle}"
         Width="680"
         Height="430"
+        Foreground="{DynamicResource TextPrimaryBrush}"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
-        Background="{StaticResource WindowBackgroundBrush}">
+        ResizeMode="CanResize" MinWidth="560" MinHeight="430"
+        Background="{DynamicResource WindowBackgroundBrush}">
     <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Border Background="{StaticResource CardBackgroundBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
+        <Border Background="{DynamicResource CardBackgroundBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
                 BorderThickness="1"
                 CornerRadius="{StaticResource CardCornerRadius}"
                 Padding="18">
-            <StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel>
                 <TextBlock x:Name="TitleText"
                            Text="{DynamicResource DownloadPreparing}"
                            FontSize="20"
                            FontWeight="SemiBold"
-                           Foreground="{StaticResource TextPrimaryBrush}" />
+                           Foreground="{DynamicResource TextPrimaryBrush}" />
 
                 <TextBlock x:Name="NoticeText"
                            Text="{DynamicResource BrowserSetupNotice}"
-                           Foreground="{StaticResource TextPrimaryBrush}"
+                           Foreground="{DynamicResource TextPrimaryBrush}"
                            Margin="0,12,0,0"
                            TextWrapping="Wrap" />
 
                 <TextBlock x:Name="StatusText"
                            Text="{DynamicResource DownloadPreparingStatus}"
-                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
                            Margin="0,16,0,0"
                            TextWrapping="Wrap" />
 
@@ -46,15 +47,15 @@
 
                 <TextBlock x:Name="PercentText"
                            Text="0%"
-                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
                            HorizontalAlignment="Center"
                            Margin="0,6,0,0" />
 
                 <Border x:Name="EdgeFallbackPanel"
-                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
                         BorderThickness="1"
                         CornerRadius="6"
-                        Background="{StaticResource WindowBackgroundBrush}"
+                        Background="{DynamicResource WindowBackgroundBrush}"
                         Padding="12"
                         Margin="0,16,0,0"
                         Visibility="Collapsed">
@@ -67,12 +68,12 @@
                                 Margin="12,0,0,0"
                                 Click="UseEdgeButton_Click" />
                         <TextBlock Text="{DynamicResource EdgeFallbackNotice}"
-                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
                                    TextWrapping="Wrap"
                                    VerticalAlignment="Center" />
                     </DockPanel>
                 </Border>
-            </StackPanel>
+            </StackPanel></ScrollViewer>
         </Border>
 
         <WrapPanel Grid.Row="1"

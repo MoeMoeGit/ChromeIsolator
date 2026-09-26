@@ -159,6 +159,20 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         }
     }
 
+    public int SelectedAppearance
+    {
+        get => _profileManager.Config.Appearance switch { "light" => 1, "dark" => 2, _ => 0 };
+        set
+        {
+            var mode = value switch { 1 => "light", 2 => "dark", _ => "system" };
+            if (_profileManager.Config.Appearance == mode) return;
+            _profileManager.Config.Appearance = mode;
+            ThemeService.Apply(mode);
+            _profileManager.Save();
+            OnPropertyChanged();
+        }
+    }
+
     public bool ShowAdvancedDetails
     {
         get => _showAdvancedDetails;

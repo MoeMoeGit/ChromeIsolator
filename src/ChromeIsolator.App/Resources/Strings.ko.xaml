@@ -178,4 +178,8 @@ Edge를 임시로 사용할까요?</sys:String>
     <sys:String x:Key="MsgConfigSaveFailed">설정을 저장하지 못했습니다. 변경 사항은 현재 메모리에만 유지됩니다: {0}</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromDisk">디스크 폴더에서 환경을 복원했습니다. 이름, 메모 및 모드를 다시 설정해야 할 수 있습니다.</sys:String>
     <sys:String x:Key="NoMatchingEnvironments">필터와 일치하는 환경이 없습니다</sys:String>
+    <sys:String x:Key="LabelAppearance">화면 모드</sys:String>
+    <sys:String x:Key="AppearanceSystem">시스템 설정 사용</sys:String>
+    <sys:String x:Key="AppearanceLight">라이트</sys:String>
+    <sys:String x:Key="AppearanceDark">다크</sys:String>
 </ResourceDictionary>

@@ -14,6 +14,7 @@ public sealed class AppConfig
         Profiles = [Profile.NewEnvironment("p1"), Profile.NewEnvironment("p2"), Profile.NewEnvironment("p3")]
     };
 
+    public string Appearance { get; set; } = "system";
     public bool ShowAdvancedDetails { get; set; }
     public string? Language { get; set; }
     public bool FirstRunCompleted { get; set; }

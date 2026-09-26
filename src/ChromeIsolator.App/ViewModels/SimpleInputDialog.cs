@@ -105,11 +105,10 @@ public static class SimpleInputDialog
             Height = 38,
             TextAlignment = TextAlignment.Center,
             VerticalAlignment = VerticalAlignment.Top,
-            Padding = new Thickness(0, 9, 0, 0),
-            Foreground = title == L10n.GetString("MsgDeleteTitle")
-                ? (app?.Resources.Contains("ErrorBrush") == true ? (MediaBrush)app.Resources["ErrorBrush"] : MediaBrushes.DarkRed)
-                : (app?.Resources.Contains("AccentBrush") == true ? (MediaBrush)app.Resources["AccentBrush"] : MediaBrushes.RoyalBlue)
+            Padding = new Thickness(0, 9, 0, 0)
         };
+        iconBlock.SetResourceReference(WpfTextBlock.ForegroundProperty,
+            title == L10n.GetString("MsgDeleteTitle") ? "ErrorBrush" : "AccentBrush");
 
         var textPanel = new WpfStackPanel
         {
@@ -165,6 +164,11 @@ public static class SimpleInputDialog
                 ? (MediaBrush)app.Resources["WindowBackgroundBrush"]
                 : MediaBrushes.White
         };
+        titleBlock.SetResourceReference(WpfTextBlock.ForegroundProperty, "TextPrimaryBrush");
+        messageBlock.SetResourceReference(WpfTextBlock.ForegroundProperty, "TextSecondaryBrush");
+        content.SetResourceReference(System.Windows.Controls.Border.BackgroundProperty, "CardBackgroundBrush");
+        content.SetResourceReference(System.Windows.Controls.Border.BorderBrushProperty, "BorderBrush");
+        window.SetResourceReference(Window.BackgroundProperty, "WindowBackgroundBrush");
         IconHelper.ApplyIcon(window);
 
         string? result = null;
@@ -248,11 +252,9 @@ public static class SimpleInputDialog
             Height = 38,
             TextAlignment = TextAlignment.Center,
             VerticalAlignment = VerticalAlignment.Top,
-            Padding = new Thickness(0, 9, 0, 0),
-            Foreground = app?.Resources.Contains("AccentBrush") == true
-                ? (MediaBrush)app.Resources["AccentBrush"]
-                : MediaBrushes.RoyalBlue
+            Padding = new Thickness(0, 9, 0, 0)
         };
+        iconBlock.SetResourceReference(WpfTextBlock.ForegroundProperty, "AccentBrush");
 
         var textPanel = new WpfStackPanel
         {
@@ -306,6 +308,11 @@ public static class SimpleInputDialog
                 ? (MediaBrush)app.Resources["WindowBackgroundBrush"]
                 : MediaBrushes.White
         };
+        titleBlock.SetResourceReference(WpfTextBlock.ForegroundProperty, "TextPrimaryBrush");
+        messageBlock.SetResourceReference(WpfTextBlock.ForegroundProperty, "TextSecondaryBrush");
+        content.SetResourceReference(System.Windows.Controls.Border.BackgroundProperty, "CardBackgroundBrush");
+        content.SetResourceReference(System.Windows.Controls.Border.BorderBrushProperty, "BorderBrush");
+        window.SetResourceReference(Window.BackgroundProperty, "WindowBackgroundBrush");
         IconHelper.ApplyIcon(window);
 
         copyButton.Click += (_, _) =>

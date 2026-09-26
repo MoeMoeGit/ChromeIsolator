@@ -178,4 +178,8 @@ Utiliser Edge temporairement ?</sys:String>
     <sys:String x:Key="MsgConfigSaveFailed">Impossible d’enregistrer les paramètres. Les modifications sont conservées uniquement en mémoire : {0}</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromDisk">Les environnements ont été reconstruits à partir des dossiers du disque. Les noms, notes et modes peuvent nécessiter une nouvelle configuration.</sys:String>
     <sys:String x:Key="NoMatchingEnvironments">Aucun environnement ne correspond aux filtres</sys:String>
+    <sys:String x:Key="LabelAppearance">Apparence</sys:String>
+    <sys:String x:Key="AppearanceSystem">Suivre le système</sys:String>
+    <sys:String x:Key="AppearanceLight">Clair</sys:String>
+    <sys:String x:Key="AppearanceDark">Sombre</sys:String>
 </ResourceDictionary>

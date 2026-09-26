@@ -178,4 +178,8 @@ Use Edge temporarily?</sys:String>
     <sys:String x:Key="MsgConfigSaveFailed">Could not save settings. Changes are currently kept only in memory: {0}</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromDisk">Profiles were rebuilt from folders on disk. Names, notes and modes may need to be set again.</sys:String>
     <sys:String x:Key="NoMatchingEnvironments">No environments match your filters</sys:String>
+    <sys:String x:Key="LabelAppearance">Appearance</sys:String>
+    <sys:String x:Key="AppearanceSystem">Use system setting</sys:String>
+    <sys:String x:Key="AppearanceLight">Light</sys:String>
+    <sys:String x:Key="AppearanceDark">Dark</sys:String>
 </ResourceDictionary>

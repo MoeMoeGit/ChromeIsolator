@@ -6,9 +6,10 @@
         Height="520"
         MinWidth="560"
         MinHeight="420"
+        Foreground="{DynamicResource TextPrimaryBrush}"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
-        Background="{StaticResource WindowBackgroundBrush}">
+        Background="{DynamicResource WindowBackgroundBrush}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
@@ -17,9 +18,9 @@
             <TextBlock Text="{DynamicResource EnvironmentModeManagerTitle}"
                        FontSize="22"
                        FontWeight="SemiBold"
-                       Foreground="{StaticResource TextPrimaryBrush}" />
+                       Foreground="{DynamicResource TextPrimaryBrush}" />
             <TextBlock Text="{DynamicResource EnvironmentModeManagerDescription}"
-                       Foreground="{StaticResource TextTertiaryBrush}"
+                       Foreground="{DynamicResource TextTertiaryBrush}"
                        TextWrapping="Wrap"
                        Margin="0,8,0,0" />
 
@@ -30,7 +31,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Text="{DynamicResource LabelSearchEnvironment}"
-                               Foreground="{StaticResource TextTertiaryBrush}" />
+                               Foreground="{DynamicResource TextTertiaryBrush}" />
                     <TextBox Text="{Binding ProfileModeSearchText, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,6,0,0"
                              MinHeight="30" />
@@ -68,8 +69,8 @@
                     MinWidth="80" />
         </StackPanel>
 
-        <Border Background="{StaticResource CardBackgroundBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
+        <Border Background="{DynamicResource CardBackgroundBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
                 BorderThickness="1"
                 CornerRadius="{StaticResource CardCornerRadius}"
                 Margin="0,16,0,0">
@@ -93,10 +94,10 @@
                                     <TextBlock Text="{Binding Title}"
                                                TextWrapping="Wrap"
                                                VerticalAlignment="Center"
-                                               Foreground="{StaticResource TextPrimaryBrush}" />
+                                               Foreground="{DynamicResource TextPrimaryBrush}" />
                                     <TextBlock Grid.Column="1"
                                                Text="{DynamicResource EnvironmentModeRunningHint}"
-                                               Foreground="{StaticResource TextTertiaryBrush}"
+                                               Foreground="{DynamicResource TextTertiaryBrush}"
                                                FontSize="12"
                                                Margin="12,0,0,0"
                                                VerticalAlignment="Center"
@@ -120,7 +121,7 @@
             </ListBox>
             <TextBlock Text="{DynamicResource NoMatchingEnvironments}"
                        Visibility="{Binding ProfileModeView.IsEmpty, Converter={StaticResource BoolToVis}}"
-                       Foreground="{StaticResource TextTertiaryBrush}"
+                       Foreground="{DynamicResource TextTertiaryBrush}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        TextWrapping="Wrap" Margin="16" IsHitTestVisible="False" />
             </Grid>

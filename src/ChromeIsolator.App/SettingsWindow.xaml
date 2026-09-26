@@ -3,23 +3,57 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource SettingsTitle}"
         Width="620"
-        Height="560"
+        Height="700"
         MinWidth="560"
         MinHeight="440"
+        Foreground="{DynamicResource TextPrimaryBrush}"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
-        Background="{StaticResource WindowBackgroundBrush}">
+        Background="{DynamicResource WindowBackgroundBrush}">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="22">
+        <StackPanel Margin="24">
             <TextBlock Text="{DynamicResource SettingsTitle}" FontSize="22" FontWeight="SemiBold"
-                       Foreground="{StaticResource TextPrimaryBrush}" />
+                       Foreground="{DynamicResource TextPrimaryBrush}" />
 
-            <Border Background="{StaticResource CardBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,18,0,0">
+            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource LabelAppearance}" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    <ComboBox SelectedIndex="{Binding SelectedAppearance}" HorizontalAlignment="Stretch"
+                              AutomationProperties.Name="{DynamicResource LabelAppearance}">
+                        <ComboBoxItem Content="{DynamicResource AppearanceSystem}" />
+                        <ComboBoxItem Content="{DynamicResource AppearanceLight}" />
+                        <ComboBoxItem Content="{DynamicResource AppearanceDark}" />
+                    </ComboBox>
+
+                    <TextBlock Text="{DynamicResource SectionLanguage}" Margin="0,20,0,0" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                    <ComboBox ItemsSource="{Binding Languages}"
+                              SelectedItem="{Binding SelectedLanguage}"
+                              Margin="0,10,0,0"
+                              Width="200"
+                              HorizontalAlignment="Left">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding NativeName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock Text="{DynamicResource SectionUi}" Margin="0,20,0,0" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                    <CheckBox Content="{DynamicResource ShowAdvancedDetails}"
+                              IsChecked="{Binding ShowAdvancedDetails}"
+                              Margin="0,10,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="20" Margin="0,18,0,0">
                 <StackPanel>
                     <TextBlock Text="{DynamicResource SectionBrowser}" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}" />
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
                     <TextBlock Text="{Binding ChromeStatusText}" TextWrapping="Wrap" Margin="0,10,0,0" />
                     <WrapPanel Margin="0,12,0,0">
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenChromeFolder}"
@@ -30,14 +64,14 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="20" Margin="0,14,0,0">
                 <StackPanel>
                     <TextBlock Text="{DynamicResource SectionEnvironmentMode}" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}" />
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
                     <TextBlock Text="{DynamicResource EnvironmentModeDescription}"
-                               Foreground="{StaticResource TextTertiaryBrush}"
+                               Foreground="{DynamicResource TextTertiaryBrush}"
                                TextWrapping="Wrap"
                                Margin="0,8,0,0" />
                     <Grid Margin="0,12,0,0">
@@ -46,8 +80,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding EnvironmentModeSummary}"
-                                   Foreground="{StaticResource TextSecondaryBrush}"
-                                   VerticalAlignment="Center" />
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   VerticalAlignment="Center" TextWrapping="Wrap" />
                         <Button Grid.Column="1"
                                 Style="{StaticResource SecondaryButton}"
                                 Content="{DynamicResource BtnManageEnvironmentModes}"
@@ -59,18 +93,18 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="20" Margin="0,14,0,0">
                 <StackPanel>
                     <TextBlock Text="{DynamicResource SectionExternalLinks}" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}" />
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
                     <TextBlock Text="{DynamicResource ExternalLinkDescription}"
-                               Foreground="{StaticResource TextTertiaryBrush}"
+                               Foreground="{DynamicResource TextTertiaryBrush}"
                                TextWrapping="Wrap"
                                Margin="0,8,0,0" />
                     <TextBlock Text="{DynamicResource LabelExternalLinkTarget}"
-                               Foreground="{StaticResource TextTertiaryBrush}"
+                               Foreground="{DynamicResource TextTertiaryBrush}"
                                Margin="0,12,0,0" />
                     <ComboBox ItemsSource="{Binding ExternalLinkProfiles}"
                               SelectedItem="{Binding SelectedExternalLinkProfile}"
@@ -93,15 +127,15 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="20" Margin="0,14,0,0">
                 <StackPanel>
                     <TextBlock Text="{DynamicResource SectionData}" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}" />
-                    <TextBlock Text="{DynamicResource LabelDataPath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                    <TextBlock Text="{DynamicResource LabelDataPath}" Foreground="{DynamicResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding DataPath}" TextWrapping="Wrap" />
-                    <TextBlock Text="{DynamicResource LabelProfilesPath}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                    <TextBlock Text="{DynamicResource LabelProfilesPath}" Foreground="{DynamicResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding ProfilesPath}" TextWrapping="Wrap" />
                     <WrapPanel Margin="0,12,0,0">
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnOpenDataFolder}"
@@ -114,49 +148,17 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource SectionUi}" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}" />
-                    <CheckBox Content="{DynamicResource ShowAdvancedDetails}"
-                              IsChecked="{Binding ShowAdvancedDetails}"
-                              Margin="0,10,0,0" />
-                </StackPanel>
-            </Border>
-
-            <Border Background="{StaticResource CardBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource SectionLanguage}" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}" />
-                    <ComboBox ItemsSource="{Binding Languages}"
-                              SelectedItem="{Binding SelectedLanguage}"
-                              Margin="0,10,0,0"
-                              Width="200"
-                              HorizontalAlignment="Left">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding NativeName}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-            </Border>
-
-            <Border Background="{StaticResource CardBackgroundBrush}"
-                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                    CornerRadius="{StaticResource CardCornerRadius}" Padding="16" Margin="0,14,0,0">
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                    CornerRadius="{StaticResource CardCornerRadius}" Padding="20" Margin="0,14,0,0">
                 <StackPanel>
                     <TextBlock Text="{DynamicResource SectionHelpUpdate}" FontWeight="SemiBold"
-                               Foreground="{StaticResource TextSecondaryBrush}" />
-                    <TextBlock Text="{DynamicResource LabelAuthor}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                    <TextBlock Text="{DynamicResource LabelAuthor}" Foreground="{DynamicResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding AuthorName}" TextWrapping="Wrap" />
-                    <TextBlock Text="{DynamicResource LabelContact}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                    <TextBlock Text="{DynamicResource LabelContact}" Foreground="{DynamicResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding ContactEmail}" TextWrapping="Wrap" />
-                    <TextBlock Text="{DynamicResource LabelUpdateStatus}" Foreground="{StaticResource TextTertiaryBrush}" Margin="0,10,0,0" />
+                    <TextBlock Text="{DynamicResource LabelUpdateStatus}" Foreground="{DynamicResource TextTertiaryBrush}" Margin="0,10,0,0" />
                     <TextBlock Text="{Binding UpdateStatusText}" TextWrapping="Wrap" />
                     <WrapPanel Margin="0,12,0,0">
                         <Button Style="{StaticResource SecondaryButton}" Content="{DynamicResource BtnCheckUpdates}"

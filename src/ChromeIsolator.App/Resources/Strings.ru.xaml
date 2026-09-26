@@ -178,4 +178,8 @@
     <sys:String x:Key="MsgConfigSaveFailed">Не удалось сохранить настройки. Изменения пока хранятся только в памяти: {0}</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromDisk">Среды восстановлены из папок на диске. Имена, заметки и режимы может потребоваться настроить заново.</sys:String>
     <sys:String x:Key="NoMatchingEnvironments">Нет сред, соответствующих фильтрам</sys:String>
+    <sys:String x:Key="LabelAppearance">Оформление</sys:String>
+    <sys:String x:Key="AppearanceSystem">Как в системе</sys:String>
+    <sys:String x:Key="AppearanceLight">Светлое</sys:String>
+    <sys:String x:Key="AppearanceDark">Тёмное</sys:String>
 </ResourceDictionary>

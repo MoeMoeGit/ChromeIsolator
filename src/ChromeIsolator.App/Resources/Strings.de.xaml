@@ -178,4 +178,8 @@ Edge vorübergehend verwenden?</sys:String>
     <sys:String x:Key="MsgConfigSaveFailed">Einstellungen konnten nicht gespeichert werden. Änderungen bleiben vorerst nur im Arbeitsspeicher: {0}</sys:String>
     <sys:String x:Key="MsgConfigRecoveredFromDisk">Umgebungen wurden aus Ordnern auf dem Datenträger wiederhergestellt. Namen, Notizen und Modi müssen eventuell erneut festgelegt werden.</sys:String>
     <sys:String x:Key="NoMatchingEnvironments">Keine Umgebung entspricht dem Filter</sys:String>
+    <sys:String x:Key="LabelAppearance">Erscheinungsbild</sys:String>
+    <sys:String x:Key="AppearanceSystem">Systemeinstellung</sys:String>
+    <sys:String x:Key="AppearanceLight">Hell</sys:String>
+    <sys:String x:Key="AppearanceDark">Dunkel</sys:String>
 </ResourceDictionary>
