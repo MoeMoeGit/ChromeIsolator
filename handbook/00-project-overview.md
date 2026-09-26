@@ -28,7 +28,7 @@ ChromeIsolator（中文产品名“浏览器多开”）是在 Windows 10/11 x86
 | 数据 | JSON 配置 + Chrome profile 文件目录；无数据库 | `Models/`、`ConfigStore.cs`、`ProfileManager.cs` | 2026-09-22 |
 | 浏览器控制 | `System.Diagnostics.Process` + HTTP/WebSocket CDP | `ChromeManager.cs`、`FingerprintInjector.cs` | 2026-09-22 |
 | 发行 | self-contained win-x64 ZIP + WiX 7 MSI | 构建脚本与 `.github/workflows/build.yml` | 2026-09-22 |
-| 版本来源 | `Directory.Build.props` | 当前版本 `1.7.12` | 2026-09-27 |
+| 版本来源 | `Directory.Build.props` | 当前版本 `2.0.0` | 2026-09-27 |
 
 ## 不可破坏的约束
 

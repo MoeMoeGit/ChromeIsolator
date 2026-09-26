@@ -4,8 +4,8 @@
 
 ## 当前环境与触发关系
 
-- 唯一版本来源：`Directory.Build.props`，当前 `1.7.12`。
-- 最新已发布版本仍为 1.7.9；1.7.12 此次仅同步源码，不创建发布标签或 Release。
+- 唯一版本来源：`Directory.Build.props`，当前 `2.0.0`。
+- 最新已发布版本仍为 1.7.9；2.0.0 通过 `v2.0.0` 标签触发构建与发布，结果以 GitHub Actions 与 Release 为准。
 - `main` push 和 PR：GitHub Actions 执行 Release 构建并上传 workflow artifacts。
 - `v*` tag：先校验 tag 与项目版本一致，再自动创建 GitHub Release 并上传 ZIP/MSI。
 - 普通 push 不授权修改版本、创建 tag 或发布 Release；发布必须由用户明确要求。
