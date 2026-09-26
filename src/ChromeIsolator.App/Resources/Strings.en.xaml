@@ -61,11 +61,11 @@
     <sys:String x:Key="SectionUi">Interface</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">Show advanced details (browser version, path, system info)</sys:String>
     <sys:String x:Key="SectionEnvironmentMode">Collector and variation modes</sys:String>
-    <sys:String x:Key="EnvironmentModeDescription">Collector mode opens a local debugging port so local collection tools can connect to signed-in environments. Variation mode injects small hardware parameters and is not recommended for routine collection.</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">New environments enable collection by default; existing settings stay unchanged. Collection lets local tools connect to an environment. Variation changes the processor and memory information seen by websites; enable it only when needed.</sys:String>
     <sys:String x:Key="EnvironmentModeSummary">Collector {0}/{2}, variation {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">Manage</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">Manage collector and variation modes</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">New environments enable collection by default; existing settings stay unchanged. Close running environments before changing modes. Bulk actions affect only editable filtered results. Enable variation only when needed.</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">Close running environments before changing modes. Bulk actions affect only editable environments in the current filtered results.</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">Enable collector</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">Disable collector</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">Collector mode</sys:String>
@@ -77,9 +77,9 @@
     <sys:String x:Key="ExternalLinkDescription">When other apps open http / https links, send them to the selected environment by default.</sys:String>
     <sys:String x:Key="LabelExternalLinkTarget">Open to</sys:String>
     <sys:String x:Key="ExternalLinkAutoTarget">Automatic (lowest-numbered environment)</sys:String>
-    <sys:String x:Key="BtnSetDefaultBrowser">Set as default browser</sys:String>
+    <sys:String x:Key="BtnSetDefaultBrowser">Make default</sys:String>
     <sys:String x:Key="SectionLanguage">Language</sys:String>
-    <sys:String x:Key="BtnOpenChromeFolder">Open browser folder</sys:String>
+    <sys:String x:Key="BtnOpenChromeFolder">Open location</sys:String>
     <sys:String x:Key="BtnReinstallChrome">Browser engine settings</sys:String>
     <sys:String x:Key="BtnRetry">Retry</sys:String>
     <sys:String x:Key="BtnCopyError">Copy error details</sys:String>

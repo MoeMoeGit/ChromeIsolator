@@ -28,7 +28,7 @@ public static class SimpleInputDialog
             VerticalContentAlignment = multiline ? VerticalAlignment.Top : VerticalAlignment.Center,
             TextWrapping = multiline ? TextWrapping.Wrap : TextWrapping.NoWrap,
             AcceptsReturn = multiline,
-            MinHeight = multiline ? 92 : 0,
+            MinHeight = multiline ? 92 : 32,
             MaxHeight = multiline ? 120 : double.PositiveInfinity,
             VerticalScrollBarVisibility = multiline ? System.Windows.Controls.ScrollBarVisibility.Auto : System.Windows.Controls.ScrollBarVisibility.Disabled
         };
@@ -41,14 +41,14 @@ public static class SimpleInputDialog
         {
             Content = L10n.GetString("BtnOk"),
             IsDefault = true,
-            MinWidth = 80,
+            MinWidth = 88,
             Margin = new Thickness(8, 0, 0, 0)
         };
         var cancelButton = new WpfButton
         {
             Content = L10n.GetString("BtnCancel"),
             IsCancel = true,
-            MinWidth = 80
+            MinWidth = 88
         };
 
         // Apply styles from theme resources if available
@@ -197,7 +197,7 @@ public static class SimpleInputDialog
         {
             Content = L10n.GetString("BtnClose"),
             IsCancel = true,
-            MinWidth = 80
+            MinWidth = 88
         };
 
         if (app?.Resources.Contains("PrimaryButton") == true)

@@ -13,7 +13,7 @@
 | 采集模式 | 环境关闭时可切换；开放本机 CDP，支持批量启停配置 | `EnvironmentModeWindow*`、`ChromeManager.cs` | 不自动注入差异脚本；运行中不可改配置 |
 | 差异模式 | 稳定覆盖 CPU 核心数和内存值，处理已有和新页面并有限重连 | `FingerprintInjector.cs` | 只覆盖两个 navigator 属性；失败回写警告 |
 | 外部链接 | 仅接受 http/https；路由到选定环境或最小编号环境 | `App.xaml.cs`、`MainViewModel.cs`、`ShellService.cs` | 启动中排队；转发失败不静默丢链接 |
-| 设置与本地化 | 数据路径、浏览器状态、模式、外部链接、语言、更新 | `SettingsWindow*`、`L10n.cs`、`Resources/` | 七语言可切换；设置即时保存 |
+| 设置与本地化 | 数据路径、浏览器状态、模式、外部链接、语言、更新 | `SettingsWindow*`、`L10n.cs`、`Resources/` | 三语言可切换；设置即时保存 |
 | 安装与更新 | self-contained ZIP、MSI、GitHub Release 检查 | 脚本、WiX、`UpdateService.cs` | 安装升级不删除用户 profile |
 
 ## 关键业务规则

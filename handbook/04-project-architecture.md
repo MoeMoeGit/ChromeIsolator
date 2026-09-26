@@ -12,7 +12,7 @@
 | `Services/ChromeManager.cs` | 浏览器发现、启动、跟踪、关闭、调试端口 | Process、注册表、CDP | 页面业务采集 |
 | `Services/FingerprintInjector.cs` | CDP 连接和两个 navigator 属性注入 | HTTP、WebSocket | 完整指纹模拟 |
 | `ViewModels/` | UI 状态、命令、排序、外部链接队列 | Models、Services | 持久化底层细节 |
-| `*.xaml`、`Themes/`、`Resources/` | 窗口、样式和七语言资源 | ViewModels | 核心浏览器生命周期 |
+| `*.xaml`、`Themes/`、`Resources/` | 窗口、样式和三语言资源 | ViewModels | 核心浏览器生命周期 |
 | `installer/`、`scripts/`、`.github/` | 发布、MSI 和 CI | .NET、WiX、GitHub Actions | 运行时用户数据 |
 
 ## 关键路径
@@ -27,7 +27,7 @@
 
 - `AppPaths` 是用户数据路径的唯一入口；不要在功能代码重复拼接 `%LOCALAPPDATA%`。
 - `ProfileManager` 是环境持久化操作入口，`ChromeManager` 是运行时进程状态入口；不要建立第二套环境身份或进程字典。
-- `L10n` 和资源字典是用户文案入口；新增文案必须同步七语言或明确回退策略。
+- `L10n` 和资源字典是用户文案入口；新增文案必须同步三语言或明确回退策略。
 - 浏览器进程、端口和注入器字典受锁保护；退出事件和 UI 命令会并发访问，相关改动必须复核竞态和释放。
 - WPF UI 状态只能安全地在 UI 线程更新；异步停止和事件回调不得直接跨线程改绑定属性。
 

@@ -12,10 +12,6 @@ public static class L10n
         ["zh"] = "Resources/Strings.xaml",
         ["en"] = "Resources/Strings.en.xaml",
         ["ja"] = "Resources/Strings.ja.xaml",
-        ["ko"] = "Resources/Strings.ko.xaml",
-        ["de"] = "Resources/Strings.de.xaml",
-        ["fr"] = "Resources/Strings.fr.xaml",
-        ["ru"] = "Resources/Strings.ru.xaml"
     };
 
     private static readonly Dictionary<string, string> NativeNames = new()
@@ -23,10 +19,6 @@ public static class L10n
         ["zh"] = "中文",
         ["en"] = "English",
         ["ja"] = "日本語",
-        ["ko"] = "한국어",
-        ["de"] = "Deutsch",
-        ["fr"] = "Français",
-        ["ru"] = "Русский"
     };
 
     public static event Action? LanguageChanged;

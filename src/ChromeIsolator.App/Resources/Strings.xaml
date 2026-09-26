@@ -61,11 +61,11 @@
     <sys:String x:Key="SectionUi">界面</sys:String>
     <sys:String x:Key="ShowAdvancedDetails">显示高级详情（浏览器版本、路径、系统信息）</sys:String>
     <sys:String x:Key="SectionEnvironmentMode">采集与差异模式</sys:String>
-    <sys:String x:Key="EnvironmentModeDescription">采集模式会开放本机调试端口，供本机采集工具连接已登录环境。差异模式会注入少量硬件参数，日常采集不建议开启。</sys:String>
+    <sys:String x:Key="EnvironmentModeDescription">新建环境默认开启采集，已有设置保持不变。采集允许本机工具连接环境；差异会调整网页读取的处理器与内存信息，仅在需要时开启。</sys:String>
     <sys:String x:Key="EnvironmentModeSummary">采集 {0}/{2}，差异 {1}</sys:String>
     <sys:String x:Key="BtnManageEnvironmentModes">管理</sys:String>
     <sys:String x:Key="EnvironmentModeManagerTitle">管理采集与差异模式</sys:String>
-    <sys:String x:Key="EnvironmentModeManagerDescription">新建环境默认开启采集，已有环境保持原设置。运行中的环境需先关闭后再切换；差异模式仅按需开启。批量按钮只修改当前筛选结果中可切换的环境。</sys:String>
+    <sys:String x:Key="EnvironmentModeManagerDescription">关闭运行中的环境后即可切换模式。批量操作只影响当前筛选结果中可修改的环境。</sys:String>
     <sys:String x:Key="BtnEnableCollectorDebug">启用采集</sys:String>
     <sys:String x:Key="BtnDisableCollectorDebug">关闭采集</sys:String>
     <sys:String x:Key="CollectorDebugModeLabel">采集模式</sys:String>

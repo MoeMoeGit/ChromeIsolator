@@ -35,6 +35,6 @@
 
     <!-- CornerRadius -->
     <CornerRadius x:Key="CardCornerRadius">12</CornerRadius>
-    <CornerRadius x:Key="ButtonCornerRadius">8</CornerRadius>
+    <CornerRadius x:Key="ButtonCornerRadius">6</CornerRadius>
 
 </ResourceDictionary>
